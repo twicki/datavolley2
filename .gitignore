@@ -1,0 +1,4 @@
+tvr_ve
+.vscode
+**/*.pyc
+**/*.egg-info
