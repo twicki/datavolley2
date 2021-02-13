@@ -288,7 +288,8 @@ class GameState:
         else:
             return 15
 
-    def collect_stats(self, team):
+    def collect_stats(self, teamname):
+        team = actions.Team.from_string(teamname)
         playerstats = {}
         for player in self.court.fields[int(team)].players:
             playerstats[player.Number] = {}

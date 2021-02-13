@@ -34,6 +34,6 @@ gs.add_string("3.5#")
 # gs.add_string("/sub 22 5")
 # gs.add_string("10s.1")
 # gs.add_string("/1#")
-out = gs.collect_stats(stats.Team.from_string("/"))
+out = gs.collect_stats("/")
 
 print(gs)
