@@ -5,7 +5,9 @@ import sys
 from PyQt5 import QtWidgets
 
 import datavolley2
-from datavolley2.statistics.Gamestate import GameState
+from datavolley2.statistics import GameState
+
+# from datavolley2.statistics.Gamestate import GameState
 from uis import Ui_Form, Ui_MainWindow
 
 
