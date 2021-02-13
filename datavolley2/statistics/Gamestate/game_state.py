@@ -148,7 +148,7 @@ def split_string(input):
             quality_set_2,
         )
     else:
-        s1 = expandString(strings[0])
+        s1, _, _, _ = expandString(strings[0])
         s2 = None
     return s1, s2
 
@@ -212,7 +212,7 @@ class GameState:
             allactions = []
             allactions.append(copy.copy(Gameaction.from_string(str1)))
             if str2:
-                allactions.append(copy.copy(Gameaction.from_string(str1)))
+                allactions.append(copy.copy(Gameaction.from_string(str2)))
             for thisaction in allactions:
                 self.add_logical(thisaction)
 
