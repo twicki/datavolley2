@@ -170,7 +170,7 @@ class GameState:
 
     def add_string(self, action: str):
         if "sub" in action:
-            l = action.split()
+            l = action.split("!")
             number = int(l[1])
             position = int(l[2])
             team = l[0][0]
@@ -183,7 +183,7 @@ class GameState:
             action = SpecialActions.SetServingTeam(actions.Team.from_string(team))
             self.add_logical(action)
         elif "point" in action:
-            l = action.split()
+            l = action.split("!")
             number = int(l[1])
             team = l[0][0]
             action = SpecialActions.SetServingTeam(actions.Team.from_string(team))
@@ -197,12 +197,12 @@ class GameState:
             action = SpecialActions.Endset(actions.Team.from_string(team))
             self.add_logical(action)
         elif "team" in action:
-            l = action.split()
+            l = action.split("!")
             team = l[0][0]
             teamname = l[1]
             self.teamnames[int(actions.Team.from_string(team))] = teamname
         elif "pname" in action:
-            l = action.split()
+            l = action.split("!")
             team = l[0][0]
             playernumber = int(l[1])
             name = l[2]
@@ -240,7 +240,6 @@ class GameState:
             self.score[int(action.team_)] += action.value
             self.flush_actions()
         else:
-            print(isinstance(action, Gameaction))
             who, was_score = is_scoring(action)
             if was_score:
                 index = int(who)
