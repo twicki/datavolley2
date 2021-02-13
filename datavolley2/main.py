@@ -16,7 +16,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.print_stats)
-        self.pushButton_2.clicked.connect(self.increment)
+        # self.pushButton_2.clicked.connect(self.increment)
         self.lineEdit.returnPressed.connect(self.update)
         self.game_state = GameState()
         self.value = 0
@@ -24,11 +24,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fullstring = ""
         self.secondWindow = None
 
-    def increment(self):
-        self.value += 1
-        if self.secondWindow is not None:
-            self.secondWindow.label.setText(str(self.value))
-            self.secondWindow.show()
+    # def increment(self):
+    #     self.value += 1
+    #     if self.secondWindow is not None:
+    #         self.secondWindow.label.setText(str(self.value))
+    #         self.secondWindow.show()
 
     def update(self):
         text = self.lineEdit.text()
@@ -118,7 +118,89 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_10.setText(fulltext)
 
         ## set up score
-        
+        self.lcdNumber.display(self.game_state.score[0])
+        self.lcdNumber_2.display(self.game_state.score[1])
+
+
+        ## update the other view:
+        if self.secondWindow is not None:
+            ## team 1
+            number = self.game_state.court.fields[0].players[0].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[0]:
+                fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            self.secondWindow.label.setText(fulltext)
+
+            number = self.game_state.court.fields[0].players[1].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[0]:
+                fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            self.secondWindow.label_22.setText(fulltext)
+
+            number = self.game_state.court.fields[0].players[2].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[0]:
+                fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            self.secondWindow.label_20.setText(fulltext)
+
+            number = self.game_state.court.fields[0].players[3].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[0]:
+                fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            self.secondWindow.label_28.setText(fulltext)
+
+            number = self.game_state.court.fields[0].players[4].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[0]:
+                fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            self.secondWindow.label_15.setText(fulltext)
+
+            number = self.game_state.court.fields[0].players[5].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[0]:
+                fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            self.secondWindow.label_8.setText(fulltext)
+
+
+
+            ## team 2
+            number = self.game_state.court.fields[1].players[0].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[1]:
+                fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            self.secondWindow.label_46.setText(fulltext)
+
+            number = self.game_state.court.fields[1].players[1].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[1]:
+                fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            self.secondWindow.label_45.setText(fulltext)
+
+            number = self.game_state.court.fields[1].players[2].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[1]:
+                fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            self.secondWindow.label_50.setText(fulltext)
+
+            number = self.game_state.court.fields[1].players[3].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[1]:
+                fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            self.secondWindow.label_60.setText(fulltext)
+
+            number = self.game_state.court.fields[1].players[4].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[1]:
+                fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            self.secondWindow.label_59.setText(fulltext)
+
+            number = self.game_state.court.fields[1].players[5].Number
+            fulltext = str(number) 
+            if number in self.game_state.player_names[1]:
+                fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            self.secondWindow.label_57.setText(fulltext)
+
+
 
     def print_stats(self):
         if self.secondWindow is None:
