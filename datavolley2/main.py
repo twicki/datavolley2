@@ -45,74 +45,74 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # home team
         number = self.game_state.court.fields[0].players[0].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[0]:
             fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[1].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[0]:
             fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_5.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[2].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[0]:
             fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_4.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[3].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[0]:
             fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_6.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[4].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[0]:
             fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_3.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[5].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[0]:
             fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_2.setText(fulltext)
 
         # away team team
         number = self.game_state.court.fields[1].players[0].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
         self.label_12.setText(fulltext)
 
         number = self.game_state.court.fields[1].players[1].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
         self.label_8.setText(fulltext)
 
         number = self.game_state.court.fields[1].players[2].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
         self.label_7.setText(fulltext)
 
         number = self.game_state.court.fields[1].players[3].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
         self.label_9.setText(fulltext)
 
         number = self.game_state.court.fields[1].players[4].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
         self.label_11.setText(fulltext)
 
         number = self.game_state.court.fields[1].players[5].Number
-        fulltext = str(number) 
+        fulltext = str(number)
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
         self.label_10.setText(fulltext)
@@ -121,86 +121,299 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lcdNumber.display(self.game_state.score[0])
         self.lcdNumber_2.display(self.game_state.score[1])
 
-
         ## update the other view:
         if self.secondWindow is not None:
             ## team 1
+            results = self.game_state.collect_stats("*")
+            # p1 home
             number = self.game_state.court.fields[0].players[0].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[0]:
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label.setText(fulltext)
+            if number in results:
+                self.lcdNumber.display(results[number]["hit"]["kill"])
+                self.lcdNumber_2.display(results[number]["serve"]["kill"])
+                self.lcdNumber_3.display(results[number]["block"])
+                self.lcdNumber_6.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_5.display(ratio)
 
+            # p2 home
             number = self.game_state.court.fields[0].players[1].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[0]:
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_22.setText(fulltext)
+            if number in results:
+                self.lcdNumber_23.display(results[number]["hit"]["kill"])
+                self.lcdNumber_25.display(results[number]["serve"]["kill"])
+                self.lcdNumber_22.display(results[number]["block"])
+                self.lcdNumber_21.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_24.display(ratio)
 
+            # p3 home
             number = self.game_state.court.fields[0].players[2].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[0]:
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_20.setText(fulltext)
+            if number in results:
+                self.lcdNumber_17.display(results[number]["hit"]["kill"])
+                self.lcdNumber_16.display(results[number]["serve"]["kill"])
+                self.lcdNumber_20.display(results[number]["block"])
+                self.lcdNumber_19.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_18.display(ratio)
 
+            # p4 home
             number = self.game_state.court.fields[0].players[3].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[0]:
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_28.setText(fulltext)
+            if number in results:
+                self.lcdNumber_28.display(results[number]["hit"]["kill"])
+                self.lcdNumber_30.display(results[number]["serve"]["kill"])
+                self.lcdNumber_27.display(results[number]["block"])
+                self.lcdNumber_26.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_29.display(ratio)
 
+            # p5 home
             number = self.game_state.court.fields[0].players[4].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[0]:
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_15.setText(fulltext)
+            if number in results:
+                self.lcdNumber_12.display(results[number]["hit"]["kill"])
+                self.lcdNumber_11.display(results[number]["serve"]["kill"])
+                self.lcdNumber_15.display(results[number]["block"])
+                self.lcdNumber_14.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_13.display(ratio)
 
+            # p6 home
             number = self.game_state.court.fields[0].players[5].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[0]:
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_8.setText(fulltext)
-
-
+            if number in results:
+                self.lcdNumber_8.display(results[number]["hit"]["kill"])
+                self.lcdNumber_10.display(results[number]["serve"]["kill"])
+                self.lcdNumber_4.display(results[number]["block"])
+                self.lcdNumber_9.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_7.display(ratio)
 
             ## team 2
+            results = self.game_state.collect_stats("/")
+            # p1 away
             number = self.game_state.court.fields[1].players[0].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[1]:
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_46.setText(fulltext)
+            if number in results:
+                self.lcdNumber_37.display(results[number]["hit"]["kill"])
+                self.lcdNumber_45.display(results[number]["serve"]["kill"])
+                self.lcdNumber_49.display(results[number]["block"])
+                self.lcdNumber_47.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_50.display(ratio)
 
+            # p2 away
             number = self.game_state.court.fields[1].players[1].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[1]:
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_45.setText(fulltext)
+            if number in results:
+                self.lcdNumber_44.display(results[number]["hit"]["kill"])
+                self.lcdNumber_48.display(results[number]["serve"]["kill"])
+                self.lcdNumber_32.display(results[number]["block"])
+                self.lcdNumber_31.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_57.display(ratio)
 
+            # p3 away
             number = self.game_state.court.fields[1].players[2].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[1]:
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_50.setText(fulltext)
+            if number in results:
+                self.lcdNumber_34.display(results[number]["hit"]["kill"])
+                self.lcdNumber_41.display(results[number]["serve"]["kill"])
+                self.lcdNumber_38.display(results[number]["block"])
+                self.lcdNumber_56.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_46.display(ratio)
 
+            # p4 away
             number = self.game_state.court.fields[1].players[3].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[1]:
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_60.setText(fulltext)
+            if number in results:
+                self.lcdNumber_51.display(results[number]["hit"]["kill"])
+                self.lcdNumber_33.display(results[number]["serve"]["kill"])
+                self.lcdNumber_58.display(results[number]["block"])
+                self.lcdNumber_59.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_55.display(ratio)
 
+            # p5 away
             number = self.game_state.court.fields[1].players[4].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[1]:
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_59.setText(fulltext)
+            if number in results:
+                self.lcdNumber_60.display(results[number]["hit"]["kill"])
+                self.lcdNumber_53.display(results[number]["serve"]["kill"])
+                self.lcdNumber_43.display(results[number]["block"])
+                self.lcdNumber_52.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_36.display(ratio)
 
+            # p6 away
             number = self.game_state.court.fields[1].players[5].Number
-            fulltext = str(number) 
+            fulltext = str(number)
             if number in self.game_state.player_names[1]:
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_57.setText(fulltext)
-
-
+            if number in results:
+                self.lcdNumber_39.display(results[number]["hit"]["kill"])
+                self.lcdNumber_40.display(results[number]["serve"]["kill"])
+                self.lcdNumber_35.display(results[number]["block"])
+                self.lcdNumber_42.display(results[number]["error"])
+                if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+                    ratio = int(
+                        results[number]["hit"]["kill"]
+                        / (
+                            results[number]["hit"]["kill"]
+                            + results[number]["hit"]["ball"]
+                        )
+                        * 100
+                    )
+                else:
+                    ratio = 0
+                self.lcdNumber_54.display(ratio)
 
     def print_stats(self):
         if self.secondWindow is None:
