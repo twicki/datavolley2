@@ -47,23 +47,17 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 0, 1, 1, 1)
         self.label_6 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 3, 4, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem1, 0, 3, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 3, 2, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem2, 2, 2, 1, 1)
         self.gridLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget_2.setGeometry(QtCore.QRect(490, 180, 241, 91))
@@ -77,20 +71,14 @@ class Ui_MainWindow(object):
         self.label_8 = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.label_8.setObjectName("label_8")
         self.gridLayout_2.addWidget(self.label_8, 0, 4, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_2.addItem(spacerItem3, 1, 2, 1, 1)
         self.label_9 = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.label_9.setObjectName("label_9")
         self.gridLayout_2.addWidget(self.label_9, 0, 0, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem4, 0, 1, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem5, 0, 3, 1, 1)
         self.label_10 = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.label_10.setObjectName("label_10")
@@ -129,7 +117,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "setup"))
-        self.pushButton_2.setText(_translate("MainWindow", "increment"))
+        self.pushButton_2.setText(_translate("MainWindow", "save"))
         self.label_2.setText(_translate("MainWindow", "TextLabel"))
         self.label_5.setText(_translate("MainWindow", "TextLabel"))
         self.label_3.setText(_translate("MainWindow", "TextLabel"))

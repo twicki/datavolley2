@@ -319,7 +319,7 @@ class GameState:
                 for action in rally[0]:
                     if isinstance(action, Gameaction):
                         # is is the right player on the right team
-                        if action.team == actions.Team.Home:
+                        if action.Team == team:
                             if action.player == player.Number:
                                 # serve statistics
                                 if action.action == Action.Serve:
@@ -364,7 +364,7 @@ class GameState:
             for action in rally[0]:
                 if isinstance(action, Gameaction):
                     # is is the right player on the right team
-                    if action.team == actions.Team.Home:
+                    if action.Team == team:
                         # serve statistics
                         if action.action == Action.Serve:
                             if action.quality == Quality.Kill:

@@ -7,11 +7,11 @@ from datavolley2.statistics.Gamestate.game_state import expandString, split_stri
 
 gs = stats.GameState()
 
-gs.add_string("*team!schoenenwerd")
-gs.add_string("/team!jona")
-gs.add_string("/pname!2!tobias")
+# gs.add_string("*team!schoenenwerd")
+# gs.add_string("/team!jona")
+# gs.add_string("/pname!2!tobias")
 
-gs.add_string("*serve")
+# gs.add_string("*serve")
 # gs.add_string("*sub!10!1")
 # gs.add_string("*sub!11!2")
 # gs.add_string("*sub!12!3")
