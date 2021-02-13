@@ -77,6 +77,7 @@ class GameState:
     _current_actions = []
     _last_serve = None
     teamnames = [None, None]
+    player_names = [{}, {}]
 
     def __init__(self) -> None:
         pass
@@ -114,6 +115,12 @@ class GameState:
             team = l[0][0]
             teamname = l[1]
             self.teamnames[int(actions.Team.from_string(team))] = teamname
+        elif "pname" in action:
+            l = action.split()
+            team = l[0][0]
+            playernumber = int(l[1])
+            name = l[2]
+            self.player_names[int(actions.Team.from_string(team))][playernumber] = name
         else:
             str1, str2 = split_string(action)
             # str1, str2 = actions.GameAction.splitstring(action)
@@ -200,6 +207,10 @@ class GameState:
         playerstats = {}
         for player in self.court.fields[int(team)].players:
             playerstats[player.Number] = {}
+            if player.Number in self.player_names[int(team)]:
+                playerstats[player.Number]["name"] = self.player_names[int(team)][
+                    player.Number
+                ]
             playerstats[player.Number]["serve"] = {}
             playerstats[player.Number]["serve"]["kill"] = 0
             playerstats[player.Number]["serve"]["ball"] = 0
