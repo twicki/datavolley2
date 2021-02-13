@@ -164,6 +164,7 @@ class GameState:
     _last_serve = None
     teamnames = [None, None]
     player_names = [{}, {}]
+    libs = [None, None]
 
     def __init__(self) -> None:
         self.score = [0, 0]
@@ -215,6 +216,11 @@ class GameState:
             playernumber = int(l[1])
             name = l[2]
             self.player_names[int(actions.Team.from_string(team))][playernumber] = name
+        elif "lib" in action:
+            l = action.split("!")
+            team = l[0][0]
+            playernumber = int(l[1])
+            self.libs[int(actions.Team.from_string(team))] = playernumber
         else:
             str1, str2 = split_string(action)
             allactions = []
@@ -298,7 +304,11 @@ class GameState:
     def collect_stats(self, teamname):
         team = actions.Team.from_string(teamname)
         playerstats = {}
-        for player in self.court.fields[int(team)].players:
+        allplayers = self.court.fields[int(team)].players
+        if self.libs[int(team)]:
+            allplayers.append(self.libs[int(team)])
+
+        for player in allplayers:
             playerstats[player.Number] = {}
             if player.Number in self.player_names[int(team)]:
                 playerstats[player.Number]["name"] = self.player_names[int(team)][
@@ -313,8 +323,7 @@ class GameState:
             playerstats[player.Number]["hit"]["ball"] = 0
             playerstats[player.Number]["error"] = 0
             playerstats[player.Number]["block"] = 0
-
-        for player in self.court.fields[int(team)].players:
+        for player in allplayers:
             for rally in self.rallies:
                 for action in rally[0]:
                     if isinstance(action, Gameaction):

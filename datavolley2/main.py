@@ -50,6 +50,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.illegal.append(command)
 
         self.textEdit.setText(self.fullstring)
+        self.textEdit.verticalScrollBar.setValue(
+            self.textEdit.verticalScrollBar.maximum()
+        )
 
         ## update my view:
         self.lineEdit.clear()
@@ -287,6 +290,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.lcdNumber_7.display(ratio)
 
+            # lib home
+            # number = self.game_state.libs[0]
+            # fulltext = str(number)
+            # if number in self.game_state.player_names[0]:
+            #     fulltext = fulltext + " " + self.game_state.player_names[0][number]
+            # self.secondWindow.label_71.setText(fulltext)
+            # if number in results:
+            #     self.secondWindow.lcdNumber_8.display(results[number]["hit"]["kill"])
+            #     self.secondWindow.lcdNumber_10.display(results[number]["serve"]["kill"])
+            #     self.secondWindow.lcdNumber_4.display(results[number]["block"])
+            #     self.secondWindow.lcdNumber_9.display(results[number]["error"])
+            #     if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
+            #         ratio = int(
+            #             results[number]["hit"]["kill"]
+            #             / (
+            #                 results[number]["hit"]["kill"]
+            #                 + results[number]["hit"]["ball"]
+            #             )
+            #             * 100
+            #         )
+            #     else:
+            #         ratio = 0
+            #     self.secondWindow.lcdNumber_7.display(ratio)
             ## team 2
             results = self.game_state.collect_stats("/")
             self.secondWindow.label_61.setText(self.game_state.teamnames[1])
