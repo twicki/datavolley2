@@ -48,18 +48,18 @@ class Quality(Enum):
         return self.value[0]
 
     @staticmethod
-    def inverse(Quality):
-        if Quality == Quality.Kill:
+    def inverse(quality):
+        if quality == Quality.Kill:
             return Quality.Bad
-        elif Quality == Quality.Perfect:
+        elif quality == Quality.Perfect:
             return Quality.Bad
-        elif Quality == Quality.Good:
+        elif quality == Quality.Good:
             return Quality.Bad
-        elif Quality == Quality.Bad:
+        elif quality == Quality.Bad:
             return Quality.Good
-        elif Quality == Quality.Over:
+        elif quality == Quality.Over:
             return Quality.Good
-        elif Quality == Quality.Error:
+        elif quality == Quality.Error:
             return Quality.Good
 
 

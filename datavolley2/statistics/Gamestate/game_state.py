@@ -52,15 +52,101 @@ class Court:
         #  = np.roll(self.fields[who].players, -1)
 
 
-def expandString(input):
-    return input
+def set_team(user_string, returnvalue):
+    if user_string[0] == "/":
+        returnvalue = user_string[0] + returnvalue[1:]
+        user_string = user_string[1:]
+        return returnvalue, user_string, True
+    elif user_string[0] == "*":
+        returnvalue = user_string[0] + returnvalue[1:]
+        user_string = user_string[1:]
+        return returnvalue, user_string, True
+    else:
+        return returnvalue, user_string, False
+
+
+def set_number(user_string, returnvalue):
+    if len(user_string) > 1 and user_string[1].isnumeric():
+        number = int(user_string[0:2])
+        returnvalue = returnvalue[0] + str(user_string[0:2]) + returnvalue[3:]
+        user_string = user_string[2:]
+    else:
+        returnvalue = returnvalue[0] + "0" + str(user_string[0]) + returnvalue[3:]
+        user_string = user_string[1:]
+    return returnvalue, user_string
+
+
+def set_action(user_string, returnvalue):
+    if len(user_string):
+        if user_string[0] in ["e", "h", "b", "s", "r", "d"]:
+            returnvalue = returnvalue[:3] + user_string[0] + returnvalue[4:]
+            user_string = user_string[1:]
+            return returnvalue, user_string, True
+
+    return returnvalue, user_string, False
+
+
+def set_quality(user_string, returnvalue):
+    if len(user_string):
+        returnvalue = returnvalue[:4] + user_string[0]
+        return returnvalue, True
+    return returnvalue, False
+
+
+def expandString(user_string):
+    returnvalue = "*00h+"
+    returnvalue, user_string, team_set = set_team(user_string, returnvalue)
+    returnvalue, user_string = set_number(user_string, returnvalue)
+    returnvalue, user_string, action_set = set_action(user_string, returnvalue)
+    returnvalue, quality_set = set_quality(user_string, returnvalue)
+
+    return returnvalue, team_set, action_set, quality_set
+
+
+def correct_strings(s1, team, action, quality, s2, team2, action2, quality2):
+    ## correct the teams
+    if not team2:
+        s2 = str(actions.Team.inverse(actions.Team.from_string(s1[0]))) + s2[1:]
+    if not team and team2:
+        s1 = str(actions.Team.inverse(actions.Team.from_string(s2[0]))) + s1[1:]
+
+    ## correct the action:
+    if not action2:
+        s2 = (
+            s2[:3]
+            + str(actions.Action.inverse(actions.Action.from_string(s1[3])))
+            + s2[4:]
+        )
+    if not action and action2:
+        s1 = (
+            s1[:3]
+            + str(actions.Action.inverse(actions.Action.from_string(s2[3])))
+            + s1[4:]
+        )
+
+    ## correct the quality
+    if not quality2:
+        s2 = s2[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s1[4])))
+    if not quality and quality2:
+        s1 = s1[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s2[4])))
+    return s1, s2
 
 
 def split_string(input):
     strings = input.split(".")
     if len(strings) > 1:
-        s1 = expandString(strings[0])
-        s2 = expandString(strings[1])
+        s1, team_set, action_set, quality_set = expandString(strings[0])
+        s2, team_set_2, action_set_2, quality_set_2 = expandString(strings[1])
+        s1, s2 = correct_strings(
+            s1,
+            team_set,
+            action_set,
+            quality_set,
+            s2,
+            team_set_2,
+            action_set_2,
+            quality_set_2,
+        )
     else:
         s1 = expandString(strings[0])
         s2 = None
@@ -123,7 +209,6 @@ class GameState:
             self.player_names[int(actions.Team.from_string(team))][playernumber] = name
         else:
             str1, str2 = split_string(action)
-            # str1, str2 = actions.GameAction.splitstring(action)
             allactions = []
             allactions.append(copy.copy(Gameaction.from_string(str1)))
             if str2:
