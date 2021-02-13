@@ -43,6 +43,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_14.setText(self.game_state.teamnames[0])
         self.label_13.setText(self.game_state.teamnames[1])
 
+        # home team
         number = self.game_state.court.fields[0].players[0].Number
         fulltext = str(number) 
         if number in self.game_state.player_names[0]:
@@ -52,32 +53,71 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         number = self.game_state.court.fields[0].players[1].Number
         fulltext = str(number) 
         if number in self.game_state.player_names[0]:
-            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_5.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[2].Number
         fulltext = str(number) 
         if number in self.game_state.player_names[0]:
-            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+            fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_4.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[3].Number
         fulltext = str(number) 
-        if number in self.game_state.player_names[1]:
-            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        if number in self.game_state.player_names[0]:
+            fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_6.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[4].Number
         fulltext = str(number) 
-        if number in self.game_state.player_names[1]:
-            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        if number in self.game_state.player_names[0]:
+            fulltext = fulltext + " " + self.game_state.player_names[0][number]
         self.label_3.setText(fulltext)
 
         number = self.game_state.court.fields[0].players[5].Number
         fulltext = str(number) 
+        if number in self.game_state.player_names[0]:
+            fulltext = fulltext + " " + self.game_state.player_names[0][number]
+        self.label_2.setText(fulltext)
+
+        # away team team
+        number = self.game_state.court.fields[1].players[0].Number
+        fulltext = str(number) 
         if number in self.game_state.player_names[1]:
             fulltext = fulltext + " " + self.game_state.player_names[1][number]
-        self.label_2.setText(fulltext)
+        self.label_12.setText(fulltext)
+
+        number = self.game_state.court.fields[1].players[1].Number
+        fulltext = str(number) 
+        if number in self.game_state.player_names[1]:
+            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        self.label_8.setText(fulltext)
+
+        number = self.game_state.court.fields[1].players[2].Number
+        fulltext = str(number) 
+        if number in self.game_state.player_names[1]:
+            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        self.label_7.setText(fulltext)
+
+        number = self.game_state.court.fields[1].players[3].Number
+        fulltext = str(number) 
+        if number in self.game_state.player_names[1]:
+            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        self.label_9.setText(fulltext)
+
+        number = self.game_state.court.fields[1].players[4].Number
+        fulltext = str(number) 
+        if number in self.game_state.player_names[1]:
+            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        self.label_11.setText(fulltext)
+
+        number = self.game_state.court.fields[1].players[5].Number
+        fulltext = str(number) 
+        if number in self.game_state.player_names[1]:
+            fulltext = fulltext + " " + self.game_state.player_names[1][number]
+        self.label_10.setText(fulltext)
+
+        ## set up score
         
 
     def print_stats(self):
