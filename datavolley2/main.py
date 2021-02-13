@@ -16,26 +16,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.print_stats)
-        # self.pushButton_2.clicked.connect(self.increment)
+        self.pushButton_2.clicked.connect(self.save_and_reset)
         self.lineEdit.returnPressed.connect(self.update)
         self.game_state = GameState()
-        self.value = 0
-        self.stats = [None, None]
         self.fullstring = ""
         self.secondWindow = None
+        self.illegal = []
 
-    # def increment(self):
-    #     self.value += 1
-    #     if self.secondWindow is not None:
-    #         self.secondWindow.label.setText(str(self.value))
-    #         self.secondWindow.show()
+    def save_and_reset(self):
+        userdata = self.textEdit.toPlainText()
+        s = userdata.split()
+        self.game_state = GameState()
+        self.fullstring = userdata
+        self.illegal.clear()
+
+        for command in s:
+            try:
+                self.game_state.add_string(command)
+            except:
+                self.illegal.append(command)
+        self.textEdit.setText(self.fullstring)
+        self.lineEdit.clear()
+        self.update()
 
     def update(self):
         text = self.lineEdit.text()
         self.fullstring = self.fullstring + text + "\n"
         s = text.split(" ")
         for command in s:
-            self.game_state.add_string(command)
+            try:
+                self.game_state.add_string(command)
+            except:
+                self.illegal.append(command)
+
         self.textEdit.setText(self.fullstring)
 
         ## update my view:
@@ -124,7 +137,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ## update the other view:
         if self.secondWindow is not None:
             ## team 1
+            self.secondWindow.label_62.setText(self.game_state.teamnames[0])
             results = self.game_state.collect_stats("*")
+            self.secondWindow.lcdNumber_61.display(results["team"]["hit"]["kill"])
+            self.secondWindow.lcdNumber_62.display(results["team"]["serve"]["kill"])
+            self.secondWindow.lcdNumber_63.display(results["team"]["block"])
+            self.secondWindow.lcdNumber_64.display(results["team"]["error"])
             # p1 home
             number = self.game_state.court.fields[0].players[0].Number
             fulltext = str(number)
@@ -271,6 +289,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             ## team 2
             results = self.game_state.collect_stats("/")
+            self.secondWindow.label_61.setText(self.game_state.teamnames[1])
+            self.secondWindow.lcdNumber_67.display(results["team"]["hit"]["kill"])
+            self.secondWindow.lcdNumber_68.display(results["team"]["serve"]["kill"])
+            self.secondWindow.lcdNumber_65.display(results["team"]["block"])
+            self.secondWindow.lcdNumber_66.display(results["team"]["error"])
             # p1 away
             number = self.game_state.court.fields[1].players[0].Number
             fulltext = str(number)

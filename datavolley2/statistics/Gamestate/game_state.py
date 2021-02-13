@@ -166,7 +166,15 @@ class GameState:
     player_names = [{}, {}]
 
     def __init__(self) -> None:
-        pass
+        self.score = [0, 0]
+        self.set_score = [0, 0]
+        self.rallies = []
+        self.court = Court()
+
+        self._current_actions = []
+        self._last_serve = None
+        self.teamnames = [None, None]
+        self.player_names = [{}, {}]
 
     def add_string(self, action: str):
         if "sub" in action:
@@ -343,4 +351,44 @@ class GameState:
                                     playerstats[player.Number]["reception"] += 1
                                     if action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
+
+        playerstats["team"] = {}
+        playerstats["team"]["serve"] = {}
+        playerstats["team"]["serve"]["kill"] = 0
+        playerstats["team"]["reception"] = 0
+        playerstats["team"]["hit"] = {}
+        playerstats["team"]["hit"]["kill"] = 0
+        playerstats["team"]["error"] = 0
+        playerstats["team"]["block"] = 0
+        for rally in self.rallies:
+            for action in rally[0]:
+                if isinstance(action, Gameaction):
+                    # is is the right player on the right team
+                    if action.team == actions.Team.Home:
+                        # serve statistics
+                        if action.action == Action.Serve:
+                            if action.quality == Quality.Kill:
+                                playerstats["team"]["serve"]["kill"] += 1
+                            elif action.quality == Quality.Error:
+                                playerstats["team"]["error"] += 1
+
+                        # hitting statistics
+                        if action.action == Action.Hit:
+                            if action.quality == Quality.Kill:
+                                playerstats["team"]["hit"]["kill"] += 1
+                            elif action.quality == Quality.Error:
+                                playerstats["team"]["error"] += 1
+
+                        # blocking statistics
+                        if action.action == Action.Block:
+                            if action.quality == Quality.Kill:
+                                playerstats["team"]["block"] += 1
+                            elif action.quality == Quality.Error:
+                                playerstats["team"]["error"] += 1
+
+                        # blocking statistics
+                        if action.action == Action.Reception:
+                            playerstats["team"]["reception"] += 1
+                            if action.quality == Quality.Error:
+                                playerstats["team"]["error"] += 1
         return playerstats
