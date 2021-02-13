@@ -132,10 +132,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label.setText(fulltext)
             if number in results:
-                self.lcdNumber.display(results[number]["hit"]["kill"])
-                self.lcdNumber_2.display(results[number]["serve"]["kill"])
-                self.lcdNumber_3.display(results[number]["block"])
-                self.lcdNumber_6.display(results[number]["error"])
+                self.secondWindow.lcdNumber.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_2.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_3.display(results[number]["block"])
+                self.secondWindow.lcdNumber_6.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -147,7 +147,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_5.display(ratio)
+                self.secondWindow.lcdNumber_5.display(ratio)
 
             # p2 home
             number = self.game_state.court.fields[0].players[1].Number
@@ -156,10 +156,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_22.setText(fulltext)
             if number in results:
-                self.lcdNumber_23.display(results[number]["hit"]["kill"])
-                self.lcdNumber_25.display(results[number]["serve"]["kill"])
-                self.lcdNumber_22.display(results[number]["block"])
-                self.lcdNumber_21.display(results[number]["error"])
+                self.secondWindow.lcdNumber_23.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_25.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_22.display(results[number]["block"])
+                self.secondWindow.lcdNumber_21.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -171,7 +171,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_24.display(ratio)
+                self.secondWindow.lcdNumber_24.display(ratio)
 
             # p3 home
             number = self.game_state.court.fields[0].players[2].Number
@@ -180,10 +180,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_20.setText(fulltext)
             if number in results:
-                self.lcdNumber_17.display(results[number]["hit"]["kill"])
-                self.lcdNumber_16.display(results[number]["serve"]["kill"])
-                self.lcdNumber_20.display(results[number]["block"])
-                self.lcdNumber_19.display(results[number]["error"])
+                self.secondWindow.lcdNumber_17.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_16.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_20.display(results[number]["block"])
+                self.secondWindow.lcdNumber_19.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -195,7 +195,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_18.display(ratio)
+                self.secondWindow.lcdNumber_18.display(ratio)
 
             # p4 home
             number = self.game_state.court.fields[0].players[3].Number
@@ -204,10 +204,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_28.setText(fulltext)
             if number in results:
-                self.lcdNumber_28.display(results[number]["hit"]["kill"])
-                self.lcdNumber_30.display(results[number]["serve"]["kill"])
-                self.lcdNumber_27.display(results[number]["block"])
-                self.lcdNumber_26.display(results[number]["error"])
+                self.secondWindow.lcdNumber_28.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_30.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_27.display(results[number]["block"])
+                self.secondWindow.lcdNumber_26.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -219,7 +219,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_29.display(ratio)
+                self.secondWindow.lcdNumber_29.display(ratio)
 
             # p5 home
             number = self.game_state.court.fields[0].players[4].Number
@@ -228,10 +228,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_15.setText(fulltext)
             if number in results:
-                self.lcdNumber_12.display(results[number]["hit"]["kill"])
-                self.lcdNumber_11.display(results[number]["serve"]["kill"])
-                self.lcdNumber_15.display(results[number]["block"])
-                self.lcdNumber_14.display(results[number]["error"])
+                self.secondWindow.lcdNumber_12.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_11.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_15.display(results[number]["block"])
+                self.secondWindow.lcdNumber_14.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -243,7 +243,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_13.display(ratio)
+                self.secondWindow.lcdNumber_13.display(ratio)
 
             # p6 home
             number = self.game_state.court.fields[0].players[5].Number
@@ -252,10 +252,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[0][number]
             self.secondWindow.label_8.setText(fulltext)
             if number in results:
-                self.lcdNumber_8.display(results[number]["hit"]["kill"])
-                self.lcdNumber_10.display(results[number]["serve"]["kill"])
-                self.lcdNumber_4.display(results[number]["block"])
-                self.lcdNumber_9.display(results[number]["error"])
+                self.secondWindow.lcdNumber_8.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_10.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_4.display(results[number]["block"])
+                self.secondWindow.lcdNumber_9.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -267,7 +267,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_7.display(ratio)
+                self.secondWindow.lcdNumber_7.display(ratio)
 
             ## team 2
             results = self.game_state.collect_stats("/")
@@ -278,10 +278,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_46.setText(fulltext)
             if number in results:
-                self.lcdNumber_37.display(results[number]["hit"]["kill"])
-                self.lcdNumber_45.display(results[number]["serve"]["kill"])
-                self.lcdNumber_49.display(results[number]["block"])
-                self.lcdNumber_47.display(results[number]["error"])
+                self.secondWindow.lcdNumber_37.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_45.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_49.display(results[number]["block"])
+                self.secondWindow.lcdNumber_47.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -293,7 +293,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_50.display(ratio)
+                self.secondWindow.lcdNumber_50.display(ratio)
 
             # p2 away
             number = self.game_state.court.fields[1].players[1].Number
@@ -302,10 +302,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_45.setText(fulltext)
             if number in results:
-                self.lcdNumber_44.display(results[number]["hit"]["kill"])
-                self.lcdNumber_48.display(results[number]["serve"]["kill"])
-                self.lcdNumber_32.display(results[number]["block"])
-                self.lcdNumber_31.display(results[number]["error"])
+                self.secondWindow.lcdNumber_44.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_48.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_32.display(results[number]["block"])
+                self.secondWindow.lcdNumber_31.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -317,7 +317,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_57.display(ratio)
+                self.secondWindow.lcdNumber_57.display(ratio)
 
             # p3 away
             number = self.game_state.court.fields[1].players[2].Number
@@ -326,10 +326,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_50.setText(fulltext)
             if number in results:
-                self.lcdNumber_34.display(results[number]["hit"]["kill"])
-                self.lcdNumber_41.display(results[number]["serve"]["kill"])
-                self.lcdNumber_38.display(results[number]["block"])
-                self.lcdNumber_56.display(results[number]["error"])
+                self.secondWindow.lcdNumber_34.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_41.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_38.display(results[number]["block"])
+                self.secondWindow.lcdNumber_56.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -341,7 +341,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_46.display(ratio)
+                self.secondWindow.lcdNumber_46.display(ratio)
 
             # p4 away
             number = self.game_state.court.fields[1].players[3].Number
@@ -350,10 +350,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_60.setText(fulltext)
             if number in results:
-                self.lcdNumber_51.display(results[number]["hit"]["kill"])
-                self.lcdNumber_33.display(results[number]["serve"]["kill"])
-                self.lcdNumber_58.display(results[number]["block"])
-                self.lcdNumber_59.display(results[number]["error"])
+                self.secondWindow.lcdNumber_51.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_33.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_58.display(results[number]["block"])
+                self.secondWindow.lcdNumber_59.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -365,7 +365,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_55.display(ratio)
+                self.secondWindow.lcdNumber_55.display(ratio)
 
             # p5 away
             number = self.game_state.court.fields[1].players[4].Number
@@ -374,10 +374,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_59.setText(fulltext)
             if number in results:
-                self.lcdNumber_60.display(results[number]["hit"]["kill"])
-                self.lcdNumber_53.display(results[number]["serve"]["kill"])
-                self.lcdNumber_43.display(results[number]["block"])
-                self.lcdNumber_52.display(results[number]["error"])
+                self.secondWindow.lcdNumber_60.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_53.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_43.display(results[number]["block"])
+                self.secondWindow.lcdNumber_52.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -389,7 +389,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_36.display(ratio)
+                self.secondWindow.lcdNumber_36.display(ratio)
 
             # p6 away
             number = self.game_state.court.fields[1].players[5].Number
@@ -398,10 +398,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fulltext = fulltext + " " + self.game_state.player_names[1][number]
             self.secondWindow.label_57.setText(fulltext)
             if number in results:
-                self.lcdNumber_39.display(results[number]["hit"]["kill"])
-                self.lcdNumber_40.display(results[number]["serve"]["kill"])
-                self.lcdNumber_35.display(results[number]["block"])
-                self.lcdNumber_42.display(results[number]["error"])
+                self.secondWindow.lcdNumber_39.display(results[number]["hit"]["kill"])
+                self.secondWindow.lcdNumber_40.display(results[number]["serve"]["kill"])
+                self.secondWindow.lcdNumber_35.display(results[number]["block"])
+                self.secondWindow.lcdNumber_42.display(results[number]["error"])
                 if results[number]["hit"]["kill"] + results[number]["hit"]["ball"] > 0:
                     ratio = int(
                         results[number]["hit"]["kill"]
@@ -413,7 +413,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     )
                 else:
                     ratio = 0
-                self.lcdNumber_54.display(ratio)
+                self.secondWindow.lcdNumber_54.display(ratio)
 
     def print_stats(self):
         if self.secondWindow is None:
