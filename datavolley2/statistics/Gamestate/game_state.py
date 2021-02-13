@@ -1,8 +1,10 @@
 import copy
 import enum
+from copy import deepcopy
 
 import datavolley2.statistics.Actions as actions
-import datavolley2.statistics.Actions.GameAction as GameAction
+
+from datavolley2.statistics.Actions.GameAction import Gameaction, is_scoring
 import datavolley2.statistics.Actions.SpecialAction as SpecialActions
 
 
@@ -43,6 +45,21 @@ class Court:
     def rotate(self, who: int) -> None:
         self.fields[who].players.append(self.fields[who].players.pop(0))
         #  = np.roll(self.fields[who].players, -1)
+
+
+def expandString(input):
+    return input
+
+
+def split_string(input):
+    strings = input.split(".")
+    if len(strings) > 1:
+        s1 = expandString(strings[0])
+        s2 = expandString(strings[1])
+    else:
+        s1 = expandString(strings[0])
+        s2 = None
+    return s1, s2
 
 
 class GameState:
@@ -93,22 +110,41 @@ class GameState:
             teamname = l[1]
             self.teamnames[int(actions.Team.from_string(team))] = teamname
         else:
-            str1, str2 = actions.GameAction.splitstring(action)
-            action = actions.GameAction()
-            action.set_values_from_string(str1)
+            str1, str2 = split_string(action)
+            # str1, str2 = actions.GameAction.splitstring(action)
             allactions = []
-            allactions.append(action)
+            allactions.append(copy.copy(Gameaction.from_string(str1)))
             if str2:
-                action = actions.GameAction()
-                action.set_values_from_string(str2)
-                allactions.append(action)
-            for action in allactions:
-                self.add_logical(action)
+                allactions.append(copy.copy(Gameaction.from_string(str1)))
+            for thisaction in allactions:
+                self.add_logical(thisaction)
 
     def add_logical(self, action):
         self._current_actions.append(action)
-        if isinstance(action, GameAction):
-            who, was_score = action.is_scoring()
+        if isinstance(action, SpecialActions.Substitute):
+            who = action.team_
+            field = self.court.fields[int(who)].players
+            pos = action.position_in - 1
+            fpos = field[:pos]
+            fpos.append(Player(action.player_in))
+            self.court.fields[int(who)].players = fpos + field[pos + 1 :]
+            self.flush_actions()
+        elif isinstance(action, SpecialActions.Endset):
+            self.score[0] = 0
+            self.score[1] = 0
+            self.flush_actions()
+        elif isinstance(action, SpecialActions.Rotation):
+            self.court.rotate(int(action.team_))
+            self.flush_actions()
+        elif isinstance(action, SpecialActions.SetServingTeam):
+            self._last_serve = action.team_
+            self.flush_actions()
+        elif isinstance(action, SpecialActions.Point):
+            self.score[int(action.team_)] += action.value
+            self.flush_actions()
+        else:
+            print(isinstance(action, Gameaction))
+            who, was_score = is_scoring(action)
             if was_score:
                 index = int(who)
                 self._current_actions.append(actions.Point(who))
@@ -135,31 +171,10 @@ class GameState:
                     self.score[index] = 0
                     self.score[opponent] = 0
 
-        if isinstance(action, SpecialActions.Substitute):
-            who = action.team_
-            field = self.court.fields[int(who)].players
-            pos = action.position_in - 1
-            fpos = field[:pos]
-            fpos.append(Player(action.player_in))
-            self.court.fields[int(who)].players = fpos + field[pos + 1 :]
-
-        if isinstance(action, SpecialActions.Endset):
-            self.score[0] = 0
-            self.score[1] = 0
-
-        if isinstance(action, SpecialActions.Rotation):
-            self.court.rotate(int(action.team_))
-
-        if isinstance(action, SpecialActions.SetServingTeam):
-            self._last_serve = action.team_
-        if isinstance(action, SpecialActions.Point):
-            self.score[int(action.team_)] += action.value
-        self.flush_actions()
-
     def flush_actions(self):
         self.rallies.append(
             (
-                copy.deepcopy(self._current_actions),
+                list.copy(self._current_actions),
                 copy.deepcopy(self.court),
                 copy.deepcopy(self.score),
                 copy.deepcopy(self.set_score),
