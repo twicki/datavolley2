@@ -4,7 +4,12 @@ from copy import deepcopy
 
 import datavolley2.statistics.Actions as actions
 
-from datavolley2.statistics.Actions.GameAction import Gameaction, is_scoring
+from datavolley2.statistics.Actions.GameAction import (
+    Gameaction,
+    is_scoring,
+    Action,
+    Quality,
+)
 import datavolley2.statistics.Actions.SpecialAction as SpecialActions
 
 
@@ -190,3 +195,56 @@ class GameState:
             return 25
         else:
             return 15
+
+    def collect_stats(self, team):
+        playerstats = {}
+        for player in self.court.fields[int(team)].players:
+            playerstats[player.Number] = {}
+            playerstats[player.Number]["serve"] = {}
+            playerstats[player.Number]["serve"]["kill"] = 0
+            playerstats[player.Number]["serve"]["ball"] = 0
+            playerstats[player.Number]["reception"] = 0
+            playerstats[player.Number]["hit"] = {}
+            playerstats[player.Number]["hit"]["kill"] = 0
+            playerstats[player.Number]["hit"]["ball"] = 0
+            playerstats[player.Number]["error"] = 0
+            playerstats[player.Number]["block"] = 0
+
+        for player in self.court.fields[int(team)].players:
+            for rally in self.rallies:
+                for action in rally[0]:
+                    if isinstance(action, Gameaction):
+                        # is is the right player on the right team
+                        if action.team == actions.Team.Home:
+                            if action.player == player.Number:
+                                # serve statistics
+                                if action.action == Action.Serve:
+                                    if action.quality == Quality.Kill:
+                                        playerstats[player.Number]["serve"]["kill"] += 1
+                                    elif action.quality == Quality.Error:
+                                        playerstats[player.Number]["error"] += 1
+                                    else:
+                                        playerstats[player.Number]["serve"]["ball"] += 1
+
+                                # hitting statistics
+                                if action.action == Action.Hit:
+                                    if action.quality == Quality.Kill:
+                                        playerstats[player.Number]["hit"]["kill"] += 1
+                                    elif action.quality == Quality.Error:
+                                        playerstats[player.Number]["error"] += 1
+                                    else:
+                                        playerstats[player.Number]["hit"]["ball"] += 1
+
+                                # blocking statistics
+                                if action.action == Action.Block:
+                                    if action.quality == Quality.Kill:
+                                        playerstats[player.Number]["block"] += 1
+                                    elif action.quality == Quality.Error:
+                                        playerstats[player.Number]["error"] += 1
+
+                                # blocking statistics
+                                if action.action == Action.Reception:
+                                    playerstats[player.Number]["reception"] += 1
+                                    if action.quality == Quality.Error:
+                                        playerstats[player.Number]["error"] += 1
+        return playerstats
