@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>945</width>
-    <height>655</height>
+    <width>1234</width>
+    <height>928</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,6 +74,17 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_2">
    <property name="geometry">
@@ -83,6 +94,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_3">
@@ -94,6 +108,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_5">
    <property name="geometry">
@@ -103,6 +120,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_5">
@@ -127,6 +147,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
@@ -150,6 +173,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_4">
    <property name="geometry">
@@ -159,6 +185,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_8">
@@ -170,6 +199,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_9">
    <property name="geometry">
@@ -179,6 +211,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_7">
@@ -229,6 +264,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_10">
    <property name="geometry">
@@ -251,6 +289,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_11">
@@ -275,6 +316,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_13">
    <property name="geometry">
@@ -285,6 +329,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_14">
    <property name="geometry">
@@ -294,6 +341,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_12">
@@ -331,6 +381,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_14">
    <property name="geometry">
@@ -367,6 +420,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_16">
    <property name="geometry">
@@ -390,6 +446,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_18">
    <property name="geometry">
@@ -400,6 +459,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_19">
    <property name="geometry">
@@ -409,6 +471,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_17">
@@ -446,6 +511,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_19">
    <property name="geometry">
@@ -482,6 +550,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_22">
    <property name="geometry">
@@ -491,6 +562,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_23">
@@ -502,6 +576,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_24">
    <property name="geometry">
@@ -511,6 +588,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_21">
@@ -587,6 +667,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_26">
    <property name="geometry">
@@ -596,6 +679,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_27">
@@ -607,6 +693,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_28">
    <property name="geometry">
@@ -617,6 +706,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_29">
    <property name="geometry">
@@ -626,6 +718,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_26">
@@ -702,6 +797,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_31">
    <property name="geometry">
@@ -712,6 +810,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_32">
    <property name="geometry">
@@ -721,6 +822,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_31">
@@ -771,6 +875,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_34">
    <property name="geometry">
@@ -807,6 +914,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_36">
    <property name="geometry">
@@ -829,6 +939,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_37">
@@ -865,6 +978,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_39">
@@ -915,6 +1031,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_38">
    <property name="geometry">
@@ -924,6 +1043,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_42">
@@ -948,6 +1070,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_40">
    <property name="geometry">
@@ -957,6 +1082,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_43">
@@ -994,6 +1122,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_42">
    <property name="geometry">
@@ -1004,6 +1135,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_43">
    <property name="geometry">
@@ -1013,6 +1147,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_45">
@@ -1037,6 +1174,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_46">
    <property name="geometry">
@@ -1059,6 +1199,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_47">
@@ -1096,6 +1239,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_47">
    <property name="geometry">
@@ -1105,6 +1251,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_48">
@@ -1116,6 +1265,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_49">
    <property name="geometry">
@@ -1125,6 +1277,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_50">
@@ -1136,6 +1291,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_51">
    <property name="geometry">
@@ -1146,6 +1304,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_52">
    <property name="geometry">
@@ -1155,6 +1316,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_49">
@@ -1179,6 +1343,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_50">
    <property name="geometry">
@@ -1202,6 +1369,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_55">
    <property name="geometry">
@@ -1211,6 +1381,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_51">
@@ -1274,6 +1447,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label_55">
    <property name="geometry">
@@ -1296,6 +1472,9 @@
      <width>41</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_56">
@@ -1372,6 +1551,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_59">
    <property name="geometry">
@@ -1381,6 +1563,9 @@
      <width>41</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_60">
@@ -1392,12 +1577,15 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   </property>
   </widget>
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>330</y>
+     <x>320</x>
+     <y>340</y>
      <width>881</width>
      <height>20</height>
     </rect>
@@ -1409,8 +1597,8 @@
   <widget class="QLabel" name="label_61">
    <property name="geometry">
     <rect>
-     <x>800</x>
-     <y>360</y>
+     <x>1120</x>
+     <y>370</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1422,8 +1610,8 @@
   <widget class="QLabel" name="label_62">
    <property name="geometry">
     <rect>
-     <x>780</x>
-     <y>20</y>
+     <x>1100</x>
+     <y>30</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1435,8 +1623,8 @@
   <widget class="QLabel" name="label_63">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>90</y>
+     <x>990</x>
+     <y>100</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1448,8 +1636,8 @@
   <widget class="QLabel" name="label_64">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>130</y>
+     <x>990</x>
+     <y>140</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1461,8 +1649,8 @@
   <widget class="QLabel" name="label_65">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>190</y>
+     <x>990</x>
+     <y>200</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1474,8 +1662,8 @@
   <widget class="QLabel" name="label_66">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>250</y>
+     <x>990</x>
+     <y>260</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1487,18 +1675,21 @@
   <widget class="QLCDNumber" name="lcdNumber_61">
    <property name="geometry">
     <rect>
-     <x>770</x>
-     <y>60</y>
+     <x>1090</x>
+     <y>70</y>
      <width>91</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
    </property>
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_62">
    <property name="geometry">
     <rect>
-     <x>770</x>
-     <y>120</y>
+     <x>1090</x>
+     <y>130</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1507,8 +1698,8 @@
   <widget class="QLCDNumber" name="lcdNumber_63">
    <property name="geometry">
     <rect>
-     <x>770</x>
-     <y>170</y>
+     <x>1090</x>
+     <y>180</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1517,8 +1708,8 @@
   <widget class="QLCDNumber" name="lcdNumber_64">
    <property name="geometry">
     <rect>
-     <x>800</x>
-     <y>570</y>
+     <x>1120</x>
+     <y>580</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1527,8 +1718,8 @@
   <widget class="QLabel" name="label_67">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>590</y>
+     <x>1020</x>
+     <y>600</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1540,8 +1731,8 @@
   <widget class="QLCDNumber" name="lcdNumber_65">
    <property name="geometry">
     <rect>
-     <x>800</x>
-     <y>510</y>
+     <x>1120</x>
+     <y>520</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1550,8 +1741,8 @@
   <widget class="QLCDNumber" name="lcdNumber_66">
    <property name="geometry">
     <rect>
-     <x>770</x>
-     <y>230</y>
+     <x>1090</x>
+     <y>240</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1560,8 +1751,8 @@
   <widget class="QLabel" name="label_68">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>430</y>
+     <x>1020</x>
+     <y>440</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1573,8 +1764,8 @@
   <widget class="QLCDNumber" name="lcdNumber_67">
    <property name="geometry">
     <rect>
-     <x>800</x>
-     <y>400</y>
+     <x>1120</x>
+     <y>410</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1583,8 +1774,8 @@
   <widget class="QLCDNumber" name="lcdNumber_68">
    <property name="geometry">
     <rect>
-     <x>800</x>
-     <y>460</y>
+     <x>1120</x>
+     <y>470</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -1593,8 +1784,8 @@
   <widget class="QLabel" name="label_69">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>470</y>
+     <x>1020</x>
+     <y>480</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -1606,8 +1797,8 @@
   <widget class="QLabel" name="label_70">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>530</y>
+     <x>1020</x>
+     <y>540</y>
      <width>67</width>
      <height>17</height>
     </rect>

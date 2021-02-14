@@ -301,6 +301,17 @@ class GameState:
         else:
             return 15
 
+    def return_timeline(self):
+        totals = []
+        deltas = []
+        for rally in self.rallies:
+            total = rally[2][0] + rally[2][1]
+            delta = rally[2][0] - rally[2][1]
+            if len(totals) < 1 or totals[-1] is not total:
+                totals.append(total)
+                deltas.append(delta)
+        return totals, deltas
+
     def collect_stats(self, teamname):
         team = actions.Team.from_string(teamname)
         playerstats = {}

@@ -7,8 +7,12 @@ from PyQt5 import QtWidgets
 import datavolley2
 from datavolley2.statistics import GameState
 
+import matplotlib as mp
+import numpy as np
+
 # from datavolley2.statistics.Gamestate import GameState
 from uis import Ui_Form, Ui_MainWindow
+from uis.third import Ui_Form as thridUI
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -21,6 +25,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.game_state = GameState()
         self.fullstring = ""
         self.secondWindow = None
+        self.ThirdWindow = None
         self.illegal = []
 
     def save_and_reset(self):
@@ -50,9 +55,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.illegal.append(command)
 
         self.textEdit.setText(self.fullstring)
-        self.textEdit.verticalScrollBar.setValue(
-            self.textEdit.verticalScrollBar.maximum()
-        )
+        # self.textEdit.verticalScrollBar.setValue(
+        #     self.textEdit.verticalScrollBar.maximum()
+        # )
 
         ## update my view:
         self.lineEdit.clear()
@@ -464,14 +469,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.lcdNumber_54.display(ratio)
 
+        totals, delta = self.game_state.return_timeline()
+        self.ThirdWindow.graphicsView.plot(totals, delta)
+        # hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        # temperature = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
+        # self.ThirdWindow.graphicsView.plot(hour, temperature)
+
     def print_stats(self):
         if self.secondWindow is None:
             self.secondWindow = SecondWindow()
             s = SecondWindow()
         self.secondWindow.show()
+        if self.ThirdWindow is None:
+            self.ThirdWindow = ThirdWindow()
+        self.ThirdWindow.show()
 
 
 class SecondWindow(QtWidgets.QWidget, Ui_Form):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+class ThirdWindow(QtWidgets.QWidget, thridUI):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
