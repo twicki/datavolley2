@@ -469,8 +469,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.lcdNumber_54.display(ratio)
 
-        totals, delta = self.game_state.return_timeline()
-        self.ThirdWindow.graphicsView.plot(totals, delta)
+        if self.ThirdWindow:
+            totals, delta = self.game_state.return_timeline()
+            self.ThirdWindow.graphicsView.clear()
+            self.ThirdWindow.graphicsView.plot(totals, delta)
         # hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         # temperature = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
         # self.ThirdWindow.graphicsView.plot(hour, temperature)

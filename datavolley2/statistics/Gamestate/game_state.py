@@ -42,6 +42,7 @@ class Court:
     fields = []
 
     def __init__(self) -> None:
+        self.fields.clear()
         f1 = Field()
         self.fields.append(f1)
         f2 = Field()
@@ -273,7 +274,7 @@ class GameState:
                 self.score[index] += 1
                 if (
                     self.score[index] >= self.max_points_in_set()
-                    and score[index] - 2 > self.score[opponent]
+                    and self.score[index] - 2 >= self.score[opponent]
                 ):
                     self._current_actions.append(actions.Endset(who))
                     self.flush_actions()
@@ -304,12 +305,21 @@ class GameState:
     def return_timeline(self):
         totals = []
         deltas = []
+        # if we are at the end of a set, we want to show the last one:
+        if self.score[0] + self.score[1] == 0:
+            activeset = self.set_score[0] + self.set_score[1] - 1
+        else:
+            activeset = self.set_score[0] + self.set_score[1]
         for rally in self.rallies:
-            total = rally[2][0] + rally[2][1]
-            delta = rally[2][0] - rally[2][1]
-            if len(totals) < 1 or totals[-1] is not total:
-                totals.append(total)
-                deltas.append(delta)
+            if rally[3][0] + rally[3][1] == activeset:
+                total = rally[2][0] + rally[2][1]
+                delta = rally[2][0] - rally[2][1]
+                if len(totals) < 1 or totals[-1] is not total:
+                    totals.append(total)
+                    deltas.append(delta)
+        if self.score[0] + self.score[1] != 0:
+            totals.append(self.score[0] + self.score[1])
+            deltas.append(self.score[0] - self.score[1])
         return totals, deltas
 
     def collect_stats(self, teamname):
