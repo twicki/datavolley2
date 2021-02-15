@@ -1,6 +1,7 @@
 import copy
 import enum
 from copy import deepcopy
+from collections import OrderedDict
 
 import datavolley2.statistics.Actions as actions
 
@@ -16,19 +17,41 @@ import datavolley2.statistics.Actions.SpecialAction as SpecialActions
 class Player:
     @enum.unique
     class PlayerPosition(enum.Enum):
-        Setter = "Setter"
-        Libera = "Libera"
-        Outside = "Outside"
-        Opposite = "Opposite"
-        Middle = "Middle"
-        Universal = "Universal"
+        Setter = ("Setter", "s", 1)
+        Opposite = ("Opposite", "d", 2)
+        Middle = ("Middle", "m", 3)
+        Outside = ("Outside", "o", 4)
+        Libera = ("Libera", "l", 5)
+        Universal = ("Universal", "u", 6)
+
+        def __lt__(self, other):
+            if self.__class__ is other.__class__:
+                return self.value[2] < other.value[2]
+            return NotImplemented
+
+        def __int__(self):
+            return self.value[2]
+
+        @classmethod
+        def from_string(cls, s):
+            for position in cls:
+                if position.value[1] == s:
+                    return position
 
     Position = PlayerPosition.Universal
     Number = 0
+    Name = ""
 
-    def __init__(self, number: int, position=PlayerPosition.Universal) -> None:
+    def __init__(
+        self,
+        number: int,
+        position: PlayerPosition = PlayerPosition.Universal,
+        name: str = "",
+    ) -> None:
+
         self.Number = number
         self.Position = position
+        self.Name = name
 
 
 class Field:
@@ -50,7 +73,6 @@ class Court:
 
     def rotate(self, who: int) -> None:
         self.fields[who].players.append(self.fields[who].players.pop(0))
-        #  = np.roll(self.fields[who].players, -1)
 
 
 def set_team(user_string, returnvalue):
@@ -164,8 +186,7 @@ class GameState:
     _current_actions = []
     _last_serve = None
     teamnames = [None, None]
-    player_names = [{}, {}]
-    libs = [None, None]
+    players = [[], []]
 
     def __init__(self) -> None:
         self.score = [0, 0]
@@ -176,7 +197,7 @@ class GameState:
         self._current_actions = []
         self._last_serve = None
         self.teamnames = [None, None]
-        self.player_names = [{}, {}]
+        self.players = [[], []]
 
     def add_string(self, action: str):
         if "sub" in action:
@@ -203,25 +224,24 @@ class GameState:
             action = SpecialActions.Endset(actions.Team.from_string(team))
             self.add_logical(action)
         elif "rota" in action:
-            team = action[0][0]
-            action = SpecialActions.Endset(actions.Team.from_string(team))
+            l = action.split("!")
+            team = l[0][0]
+            direction = True if int(l[1]) > 0 else False
+            action = SpecialActions.Rotation(actions.Team.from_string(team), direction)
             self.add_logical(action)
         elif "team" in action:
             l = action.split("!")
             team = l[0][0]
             teamname = l[1]
             self.teamnames[int(actions.Team.from_string(team))] = teamname
-        elif "pname" in action:
+        elif "player" in action:
             l = action.split("!")
             team = l[0][0]
             playernumber = int(l[1])
             name = l[2]
-            self.player_names[int(actions.Team.from_string(team))][playernumber] = name
-        elif "lib" in action:
-            l = action.split("!")
-            team = l[0][0]
-            playernumber = int(l[1])
-            self.libs[int(actions.Team.from_string(team))] = playernumber
+            position = l[3]
+            p = Player(playernumber, Player.PlayerPosition.from_string(position), name)
+            self.players[int(actions.Team.from_string(team))].append(p)
         else:
             str1, str2 = split_string(action)
             allactions = []
@@ -324,24 +344,28 @@ class GameState:
 
     def collect_stats(self, teamname):
         team = actions.Team.from_string(teamname)
-        playerstats = {}
-        allplayers = self.court.fields[int(team)].players
-        if self.libs[int(team)]:
-            allplayers.append(self.libs[int(team)])
+        playerstats = OrderedDict()
+
+        self.players[int(team)] = sorted(
+            self.players[int(team)], key=lambda player: player.Position
+        )
+        allplayers = self.players[int(team)]
 
         for player in allplayers:
             playerstats[player.Number] = {}
-            if player.Number in self.player_names[int(team)]:
-                playerstats[player.Number]["name"] = self.player_names[int(team)][
-                    player.Number
-                ]
+            playerstats[player.Number]["played"] = False
+            for teams_player in self.players[int(team)]:
+                if teams_player.Number == player.Number:
+                    playerstats[player.Number]["name"] = teams_player.Name
             playerstats[player.Number]["serve"] = {}
             playerstats[player.Number]["serve"]["kill"] = 0
-            playerstats[player.Number]["serve"]["ball"] = 0
-            playerstats[player.Number]["reception"] = 0
+            playerstats[player.Number]["serve"]["total"] = 0
+            playerstats[player.Number]["rece"] = {}
+            playerstats[player.Number]["rece"]["win"] = 0
+            playerstats[player.Number]["rece"]["total"] = 0
             playerstats[player.Number]["hit"] = {}
             playerstats[player.Number]["hit"]["kill"] = 0
-            playerstats[player.Number]["hit"]["ball"] = 0
+            playerstats[player.Number]["hit"]["total"] = 0
             playerstats[player.Number]["error"] = 0
             playerstats[player.Number]["block"] = 0
         for player in allplayers:
@@ -349,25 +373,27 @@ class GameState:
                 for action in rally[0]:
                     if isinstance(action, Gameaction):
                         # is is the right player on the right team
-                        if action.Team == team:
+                        if action.team == team:
                             if action.player == player.Number:
+                                playerstats[player.Number]["played"] = True
+                                playerstats[player.Number]["group"] = int(
+                                    player.Position
+                                )
                                 # serve statistics
                                 if action.action == Action.Serve:
+                                    playerstats[player.Number]["serve"]["total"] += 1
                                     if action.quality == Quality.Kill:
                                         playerstats[player.Number]["serve"]["kill"] += 1
                                     elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
-                                    else:
-                                        playerstats[player.Number]["serve"]["ball"] += 1
 
                                 # hitting statistics
                                 if action.action == Action.Hit:
+                                    playerstats[player.Number]["hit"]["total"] += 1
                                     if action.quality == Quality.Kill:
                                         playerstats[player.Number]["hit"]["kill"] += 1
                                     elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
-                                    else:
-                                        playerstats[player.Number]["hit"]["ball"] += 1
 
                                 # blocking statistics
                                 if action.action == Action.Block:
@@ -378,14 +404,24 @@ class GameState:
 
                                 # blocking statistics
                                 if action.action == Action.Reception:
-                                    playerstats[player.Number]["reception"] += 1
-                                    if action.quality == Quality.Error:
+                                    playerstats[player.Number]["rece"]["total"] += 1
+                                    if (
+                                        action.quality == Quality.Perfect
+                                        or action.quality == Quality.Good
+                                    ):
+                                        playerstats[player.Number]["rece"]["win"] += 1
+                                    elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
+
+        for numbers in [
+            number for number, stats in playerstats.items() if stats["played"] == False
+        ]:
+            del playerstats[numbers]
 
         playerstats["team"] = {}
         playerstats["team"]["serve"] = {}
         playerstats["team"]["serve"]["kill"] = 0
-        playerstats["team"]["reception"] = 0
+        playerstats["team"]["rece"] = 0
         playerstats["team"]["hit"] = {}
         playerstats["team"]["hit"]["kill"] = 0
         playerstats["team"]["error"] = 0
@@ -394,7 +430,8 @@ class GameState:
             for action in rally[0]:
                 if isinstance(action, Gameaction):
                     # is is the right player on the right team
-                    if action.Team == team:
+                    if action.team == team:
+                        playerstats["team"]["group"] = 7
                         # serve statistics
                         if action.action == Action.Serve:
                             if action.quality == Quality.Kill:
@@ -418,7 +455,7 @@ class GameState:
 
                         # blocking statistics
                         if action.action == Action.Reception:
-                            playerstats["team"]["reception"] += 1
+                            playerstats["team"]["rece"] += 1
                             if action.quality == Quality.Error:
                                 playerstats["team"]["error"] += 1
         return playerstats
