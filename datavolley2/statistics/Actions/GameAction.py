@@ -110,10 +110,13 @@ class Gameaction:
         self.action = Action.Hit
         self.quality = Quality.Good
 
+    def __str__(self):
+        return str(self.team) + str(self.player) + str(self.action) + str(self.quality)
+
     @classmethod
     def from_string(cls, s):
         new = cls()
-        new.Team = Team.from_string(s[0])
+        new.team = Team.from_string(s[0])
         new.player = int(s[1:3])
         new.action = Action.from_string(s[3])
         new.quality = Quality.from_string(s[4])
@@ -122,8 +125,8 @@ class Gameaction:
 
 def is_scoring(action):
     if action.quality == Quality.Kill:
-        return action.Team, True
+        return action.team, True
     elif action.quality == Quality.Error:
-        return Team.inverse(action.Team), True
+        return Team.inverse(action.team), True
     else:
         return None, False

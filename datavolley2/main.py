@@ -2,10 +2,10 @@
 # import statistics.Gamestate as GS
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 import datavolley2
-from datavolley2.statistics import GameState
+from datavolley2.statistics import GameState, Team
 
 import matplotlib as mp
 import numpy as np
@@ -42,6 +42,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.illegal.append(command)
         self.textEdit.setText(self.fullstring)
         self.lineEdit.clear()
+        self.textEdit.verticalScrollBar().setValue(
+            self.textEdit.verticalScrollBar().maximum()
+        )
         self.update()
 
     def update(self):
@@ -55,14 +58,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.illegal.append(command)
 
         self.textEdit.setText(self.fullstring)
-        # self.textEdit.verticalScrollBar.setValue(
-        #     self.textEdit.verticalScrollBar.maximum()
-        # )
+        self.textEdit.verticalScrollBar().setValue(
+            self.textEdit.verticalScrollBar().maximum()
+        )
 
         ## update my view:
         self.lineEdit.clear()
         self.label_14.setText(self.game_state.teamnames[0])
         self.label_13.setText(self.game_state.teamnames[1])
+        if self.game_state._last_serve == Team.from_string("*"):
+            self.checkBox.setChecked(True)
+            self.checkBox_2.setChecked(False)
+        elif self.game_state._last_serve == Team.from_string("/"):
+            self.checkBox.setChecked(False)
+            self.checkBox_2.setChecked(True)
+        else:
+            self.checkBox.setChecked(False)
+            self.checkBox_2.setChecked(False)
+        self.checkBox_2.setEnabled(False)
+        self.checkBox.setEnabled(False)
 
         # home team
         number = self.game_state.court.fields[0].players[0].Number
@@ -141,6 +155,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ## set up score
         self.lcdNumber.display(self.game_state.score[0])
         self.lcdNumber_2.display(self.game_state.score[1])
+        self.lcdNumber_4.display(self.game_state.set_score[0])
+        self.lcdNumber_3.display(self.game_state.set_score[1])
 
         ## update the other view:
         if self.secondWindow is not None:
@@ -473,9 +489,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             totals, delta = self.game_state.return_timeline()
             self.ThirdWindow.graphicsView.clear()
             self.ThirdWindow.graphicsView.plot(totals, delta)
-        # hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        # temperature = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
-        # self.ThirdWindow.graphicsView.plot(hour, temperature)
+            self.ThirdWindow.graphicsView.showGrid(True, True, 0.8)
+
+        self.tableWidget.setRowCount(10000)
+        self.tableWidget.setColumnCount(1)
+        i = 0
+        for rally in self.game_state.rallies:
+            for action in rally[0]:
+                self.tableWidget.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
+                i += 1
+        self.tableWidget.setRowCount(i)
+        self.tableWidget.scrollToBottom()
 
     def print_stats(self):
         if self.secondWindow is None:
