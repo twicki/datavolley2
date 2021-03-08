@@ -1,4 +1,6 @@
 from enum import Enum
+from .AbstractAction import AbstractAction
+import datavolley2.statistics.Gamestate.game_state as gs
 
 
 class Team(Enum):
@@ -98,7 +100,7 @@ class Action(Enum):
             return Action.Hit
 
 
-class Gameaction:
+class Gameaction(AbstractAction):
     team = None
     player = None
     action = None
@@ -111,7 +113,9 @@ class Gameaction:
         self.quality = Quality.Good
 
     def __str__(self):
-        return str(self.team) + str(self.player) + str(self.action) + str(self.quality)
+        return gs.expandString(
+            str(self.team) + str(self.player) + str(self.action) + str(self.quality)
+        )[0]
 
     @classmethod
     def from_string(cls, s):

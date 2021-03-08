@@ -1,7 +1,8 @@
 from .GameAction import Team
+from .AbstractAction import AbstractAction
 
 
-class Substitute:
+class Substitute(AbstractAction):
     player_in: int
     position_in: int
 
@@ -21,7 +22,7 @@ class Substitute:
         )
 
 
-class Rotation:
+class Rotation(AbstractAction):
     team_: Team
     positive: bool
 
@@ -34,7 +35,7 @@ class Rotation:
         return str(self.team_) + "Rotation " + str(int(self.positive))
 
 
-class Point:
+class Point(AbstractAction):
     team_: Team
     value: int
 
@@ -47,7 +48,7 @@ class Point:
         return str(self.team_) + "Point"
 
 
-class Endset:
+class Endset(AbstractAction):
     team_: Team
 
     def __init__(self, team: Team):
@@ -58,7 +59,7 @@ class Endset:
         return str(self.team_) + "EndSet"
 
 
-class SetServingTeam:
+class SetServingTeam(AbstractAction):
     team_: Team
 
     def __init__(self, team: Team):

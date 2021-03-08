@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets, QtGui
 
 import datavolley2
 from datavolley2.statistics import GameState, Team
+from datavolley2.analysis.static import StaticWriter
 
 import matplotlib as mp
 import numpy as np
@@ -13,6 +14,7 @@ import numpy as np
 # from datavolley2.statistics.Gamestate import GameState
 from uis import Ui_Form, Ui_MainWindow
 from uis.third import Ui_Form as thridUI
+from uis.fourth import Ui_Form as fourthUI
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -21,12 +23,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.pushButton.clicked.connect(self.print_stats)
         self.pushButton_2.clicked.connect(self.save_and_reset)
+        self.pushButton_3.clicked.connect(self.write_analysis)
         self.lineEdit.returnPressed.connect(self.update)
         self.game_state = GameState()
         self.fullstring = ""
         self.secondWindow = None
         self.ThirdWindow = None
+        self.FourthWindow = None
         self.illegal = []
+
+    def write_analysis(self):
+        sw = StaticWriter(self.game_state)
+        sw.analyze()
+        print("stat file written")
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
@@ -217,7 +226,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 if p.Number == number:
                     fulltext = fulltext + " " + p.Name
             processed = False
-            if value[1]["group"] < 3:
+            if value and value[1]["group"] < 3:
                 processed = True
                 self.secondWindow.player_name.setText(fulltext)
                 self.secondWindow.hit.display(value[1]["hit"]["kill"])
@@ -240,6 +249,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct.display(ratio)
                 processed = True
+                self.secondWindow.player_name.show()
+                self.secondWindow.hit.show()
+                self.secondWindow.serve.show()
+                self.secondWindow.block.show()
+                self.secondWindow.rece.show()
+                self.secondWindow.error.show()
+                self.secondWindow.hit_pct.show()
+                self.secondWindow.rece_pct.show()
+                self.secondWindow.l_hits.show()
+                self.secondWindow.l_serve.show()
+                self.secondWindow.l_block.show()
+                self.secondWindow.l_rece.show()
+                self.secondWindow.l_error.show()
             else:
                 self.secondWindow.player_name.hide()
                 self.secondWindow.hit.hide()
@@ -264,7 +286,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 3:
+            if value and value[1]["group"] < 3:
                 self.secondWindow.player_name_2.setText(fulltext)
                 self.secondWindow.hit_2.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_2.display(value[1]["serve"]["kill"])
@@ -286,6 +308,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_2.display(ratio)
                 processed = True
+                self.secondWindow.player_name_2.show()
+                self.secondWindow.hit_2.show()
+                self.secondWindow.serve_2.show()
+                self.secondWindow.block_2.show()
+                self.secondWindow.rece_2.show()
+                self.secondWindow.error_2.show()
+                self.secondWindow.hit_pct_2.show()
+                self.secondWindow.rece_pct_2.show()
+                self.secondWindow.l_hits_2.show()
+                self.secondWindow.l_serve_2.show()
+                self.secondWindow.l_block_2.show()
+                self.secondWindow.l_rece_2.show()
+                self.secondWindow.l_error_2.show()
             else:
                 self.secondWindow.player_name_2.hide()
                 self.secondWindow.hit_2.hide()
@@ -310,7 +345,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 3:
+            if value and value[1]["group"] < 3:
                 self.secondWindow.player_name_3.setText(fulltext)
                 self.secondWindow.hit_3.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_3.display(value[1]["serve"]["kill"])
@@ -332,6 +367,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_3.display(ratio)
                 processed = True
+                self.secondWindow.player_name_3.show()
+                self.secondWindow.hit_3.show()
+                self.secondWindow.serve_3.show()
+                self.secondWindow.block_3.show()
+                self.secondWindow.rece_3.show()
+                self.secondWindow.error_3.show()
+                self.secondWindow.hit_pct_3.show()
+                self.secondWindow.rece_pct_3.show()
+                self.secondWindow.l_hits_3.show()
+                self.secondWindow.l_serve_3.show()
+                self.secondWindow.l_block_3.show()
+                self.secondWindow.l_rece_3.show()
+                self.secondWindow.l_error_3.show()
             else:
                 self.secondWindow.player_name_3.hide()
                 self.secondWindow.hit_3.hide()
@@ -355,7 +403,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 4:
+            if value and value[1]["group"] < 4:
                 self.secondWindow.player_name_4.setText(fulltext)
                 self.secondWindow.hit_4.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_4.display(value[1]["serve"]["kill"])
@@ -377,6 +425,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_4.display(ratio)
                 processed = True
+                self.secondWindow.player_name_4.show()
+                self.secondWindow.hit_4.show()
+                self.secondWindow.serve_4.show()
+                self.secondWindow.block_4.show()
+                self.secondWindow.rece_4.show()
+                self.secondWindow.error_4.show()
+                self.secondWindow.hit_pct_4.show()
+                self.secondWindow.rece_pct_4.show()
+                self.secondWindow.l_hits_4.show()
+                self.secondWindow.l_serve_4.show()
+                self.secondWindow.l_block_4.show()
+                self.secondWindow.l_rece_4.show()
+                self.secondWindow.l_error_4.show()
             else:
                 self.secondWindow.player_name_4.hide()
                 self.secondWindow.hit_4.hide()
@@ -400,7 +461,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 4:
+            if value and value[1]["group"] < 4:
                 self.secondWindow.player_name_5.setText(fulltext)
                 self.secondWindow.hit_5.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_5.display(value[1]["serve"]["kill"])
@@ -422,6 +483,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_5.display(ratio)
                 processed = True
+                self.secondWindow.player_name_5.show()
+                self.secondWindow.hit_5.show()
+                self.secondWindow.serve_5.show()
+                self.secondWindow.block_5.show()
+                self.secondWindow.rece_5.show()
+                self.secondWindow.error_5.show()
+                self.secondWindow.hit_pct_5.show()
+                self.secondWindow.rece_pct_5.show()
+                self.secondWindow.l_hits_5.show()
+                self.secondWindow.l_serve_5.show()
+                self.secondWindow.l_block_5.show()
+                self.secondWindow.l_rece_5.show()
+                self.secondWindow.l_error_5.show()
             else:
                 self.secondWindow.player_name_5.hide()
                 self.secondWindow.hit_5.hide()
@@ -445,7 +519,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 4:
+            if value and value[1]["group"] < 4:
                 self.secondWindow.player_name_6.setText(fulltext)
                 self.secondWindow.hit_6.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_6.display(value[1]["serve"]["kill"])
@@ -467,6 +541,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_6.display(ratio)
                 processed = True
+                self.secondWindow.player_name_6.show()
+                self.secondWindow.hit_6.show()
+                self.secondWindow.serve_6.show()
+                self.secondWindow.block_6.show()
+                self.secondWindow.rece_6.show()
+                self.secondWindow.error_6.show()
+                self.secondWindow.hit_pct_6.show()
+                self.secondWindow.rece_pct_6.show()
+                self.secondWindow.l_hits_6.show()
+                self.secondWindow.l_serve_6.show()
+                self.secondWindow.l_block_6.show()
+                self.secondWindow.l_rece_6.show()
+                self.secondWindow.l_error_6.show()
             else:
                 self.secondWindow.player_name_6.hide()
                 self.secondWindow.hit_6.hide()
@@ -490,7 +577,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 5:
+            if value and value[1]["group"] < 5:
                 self.secondWindow.player_name_7.setText(fulltext)
                 self.secondWindow.hit_7.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_7.display(value[1]["serve"]["kill"])
@@ -512,6 +599,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_7.display(ratio)
                 processed = True
+                self.secondWindow.player_name_7.show()
+                self.secondWindow.hit_7.show()
+                self.secondWindow.serve_7.show()
+                self.secondWindow.block_7.show()
+                self.secondWindow.rece_7.show()
+                self.secondWindow.error_7.show()
+                self.secondWindow.hit_pct_7.show()
+                self.secondWindow.rece_pct_7.show()
+                self.secondWindow.l_hits_7.show()
+                self.secondWindow.l_serve_7.show()
+                self.secondWindow.l_block_7.show()
+                self.secondWindow.l_rece_7.show()
+                self.secondWindow.l_error_7.show()
             else:
                 self.secondWindow.player_name_7.hide()
                 self.secondWindow.hit_7.hide()
@@ -535,7 +635,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 5:
+            if value and value[1]["group"] < 5:
                 self.secondWindow.player_name_8.setText(fulltext)
                 self.secondWindow.hit_8.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_8.display(value[1]["serve"]["kill"])
@@ -557,6 +657,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_8.display(ratio)
                 processed = True
+                self.secondWindow.player_name_8.show()
+                self.secondWindow.hit_8.show()
+                self.secondWindow.serve_8.show()
+                self.secondWindow.block_8.show()
+                self.secondWindow.rece_8.show()
+                self.secondWindow.error_8.show()
+                self.secondWindow.hit_pct_8.show()
+                self.secondWindow.rece_pct_8.show()
+                self.secondWindow.l_hits_8.show()
+                self.secondWindow.l_serve_8.show()
+                self.secondWindow.l_block_8.show()
+                self.secondWindow.l_rece_8.show()
+                self.secondWindow.l_error_8.show()
             else:
                 self.secondWindow.player_name_8.hide()
                 self.secondWindow.hit_8.hide()
@@ -580,7 +693,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 5:
+            if value and value[1]["group"] < 5:
                 self.secondWindow.player_name_9.setText(fulltext)
                 self.secondWindow.hit_9.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_9.display(value[1]["serve"]["kill"])
@@ -602,6 +715,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_9.display(ratio)
                 processed = True
+                self.secondWindow.player_name_9.show()
+                self.secondWindow.hit_9.show()
+                self.secondWindow.serve_9.show()
+                self.secondWindow.block_9.show()
+                self.secondWindow.rece_9.show()
+                self.secondWindow.error_9.show()
+                self.secondWindow.hit_pct_9.show()
+                self.secondWindow.rece_pct_9.show()
+                self.secondWindow.l_hits_9.show()
+                self.secondWindow.l_serve_9.show()
+                self.secondWindow.l_block_9.show()
+                self.secondWindow.l_rece_9.show()
+                self.secondWindow.l_error_9.show()
             else:
                 self.secondWindow.player_name_9.hide()
                 self.secondWindow.hit_9.hide()
@@ -625,7 +751,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 7:
+            if value and value[1]["group"] < 7:
                 self.secondWindow.player_name_10.setText(fulltext)
                 self.secondWindow.hit_10.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_10.display(value[1]["serve"]["kill"])
@@ -647,6 +773,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_10.display(ratio)
                 processed = True
+                self.secondWindow.player_name_10.show()
+                self.secondWindow.hit_10.show()
+                self.secondWindow.serve_10.show()
+                self.secondWindow.block_10.show()
+                self.secondWindow.rece_10.show()
+                self.secondWindow.error_10.show()
+                self.secondWindow.hit_pct_10.show()
+                self.secondWindow.rece_pct_10.show()
+                self.secondWindow.l_hits_10.show()
+                self.secondWindow.l_serve_10.show()
+                self.secondWindow.l_block_10.show()
+                self.secondWindow.l_rece_10.show()
+                self.secondWindow.l_error_10.show()
             else:
                 self.secondWindow.player_name_10.hide()
                 self.secondWindow.hit_10.hide()
@@ -670,7 +809,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 7:
+            if value and value[1]["group"] < 7:
                 self.secondWindow.player_name_11.setText(fulltext)
                 self.secondWindow.hit_11.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_11.display(value[1]["serve"]["kill"])
@@ -692,6 +831,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_11.display(ratio)
                 processed = True
+                self.secondWindow.player_name_11.show()
+                self.secondWindow.hit_11.show()
+                self.secondWindow.serve_11.show()
+                self.secondWindow.block_11.show()
+                self.secondWindow.rece_11.show()
+                self.secondWindow.error_11.show()
+                self.secondWindow.hit_pct_11.show()
+                self.secondWindow.rece_pct_11.show()
+                self.secondWindow.l_hits_11.show()
+                self.secondWindow.l_serve_11.show()
+                self.secondWindow.l_block_11.show()
+                self.secondWindow.l_rece_11.show()
+                self.secondWindow.l_error_11.show()
             else:
                 self.secondWindow.player_name_11.hide()
                 self.secondWindow.hit_11.hide()
@@ -722,7 +874,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 if p.Number == number:
                     fulltext = fulltext + " " + p.Name
             processed = False
-            if value[1]["group"] < 3:
+            if value and value[1]["group"] < 3:
                 processed = True
                 self.secondWindow.player_name_12.setText(fulltext)
                 self.secondWindow.hit_12.display(value[1]["hit"]["kill"])
@@ -745,6 +897,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_12.display(ratio)
                 processed = True
+                self.secondWindow.player_name_12.show()
+                self.secondWindow.player_name_12.show()
+                self.secondWindow.hit_12.show()
+                self.secondWindow.serve_12.show()
+                self.secondWindow.block_12.show()
+                self.secondWindow.rece_12.show()
+                self.secondWindow.error_12.show()
+                self.secondWindow.hit_pct_12.show()
+                self.secondWindow.rece_pct_12.show()
+                self.secondWindow.l_hits_12.show()
+                self.secondWindow.l_serve_12.show()
+                self.secondWindow.l_block_12.show()
+                self.secondWindow.l_rece_12.show()
+                self.secondWindow.l_error_12.show()
             else:
                 self.secondWindow.player_name_12.hide()
                 self.secondWindow.hit_12.hide()
@@ -768,7 +934,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 3:
+            if value and value[1]["group"] < 3:
                 self.secondWindow.player_name_13.setText(fulltext)
                 self.secondWindow.hit_13.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_13.display(value[1]["serve"]["kill"])
@@ -790,6 +956,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_13.display(ratio)
                 processed = True
+                self.secondWindow.player_name_13.show()
+                self.secondWindow.hit_13.show()
+                self.secondWindow.serve_13.show()
+                self.secondWindow.block_13.show()
+                self.secondWindow.rece_13.show()
+                self.secondWindow.error_13.show()
+                self.secondWindow.hit_pct_13.show()
+                self.secondWindow.rece_pct_13.show()
+                self.secondWindow.l_hits_13.show()
+                self.secondWindow.l_serve_13.show()
+                self.secondWindow.l_block_13.show()
+                self.secondWindow.l_rece_13.show()
+                self.secondWindow.l_error_13.show()
             else:
                 self.secondWindow.player_name_13.hide()
                 self.secondWindow.hit_13.hide()
@@ -813,7 +992,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 3:
+            if value and value[1]["group"] < 3:
                 self.secondWindow.player_name_15.setText(fulltext)
                 self.secondWindow.hit_15.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_15.display(value[1]["serve"]["kill"])
@@ -835,6 +1014,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_15.display(ratio)
                 processed = True
+                self.secondWindow.player_name_15.show()
+                self.secondWindow.hit_15.show()
+                self.secondWindow.serve_15.show()
+                self.secondWindow.block_15.show()
+                self.secondWindow.rece_15.show()
+                self.secondWindow.error_15.show()
+                self.secondWindow.hit_pct_15.show()
+                self.secondWindow.rece_pct_15.show()
+                self.secondWindow.l_hits_15.show()
+                self.secondWindow.l_serve_15.show()
+                self.secondWindow.l_block_15.show()
+                self.secondWindow.l_rece_15.show()
+                self.secondWindow.l_error_15.show()
             else:
                 self.secondWindow.player_name_15.hide()
                 self.secondWindow.hit_15.hide()
@@ -858,7 +1050,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 4:
+            if value and value[1]["group"] < 4:
                 self.secondWindow.player_name_16.setText(fulltext)
                 self.secondWindow.hit_16.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_16.display(value[1]["serve"]["kill"])
@@ -880,6 +1072,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_16.display(ratio)
                 processed = True
+                self.secondWindow.player_name_16.show()
+                self.secondWindow.hit_16.show()
+                self.secondWindow.serve_16.show()
+                self.secondWindow.block_16.show()
+                self.secondWindow.rece_16.show()
+                self.secondWindow.error_16.show()
+                self.secondWindow.hit_pct_16.show()
+                self.secondWindow.rece_pct_16.show()
+                self.secondWindow.l_hits_16.show()
+                self.secondWindow.l_serve_16.show()
+                self.secondWindow.l_block_16.show()
+                self.secondWindow.l_rece_16.show()
+                self.secondWindow.l_error_16.show()
             else:
                 self.secondWindow.player_name_16.hide()
                 self.secondWindow.hit_16.hide()
@@ -903,7 +1108,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 4:
+            if value and value[1]["group"] < 4:
                 self.secondWindow.player_name_17.setText(fulltext)
                 self.secondWindow.hit_17.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_17.display(value[1]["serve"]["kill"])
@@ -925,6 +1130,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_17.display(ratio)
                 processed = True
+                self.secondWindow.player_name_17.show()
+                self.secondWindow.hit_17.show()
+                self.secondWindow.serve_17.show()
+                self.secondWindow.block_17.show()
+                self.secondWindow.rece_17.show()
+                self.secondWindow.error_17.show()
+                self.secondWindow.hit_pct_17.show()
+                self.secondWindow.rece_pct_17.show()
+                self.secondWindow.l_hits_17.show()
+                self.secondWindow.l_serve_17.show()
+                self.secondWindow.l_block_17.show()
+                self.secondWindow.l_rece_17.show()
+                self.secondWindow.l_error_17.show()
             else:
                 self.secondWindow.player_name_17.hide()
                 self.secondWindow.hit_17.hide()
@@ -949,7 +1167,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 4:
+            if value and value[1]["group"] < 4:
                 self.secondWindow.player_name_18.setText(fulltext)
                 self.secondWindow.hit_18.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_18.display(value[1]["serve"]["kill"])
@@ -971,6 +1189,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_18.display(ratio)
                 processed = True
+                self.secondWindow.player_name_18.show()
+                self.secondWindow.hit_18.show()
+                self.secondWindow.serve_18.show()
+                self.secondWindow.block_18.show()
+                self.secondWindow.rece_18.show()
+                self.secondWindow.error_18.show()
+                self.secondWindow.hit_pct_18.show()
+                self.secondWindow.rece_pct_18.show()
+                self.secondWindow.l_hits_18.show()
+                self.secondWindow.l_serve_18.show()
+                self.secondWindow.l_block_18.show()
+                self.secondWindow.l_rece_18.show()
+                self.secondWindow.l_error_18.show()
             else:
                 self.secondWindow.player_name_18.hide()
                 self.secondWindow.hit_18.hide()
@@ -995,7 +1226,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 5:
+            if value and value[1]["group"] < 5:
                 self.secondWindow.player_name_19.setText(fulltext)
                 self.secondWindow.hit_19.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_19.display(value[1]["serve"]["kill"])
@@ -1017,6 +1248,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_19.display(ratio)
                 processed = True
+                self.secondWindow.player_name_19.show()
+                self.secondWindow.hit_19.show()
+                self.secondWindow.serve_19.show()
+                self.secondWindow.block_19.show()
+                self.secondWindow.rece_19.show()
+                self.secondWindow.error_19.show()
+                self.secondWindow.hit_pct_19.show()
+                self.secondWindow.rece_pct_19.show()
+                self.secondWindow.l_hits_19.show()
+                self.secondWindow.l_serve_19.show()
+                self.secondWindow.l_block_19.show()
+                self.secondWindow.l_rece_19.show()
+                self.secondWindow.l_error_19.show()
             else:
                 self.secondWindow.player_name_19.hide()
                 self.secondWindow.hit_19.hide()
@@ -1041,7 +1285,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 5:
+            if value and value[1]["group"] < 5:
                 self.secondWindow.player_name_20.setText(fulltext)
                 self.secondWindow.hit_20.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_20.display(value[1]["serve"]["kill"])
@@ -1063,6 +1307,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_20.display(ratio)
                 processed = True
+                self.secondWindow.player_name_20.show()
+                self.secondWindow.hit_20.show()
+                self.secondWindow.serve_20.show()
+                self.secondWindow.block_20.show()
+                self.secondWindow.rece_20.show()
+                self.secondWindow.error_20.show()
+                self.secondWindow.hit_pct_20.show()
+                self.secondWindow.rece_pct_20.show()
+                self.secondWindow.l_hits_20.show()
+                self.secondWindow.l_serve_20.show()
+                self.secondWindow.l_block_20.show()
+                self.secondWindow.l_rece_20.show()
+                self.secondWindow.l_error_20.show()
             else:
                 self.secondWindow.player_name_20.hide()
                 self.secondWindow.hit_20.hide()
@@ -1087,7 +1344,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 5:
+            if value and value[1]["group"] < 5:
                 self.secondWindow.player_name_21.setText(fulltext)
                 self.secondWindow.hit_21.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_21.display(value[1]["serve"]["kill"])
@@ -1109,6 +1366,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_21.display(ratio)
                 processed = True
+                self.secondWindow.player_name_21.show()
+                self.secondWindow.hit_21.show()
+                self.secondWindow.serve_21.show()
+                self.secondWindow.block_21.show()
+                self.secondWindow.rece_21.show()
+                self.secondWindow.error_21.show()
+                self.secondWindow.hit_pct_21.show()
+                self.secondWindow.rece_pct_21.show()
+                self.secondWindow.l_hits_21.show()
+                self.secondWindow.l_serve_21.show()
+                self.secondWindow.l_block_21.show()
+                self.secondWindow.l_rece_21.show()
+                self.secondWindow.l_error_21.show()
             else:
                 self.secondWindow.player_name_21.hide()
                 self.secondWindow.hit_21.hide()
@@ -1133,7 +1403,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 7:
+            if value and value[1]["group"] < 7:
                 self.secondWindow.player_name_22.setText(fulltext)
                 self.secondWindow.hit_22.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_22.display(value[1]["serve"]["kill"])
@@ -1155,6 +1425,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_22.display(ratio)
                 processed = True
+                self.secondWindow.player_name_22.show()
+                self.secondWindow.hit_22.show()
+                self.secondWindow.serve_22.show()
+                self.secondWindow.block_22.show()
+                self.secondWindow.rece_22.show()
+                self.secondWindow.error_22.show()
+                self.secondWindow.hit_pct_22.show()
+                self.secondWindow.rece_pct_22.show()
+                self.secondWindow.l_hits_22.show()
+                self.secondWindow.l_serve_22.show()
+                self.secondWindow.l_block_22.show()
+                self.secondWindow.l_rece_22.show()
+                self.secondWindow.l_error_22.show()
             else:
                 self.secondWindow.player_name_22.hide()
                 self.secondWindow.hit_22.hide()
@@ -1179,7 +1462,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     if p.Number == number:
                         fulltext = fulltext + " " + p.Name
                 processed = False
-            if value[1]["group"] < 7:
+            if value and value[1]["group"] < 7:
                 self.secondWindow.player_name_23.setText(fulltext)
                 self.secondWindow.hit_23.display(value[1]["hit"]["kill"])
                 self.secondWindow.serve_23.display(value[1]["serve"]["kill"])
@@ -1201,6 +1484,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     ratio = 0
                 self.secondWindow.rece_pct_23.display(ratio)
                 processed = True
+                self.secondWindow.player_name_23.show()
+                self.secondWindow.hit_23.show()
+                self.secondWindow.serve_23.show()
+                self.secondWindow.block_23.show()
+                self.secondWindow.rece_23.show()
+                self.secondWindow.error_23.show()
+                self.secondWindow.hit_pct_23.show()
+                self.secondWindow.rece_pct_23.show()
+                self.secondWindow.l_hits_23.show()
+                self.secondWindow.l_serve_23.show()
+                self.secondWindow.l_block_23.show()
+                self.secondWindow.l_rece_23.show()
+                self.secondWindow.l_error_23.show()
             else:
                 self.secondWindow.player_name_23.hide()
                 self.secondWindow.hit_23.hide()
@@ -1216,12 +1512,43 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.secondWindow.l_rece_23.hide()
                 self.secondWindow.l_error_23.hide()
 
-
         if self.ThirdWindow:
             totals, delta = self.game_state.return_timeline()
             self.ThirdWindow.graphicsView.clear()
             self.ThirdWindow.graphicsView.plot(totals, delta)
             self.ThirdWindow.graphicsView.showGrid(True, True, 0.8)
+
+        if self.FourthWindow:
+            score = self.game_state.return_truncated_scores()
+            self.game_state.teamnames[0]
+            self.FourthWindow.label.setText(self.game_state.teamnames[0])
+            self.FourthWindow.label_2.setText(self.game_state.teamnames[1])
+            self.FourthWindow.lcdNumber_21.display(self.game_state.score[0])
+            self.FourthWindow.lcdNumber_22.display(self.game_state.score[1])
+            for i in range(len(self.FourthWindow.home_scores)):
+                self.FourthWindow.home_scores[i].hide()
+                self.FourthWindow.guest_scores[i].hide()
+            for i in range(len(score) - 1):
+                self.FourthWindow.home_scores[i].show()
+                self.FourthWindow.guest_scores[i].show()
+                if score[i][0] != score[i + 1][0]:
+                    self.FourthWindow.home_scores[i].display(score[i + 1][0])
+                    self.FourthWindow.home_scores[i].setStyleSheet(
+                        """QLCDNumber {background-color: green}"""
+                    )
+                    self.FourthWindow.guest_scores[i].display(" ")
+                    self.FourthWindow.guest_scores[i].setStyleSheet(
+                        """QLCDNumber {background-color: rgb(114, 159, 207);}"""
+                    )
+                else:
+                    self.FourthWindow.guest_scores[i].display(score[i + 1][1])
+                    self.FourthWindow.guest_scores[i].setStyleSheet(
+                        """QLCDNumber {background-color: green}"""
+                    )
+                    self.FourthWindow.home_scores[i].display(" ")
+                    self.FourthWindow.home_scores[i].setStyleSheet(
+                        """QLCDNumber {background-color: rgb(114, 159, 207);}"""
+                    )
 
     def print_stats(self):
         if self.secondWindow is None:
@@ -1231,6 +1558,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.ThirdWindow is None:
             self.ThirdWindow = ThirdWindow()
         self.ThirdWindow.show()
+        if self.FourthWindow is None:
+            self.FourthWindow = FourthWindow()
+        self.FourthWindow.show()
 
 
 class SecondWindow(QtWidgets.QWidget, Ui_Form):
@@ -1243,6 +1573,39 @@ class ThirdWindow(QtWidgets.QWidget, thridUI):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+
+class FourthWindow(QtWidgets.QWidget, fourthUI):
+    home_scores = []
+    guest_scores = []
+
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.home_scores = [
+            self.lcdNumber,
+            self.lcdNumber_2,
+            self.lcdNumber_3,
+            self.lcdNumber_4,
+            self.lcdNumber_5,
+            self.lcdNumber_6,
+            self.lcdNumber_7,
+            self.lcdNumber_8,
+            self.lcdNumber_9,
+            self.lcdNumber_10,
+        ]
+        self.guest_scores = [
+            self.lcdNumber_11,
+            self.lcdNumber_12,
+            self.lcdNumber_13,
+            self.lcdNumber_14,
+            self.lcdNumber_15,
+            self.lcdNumber_16,
+            self.lcdNumber_17,
+            self.lcdNumber_18,
+            self.lcdNumber_19,
+            self.lcdNumber_20,
+        ]
 
 
 def main():

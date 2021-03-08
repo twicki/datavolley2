@@ -14,6 +14,13 @@ from datavolley2.statistics.Actions.GameAction import (
 import datavolley2.statistics.Actions.SpecialAction as SpecialActions
 
 
+def truncate_list(in_list, size=11):
+    if len(in_list) < size:
+        return in_list
+    else:
+        return in_list[-size:]
+
+
 class Player:
     @enum.unique
     class PlayerPosition(enum.Enum):
@@ -27,7 +34,9 @@ class Player:
         def __lt__(self, other):
             if self.__class__ is other.__class__:
                 return self.value[2] < other.value[2]
-            return NotImplemented
+            else:
+                return False
+            # return NotImplemented
 
         def __int__(self):
             return self.value[2]
@@ -41,31 +50,32 @@ class Player:
     Position = PlayerPosition.Universal
     Number = 0
     Name = ""
+    is_capitain = False
 
     def __init__(
         self,
         number: int,
         position: PlayerPosition = PlayerPosition.Universal,
         name: str = "",
+        is_capitain: bool = False,
     ) -> None:
 
         self.Number = number
         self.Position = position
         self.Name = name
+        self.is_capitain = is_capitain
 
 
 class Field:
     def __init__(self) -> None:
-        self.players = list()
+        self.players = []
         for i in range(6):
             self.players.append(Player(0))
 
 
 class Court:
-    fields = []
-
     def __init__(self) -> None:
-        self.fields.clear()
+        self.fields = []
         f1 = Field()
         self.fields.append(f1)
         f2 = Field()
@@ -181,7 +191,7 @@ class GameState:
     set_score = [0, 0]
     # timeouts = [0, 0]
     rallies = []
-    court = Court()
+    court = None
 
     _current_actions = []
     _last_serve = None
@@ -264,6 +274,8 @@ class GameState:
         elif isinstance(action, SpecialActions.Endset):
             self.score[0] = 0
             self.score[1] = 0
+            self.court.fields[0] = Field()
+            self.court.fields[1] = Field()
             self.flush_actions()
         elif isinstance(action, SpecialActions.Rotation):
             self.court.rotate(int(action.team_))
@@ -299,16 +311,23 @@ class GameState:
                     self._current_actions.append(actions.Endset(who))
                     self.flush_actions()
                     self.set_score[index] += 1
-                    self.score[index] = 0
-                    self.score[opponent] = 0
+                    self.score[0] = 0
+                    self.score[1] = 0
+                    self.court.fields[0] = Field()
+                    self.court.fields[1] = Field()
 
     def flush_actions(self):
+        c = Court()
+        c.fields[0].players = list.copy(self.court.fields[0].players)
+        c.fields[1].players = list.copy(self.court.fields[1].players)
+
         self.rallies.append(
             (
                 list.copy(self._current_actions),
                 copy.deepcopy(self.court),
                 copy.deepcopy(self.score),
                 copy.deepcopy(self.set_score),
+                copy.deepcopy(str(self._last_serve)),
             )
         )
         self._current_actions.clear()
@@ -341,6 +360,23 @@ class GameState:
             totals.append(self.score[0] + self.score[1])
             deltas.append(self.score[0] - self.score[1])
         return totals, deltas
+
+    def return_truncated_scores(self):
+        scores = []
+        # if we are at the end of a set, we want to show the last one:
+        if self.score[0] + self.score[1] == 0:
+            activeset = self.set_score[0] + self.set_score[1] - 1
+        else:
+            activeset = self.set_score[0] + self.set_score[1]
+        for rally in self.rallies:
+            if rally[3][0] + rally[3][1] == activeset:
+                score = [rally[2][0], rally[2][1]]
+                if len(scores) < 1 or scores[-1] != score:
+                    scores.append(score)
+        if self.score[0] + self.score[1] != 0:
+            scores.append(self.score)
+        scores = truncate_list(scores)
+        return scores
 
     def collect_stats(self, teamname):
         team = actions.Team.from_string(teamname)
@@ -419,6 +455,7 @@ class GameState:
             del playerstats[numbers]
 
         playerstats["team"] = {}
+        playerstats["team"]["group"] = 7
         playerstats["team"]["serve"] = {}
         playerstats["team"]["serve"]["kill"] = 0
         playerstats["team"]["rece"] = 0
@@ -431,7 +468,6 @@ class GameState:
                 if isinstance(action, Gameaction):
                     # is is the right player on the right team
                     if action.team == team:
-                        playerstats["team"]["group"] = 7
                         # serve statistics
                         if action.action == Action.Serve:
                             if action.quality == Quality.Kill:
