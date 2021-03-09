@@ -255,7 +255,7 @@ class StaticWriter:
                 )
             for playerstat in self.playerstats[name]:
                 if playerstat["Blocks"] == 0:
-                    playerstat["Blocks"] == "."
+                    playerstat["Blocks"] = "."
                 for k, v in playerstat["Attack"].items():
                     if v == 0:
                         playerstat["Attack"][k] = "."
@@ -343,37 +343,106 @@ class StaticWriter:
                     positive_rallies.append(ralley)
                 else:
                     negative_rallies.append(ralley)
-            self.detailed_infos[name]["K1_stats"]["positive"]["Total"] = len(
-                self.action_filter("@@@h@", positive_rallies)
-            )
-            self.detailed_infos[name]["K1_stats"]["positive"]["Error"] = len(
-                self.action_filter("@@@h=", positive_rallies)
-            )
-            self.detailed_infos[name]["K1_stats"]["positive"]["Blocked"] = len(
-                self.action_filter("@@@ho", positive_rallies)
-            )
-            self.detailed_infos[name]["K1_stats"]["positive"]["Points"] = len(
-                self.action_filter("@@@h#", positive_rallies)
+            total_k1 = 0
+            error_k1 = 0
+            blocked_k1 = 0
+            points_k1 = 0
+            total_k2 = 0
+            error_k2 = 0
+            blocked_k2 = 0
+            points_k2 = 0
+            for ralley in positive_rallies:
+                k1_found = False
+                for action in ralley[0]:
+                    if isinstance(action, Gameaction):
+                        current_action = str(action)
+                        if not k1_found:
+                            if string_match(current_action, str(team) + "@@h@"):
+                                total_k1 += 1
+                                k1_found = True
+                            if string_match(current_action, str(team) + "@@h="):
+                                error_k1 += 1
+                                k1_found = True
+                            if string_match(current_action, str(team) + "@@ho"):
+                                blocked_k1 += 1
+                                k1_found = True
+                            if string_match(current_action, str(team) + "@@h#"):
+                                points_k1 += 1
+                                k1_found = True
+                        else:
+                            if string_match(current_action, str(team) + "@@h@"):
+                                total_k2 += 1
+                            if string_match(current_action, str(team) + "@@h="):
+                                error_k2 += 1
+                            if string_match(current_action, str(team) + "@@ho"):
+                                blocked_k2 += 1
+                            if string_match(current_action, str(team) + "@@h#"):
+                                points_k2 += 1
+
+            self.detailed_infos[name]["K1_stats"]["positive"]["Total"] = total_k1
+            self.detailed_infos[name]["K1_stats"]["positive"]["Error"] = error_k1
+            self.detailed_infos[name]["K1_stats"]["positive"]["Blocked"] = blocked_k1
+            self.detailed_infos[name]["K1_stats"]["positive"]["Points"] = int(
+                100 * points_k1 / total_k1 if total_k1 > 0 else 0
             )
 
-            self.detailed_infos[name]["K1_stats"]["negative"]["Total"] = len(
-                self.action_filter("@@@h@", negative_rallies)
-            )
-            self.detailed_infos[name]["K1_stats"]["negative"]["Error"] = len(
-                self.action_filter("@@@h=", negative_rallies)
-            )
-            self.detailed_infos[name]["K1_stats"]["negative"]["Blocked"] = len(
-                self.action_filter("@@@ho", negative_rallies)
-            )
-            self.detailed_infos[name]["K1_stats"]["negative"]["Points"] = len(
-                self.action_filter("@@@h#", negative_rallies)
+            total_k1 = 0
+            error_k1 = 0
+            blocked_k1 = 0
+            points_k1 = 0
+            for ralley in negative_rallies:
+                k1_found = False
+                for action in ralley[0]:
+                    if isinstance(action, Gameaction):
+                        current_action = str(action)
+                        if not k1_found:
+                            if string_match(current_action, str(team) + "@@h@"):
+                                total_k1 += 1
+                                k1_found = True
+                            if string_match(current_action, str(team) + "@@h="):
+                                error_k1 += 1
+                                k1_found = True
+                            if string_match(current_action, str(team) + "@@ho"):
+                                blocked_k1 += 1
+                                k1_found = True
+                            if string_match(current_action, str(team) + "@@h#"):
+                                points_k1 += 1
+                                k1_found = True
+                        else:
+                            if string_match(current_action, str(team) + "@@h@"):
+                                total_k2 += 1
+                            if string_match(current_action, str(team) + "@@h="):
+                                error_k2 += 1
+                            if string_match(current_action, str(team) + "@@ho"):
+                                blocked_k2 += 1
+                            if string_match(current_action, str(team) + "@@h#"):
+                                points_k2 += 1
+            serve_rallies = self.ralley_filter("@@@@@@@" + str(team))
+            for ralley in serve_rallies:
+                for action in ralley[0]:
+                    current_action = str(action)
+                    if isinstance(action, Gameaction):
+                        if string_match(current_action, str(team) + "@@h@"):
+                            total_k2 += 1
+                        if string_match(current_action, str(team) + "@@h="):
+                            error_k2 += 1
+                        if string_match(current_action, str(team) + "@@ho"):
+                            blocked_k2 += 1
+                        if string_match(current_action, str(team) + "@@h#"):
+                            points_k2 += 1
+
+            self.detailed_infos[name]["K1_stats"]["negative"]["Total"] = total_k1
+            self.detailed_infos[name]["K1_stats"]["negative"]["Error"] = error_k1
+            self.detailed_infos[name]["K1_stats"]["negative"]["Blocked"] = blocked_k1
+            self.detailed_infos[name]["K1_stats"]["negative"]["Points"] = int(
+                100 * points_k1 / total_k1 if total_k1 > 0 else 0
             )
 
             self.detailed_infos[name]["K2_stats"] = {
-                "Error": -1,
-                "Blocked": -1,
-                "Points": -1,
-                "Total": -1,
+                "Error": error_k2,
+                "Blocked": blocked_k2,
+                "Points": int(100 * points_k2 / total_k2 if total_k2 > 0 else 0),
+                "Total": total_k2,
             }
 
     def collect_stats_from_number(
@@ -444,7 +513,10 @@ class StaticWriter:
         fulldata["Points"]["Plus_minus"] = total_points - total_errors
 
         # TODO: add this later
-        fulldata["Points"]["BP"] = 0
+        break_rallies = self.ralley_filter("@@@@@@@" + str(team))
+        filterstring = str(team) + player_number + "@#"
+        fulldata["Points"]["BP"] = len(self.action_filter(filterstring, break_rallies))
+
 
         return fulldata
 
