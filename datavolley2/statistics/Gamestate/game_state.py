@@ -3,6 +3,7 @@ import enum
 from copy import deepcopy
 from collections import OrderedDict
 
+
 import datavolley2.statistics.Actions as actions
 
 from datavolley2.statistics.Actions.GameAction import (
@@ -12,40 +13,8 @@ from datavolley2.statistics.Actions.GameAction import (
     Quality,
 )
 import datavolley2.statistics.Actions.SpecialAction as SpecialActions
-
-# TODO: this is duplicated, we need to move it
-def ralley_filter(filter_string: str, rallies):
-    retval = []
-    for ralley in rallies:
-        if ralley_compare(ralley, filter_string):
-            retval.append(ralley)
-    return retval
-
-
-def ralley_compare(ralley, string):
-    """compares the rally to the given input string
-    the string is formatted [ScoreHMin][ScoreHMax][ScoreGMin][ScoreGMax][SetScoreH][SetScoreG][SetScoreTotal][HomeServe]
-    """
-    # scores
-    if string[0] != "@" and int(string[0]) > ralley[2][0]:
-        return False
-    if string[1] != "@" and int(string[1]) < ralley[2][0]:
-        return False
-    if string[2] != "@" and int(string[2]) > ralley[2][1]:
-        return False
-    if string[3] != "@" and int(string[3]) < ralley[2][1]:
-        return False
-    # sets:
-    if string[4] != "@" and int(string[4]) != ralley[3][0]:
-        return False
-    if string[5] != "@" and int(string[5]) != ralley[3][1]:
-        return False
-    if string[6] != "@" and int(string[6]) != ralley[3][1] + ralley[3][0]:
-        return False
-    # serving
-    if string[7] != "@" and str(ralley[4]) != string[7]:
-        return False
-    return True
+from datavolley2.statistics.Players.players import Player
+from datavolley2.analysis.filters import *
 
 
 def truncate_list(in_list, size=11):
@@ -53,51 +22,6 @@ def truncate_list(in_list, size=11):
         return in_list
     else:
         return in_list[-size:]
-
-
-class Player:
-    @enum.unique
-    class PlayerPosition(enum.Enum):
-        Setter = ("Setter", "s", 1)
-        Opposite = ("Opposite", "d", 2)
-        Middle = ("Middle", "m", 3)
-        Outside = ("Outside", "o", 4)
-        Libera = ("Libera", "l", 5)
-        Universal = ("Universal", "u", 6)
-
-        def __lt__(self, other):
-            if self.__class__ is other.__class__:
-                return self.value[2] < other.value[2]
-            else:
-                return False
-            # return NotImplemented
-
-        def __int__(self):
-            return self.value[2]
-
-        @classmethod
-        def from_string(cls, s):
-            for position in cls:
-                if position.value[1] == s:
-                    return position
-
-    Position = PlayerPosition.Universal
-    Number = 0
-    Name = ""
-    is_capitain = False
-
-    def __init__(
-        self,
-        number: int,
-        position: PlayerPosition = PlayerPosition.Universal,
-        name: str = "",
-        is_capitain: bool = False,
-    ) -> None:
-
-        self.Number = number
-        self.Position = position
-        self.Name = name
-        self.is_capitain = is_capitain
 
 
 class Field:
@@ -292,24 +216,11 @@ class GameState:
             )
             self.add_logical([action])
         elif "team" in action:
-            l = action.split("!")
-            team = l[0][0]
-            teamname = l[1]
-            self.teamnames[int(actions.Team.from_string(team))] = teamname
+            action = SpecialActions.InitializeTeamName(action, time_stamp)
+            self.add_logical([action], time_stamp)
         elif "player" in action:
-            l = action.split("!")
-            team = l[0][0]
-            playernumber = int(l[1])
-            name = l[2]
-            position = l[3]
-            p = Player(playernumber, Player.PlayerPosition.from_string(position), name)
-            self.players[int(actions.Team.from_string(team))].append(p)
-        if "HC" in action:
-            self.details.append(action)
-        if "AC" in action:
-            self.details.append(action)
-        if "Refs" in action:
-            self.details.append(action)
+            action = SpecialActions.InitializePlayer(action, time_stamp)
+            self.add_logical([action], time_stamp)
         else:
             str1, str2 = split_string(action)
             allactions = []
@@ -345,12 +256,19 @@ class GameState:
             elif isinstance(action, SpecialActions.Point):
                 self.score[int(action.team_)] += action.value
                 self.flush_actions()
+            elif isinstance(action, SpecialActions.InitializePlayer):
+                p = Player(action.number, action.position, action.name)
+                self.players[int(action.team)].append(p)
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.InitializeTeamName):
+                self.teamnames[int(action.team)] = action.name
+                self.flush_actions()
             else:
                 who, was_score = is_scoring(action)
                 if was_score:
                     index = int(who)
                     self._current_actions.append(
-                        actions.Point(who, time_stamp=time_stamp)
+                        actions.Point(who, time_stamp=time_stamp, auto_generated=True)
                     )
 
                     # flush the current action before housekeeping
@@ -359,7 +277,14 @@ class GameState:
                     # housekeeping: serve
                     if who is not self._last_serve:
                         self._current_actions.append(
-                            actions.Rotation(who, time_stamp=time_stamp)
+                            actions.Rotation(
+                                who, time_stamp=time_stamp, auto_generated=True
+                            )
+                        )
+                        self._current_actions.append(
+                            actions.SetServingTeam(
+                                who, time_stamp=time_stamp, auto_generated=True
+                            )
                         )
                         self.court.rotate(index)
                     self._last_serve = who
@@ -372,7 +297,9 @@ class GameState:
                         and self.score[index] - 2 >= self.score[opponent]
                     ):
                         self._current_actions.append(
-                            actions.Endset(who, time_stamp=time_stamp)
+                            actions.Endset(
+                                who, time_stamp=time_stamp, auto_generated=True
+                            )
                         )
                         self.flush_actions()
                         self.set_score[index] += 1
@@ -570,7 +497,9 @@ class GameState:
                 + "@"
                 + "@"
             )
-            old_rallies = ralley_filter(filter_string, old_game_state.rallies)
+            old_rallies = ralley_filter_from_string(
+                filter_string, old_game_state.rallies
+            )
             for new_action in rally[0]:
                 if isinstance(new_action, Gameaction):
                     for rally in old_rallies:

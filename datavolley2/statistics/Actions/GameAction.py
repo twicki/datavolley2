@@ -1,31 +1,7 @@
 from enum import Enum
 from .AbstractAction import AbstractAction
 import datavolley2.statistics.Gamestate.game_state as gs
-
-
-class Team(Enum):
-
-    Home = (0, "*")
-    Away = (1, "/")
-
-    @classmethod
-    def from_string(cls, s):
-        for team in cls:
-            if team.value[1] == s:
-                return team
-
-    def __str__(self):
-        return self.value[1]
-
-    def __int__(self):
-        return self.value[0]
-
-    @staticmethod
-    def inverse(team):
-        if team == Team.Home:
-            return Team.Away
-        else:
-            return Team.Home
+from datavolley2.statistics.Players.players import Team
 
 
 class Quality(Enum):

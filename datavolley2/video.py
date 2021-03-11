@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QFrame, QFileDialog
 from uis.video import Ui_Dialog
 import datavolley2.utils.vlc as vlc
 
+from datavolley2.analysis.filters import *
+
 
 class TimestampedAction:
     def __init__(
@@ -36,6 +38,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         self.horizontalSlider.sliderMoved.connect(self.setPosition)
         self.tableWidget.cellClicked.connect(self.cell_was_clicked)
 
+        self.add_action_filter.clicked.connect(self.apply_action_filter)
+
         self.timer = QTimer(self)
         self.timer.setInterval(200)
         self.timer.timeout.connect(self.updateUI)
@@ -50,12 +54,12 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         # set up detailed view
         if game_state:
             # get the total count of actions:
-            total_nuber_of_actions = 0
+            self.total_nuber_of_actions = 0
             for rally in self.game_state.rallies:
                 for action in rally[0]:
-                    total_nuber_of_actions += 1
+                    self.total_nuber_of_actions += 1
 
-            self.tableWidget.setRowCount(total_nuber_of_actions)
+            self.tableWidget.setRowCount(self.total_nuber_of_actions)
             self.tableWidget.setColumnCount(1)
             i = 0
             initial_time_stamp = None
@@ -65,16 +69,40 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
                     if initial_time_stamp is None:
                         initial_time_stamp = action.time_stamp
                     if action.time_stamp:
-                        self.all_actions.append(
-                            TimestampedAction(
-                                action,
-                                i,
-                                action.time_stamp - initial_time_stamp,
-                                action.time_stamp - initial_time_stamp,
-                            )
+                        relative_time_stamp = action.time_stamp - initial_time_stamp
+                    else:
+                        relative_time_stamp = 0
+                    self.all_actions.append(
+                        TimestampedAction(
+                            action,
+                            i,
+                            relative_time_stamp,
+                            relative_time_stamp,
                         )
+                    )
                     i += 1
             self.tableWidget.scrollToBottom()
+
+    def apply_action_filter(self):
+        self.tableWidget.setRowCount(self.total_nuber_of_actions)
+        filter_string = self.lineEdit.text()
+        i = 0
+        for action in self.all_actions:
+            if isinstance(action.action, Gameaction):
+                current_action = str(action.action)
+                if compare_action_to_string(current_action, filter_string):
+                    self.tableWidget.setItem(
+                        0, i, QtGui.QTableWidgetItem(current_action)
+                    )
+                    action.row_that_displays = i
+                    i += 1
+                else:
+                    action.row_that_displays = -1
+            else:
+                action.row_that_displays = -1
+        self.tableWidget.setRowCount(i)
+        self.tableWidget.scrollToBottom()
+        self.lineEdit.clear()
 
     def setPosition(self, position):
         """Set the position"""
@@ -98,7 +126,6 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
             position = self.mediaplayer.get_position()
             seconds = position * self.total_time
             delta_to_original = seconds - current_action.relative_timestamp
-            # update previous
             previousActions = True
             for action in self.all_actions:
                 if action.action == current_action.action:

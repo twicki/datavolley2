@@ -1,10 +1,15 @@
 import sys
+import os
 
 from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtWidgets import QFileDialog
 
 import datavolley2
-from datavolley2.statistics import GameState, Team
+from datavolley2.statistics.Players.players import Team
+from datavolley2.statistics import GameState
 from datavolley2.analysis.static import StaticWriter
+
+from datavolley2.serializer.serializer import Serializer
 
 import matplotlib as mp
 import numpy as np
@@ -28,6 +33,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.video_analysis.clicked.connect(self.start_video)
         self.lineEdit.returnPressed.connect(self.update)
         self.lineEdit.textChanged.connect(self.get_times)
+        self.saveFile.clicked.connect(self.save_file)
+        self.loadFile.clicked.connect(self.load_file)
         self.game_state = GameState()
         self.fullstring = ""
         self.secondWindow = None
@@ -38,6 +45,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.details = []
         self.time_stamps = []
+
+    def save_file(self):
+        ser = Serializer(self.game_state)
+        ser.serialize("output.tvr")
+
+    def load_file(self):
+        filename = QFileDialog.getOpenFileName(
+            self, "Open File", os.path.expanduser("~")
+        )[0]
+        if not filename:
+            return
+        ser = Serializer()
+        self.game_state = ser.deserialize(filename)
+        self.fullstring = ""
+        for rally in self.game_state.rallies:
+            for action in rally[0]:
+                if not action.auto_generated:
+                    self.fullstring += str(action) + " "
+            self.fullstring += "\n"
+        self.update()
 
     def start_video(self):
 

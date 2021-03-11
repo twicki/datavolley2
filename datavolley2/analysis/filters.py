@@ -1,4 +1,4 @@
-from datavolley2.statistics import Gameaction
+from datavolley2.statistics.Actions import Gameaction
 from typing import List, Any, Dict
 
 

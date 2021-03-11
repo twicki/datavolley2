@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import datavolley2
 import datavolley2.statistics as stats
-from datavolley2.statistics.Actions import Team
+from datavolley2.statistics.Players.players import Team, Player
 import datavolley2.statistics.Gamestate.game_state as gs
 from datavolley2.statistics.Actions.GameAction import Gameaction
 
@@ -205,7 +205,7 @@ class StaticWriter:
             for position in [1, 2, 3, 4, 5, 6]:
                 plus_minus = {}
                 for player in self.gamestate.players[int(team)]:
-                    if player.Position == gs.Player.PlayerPosition.Setter:
+                    if player.Position == Player.PlayerPosition.Setter:
                         offset = position - 1
                         filter_string = (
                             str(team)
@@ -502,7 +502,7 @@ class StaticWriter:
 
         return fulldata
 
-    def collect_individual_statistics(self, team: Team, player: gs.Player) -> Dict:
+    def collect_individual_statistics(self, team: Team, player: Player) -> Dict:
         player_number = "%02d" % player.Number
         fulldata = self.collect_stats_from_number(team, player_number)
         fulldata["Name"] = player.Name
@@ -510,15 +510,15 @@ class StaticWriter:
         fulldata["Role"] = ""
         if player.is_capitain:
             fulldata["Role"] = "C"
-        elif player.Position == gs.Player.PlayerPosition.Libera:
+        elif player.Position == Player.PlayerPosition.Libera:
             fulldata["Role"] = "L"
         fulldata["Starts"] = [0, 0, 0, 0, 0]
         for rally in self.gamestate.rallies:
             setnumber = rally[3][0] + rally[3][1]
-            if player.Position == gs.Player.PlayerPosition.Libera:
+            if player.Position == Player.PlayerPosition.Libera:
                 for action in rally[0]:
                     if isinstance(action, Gameaction):
-                        if action.player == player.Number:
+                        if action.player == player.Number and action.team == team:
                             fulldata["Starts"][setnumber] = -1
                             continue
             else:
