@@ -1,5 +1,3 @@
-# from statistics import Gamestate
-# import statistics.Gamestate as GS
 import sys
 
 from PyQt5 import QtWidgets, QtGui
@@ -10,11 +8,14 @@ from datavolley2.analysis.static import StaticWriter
 
 import matplotlib as mp
 import numpy as np
+import time
 
-# from datavolley2.statistics.Gamestate import GameState
 from uis import Ui_Form, Ui_MainWindow
 from uis.third import Ui_Form as thridUI
 from uis.fourth import Ui_Form as fourthUI
+
+
+from datavolley2.video import Main
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -24,13 +25,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.print_stats)
         self.pushButton_2.clicked.connect(self.save_and_reset)
         self.pushButton_3.clicked.connect(self.write_analysis)
+        self.video_analysis.clicked.connect(self.start_video)
         self.lineEdit.returnPressed.connect(self.update)
+        self.lineEdit.textChanged.connect(self.get_times)
         self.game_state = GameState()
         self.fullstring = ""
         self.secondWindow = None
         self.ThirdWindow = None
         self.FourthWindow = None
+        self.VideoWindow = None
         self.illegal = []
+
+        self.details = []
+        self.time_stamps = []
+
+    def start_video(self):
+
+        self.VideoWindow = Main(self.game_state)
+        self.VideoWindow.show()
+
+    def get_times(self):
+        if len(self.lineEdit.text()):
+            last_character = self.lineEdit.text()[-1]
+            if last_character == " ":
+                self.time_stamps.append(time.time())
 
     def write_analysis(self):
         sw = StaticWriter(self.game_state)
@@ -40,6 +58,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
         s = userdata.split()
+        oldstate = self.game_state
         self.game_state = GameState()
         self.fullstring = userdata
         self.illegal.clear()
@@ -49,21 +68,38 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.game_state.add_string(command)
             except:
                 self.illegal.append(command)
+
+        self.game_state.fix_time_stamps(oldstate)
         self.textEdit.setText(self.fullstring)
         self.lineEdit.clear()
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
         self.update()
 
     def update(self):
+        self.time_stamps.append(time.time())
         text = self.lineEdit.text()
         self.fullstring = self.fullstring + text + "\n"
         s = text.split(" ")
-        for command in s:
-            try:
-                self.game_state.add_string(command)
-            except:
-                self.illegal.append(command)
+        if len(self.time_stamps) == len(s):
+            for command, action_time in zip(s, self.time_stamps):
+                try:
+                    self.game_state.add_string(command, action_time)
+                except:
+                    self.illegal.append(command)
+        elif len(self.time_stamps):
+            for command in s:
+                try:
+                    self.game_state.add_string(command, self.time_stamps[0])
+                except:
+                    self.illegal.append(command, self.time_stamps[0])
+        else:
+            for command in s:
+                try:
+                    self.game_state.add_string(command)
+                except:
+                    self.illegal.append(command)
 
+        self.time_stamps.clear()
         self.textEdit.setText(self.fullstring)
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
 

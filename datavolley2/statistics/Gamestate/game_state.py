@@ -13,6 +13,40 @@ from datavolley2.statistics.Actions.GameAction import (
 )
 import datavolley2.statistics.Actions.SpecialAction as SpecialActions
 
+# TODO: this is duplicated, we need to move it
+def ralley_filter(filter_string: str, rallies):
+    retval = []
+    for ralley in rallies:
+        if ralley_compare(ralley, filter_string):
+            retval.append(ralley)
+    return retval
+
+
+def ralley_compare(ralley, string):
+    """compares the rally to the given input string
+    the string is formatted [ScoreHMin][ScoreHMax][ScoreGMin][ScoreGMax][SetScoreH][SetScoreG][SetScoreTotal][HomeServe]
+    """
+    # scores
+    if string[0] != "@" and int(string[0]) > ralley[2][0]:
+        return False
+    if string[1] != "@" and int(string[1]) < ralley[2][0]:
+        return False
+    if string[2] != "@" and int(string[2]) > ralley[2][1]:
+        return False
+    if string[3] != "@" and int(string[3]) < ralley[2][1]:
+        return False
+    # sets:
+    if string[4] != "@" and int(string[4]) != ralley[3][0]:
+        return False
+    if string[5] != "@" and int(string[5]) != ralley[3][1]:
+        return False
+    if string[6] != "@" and int(string[6]) != ralley[3][1] + ralley[3][0]:
+        return False
+    # serving
+    if string[7] != "@" and str(ralley[4]) != string[7]:
+        return False
+    return True
+
 
 def truncate_list(in_list, size=11):
     if len(in_list) < size:
@@ -189,7 +223,6 @@ def split_string(input):
 class GameState:
     score = [0, 0]
     set_score = [0, 0]
-    # timeouts = [0, 0]
     rallies = []
     court = None
 
@@ -209,36 +242,55 @@ class GameState:
         self.teamnames = [None, None]
         self.players = [[], []]
 
-    def add_string(self, action: str):
+        self.details = []
+
+    def add_action_substitution_from_string(self, action: str, time_stamp=None) -> None:
+        """add a substitiution action from a string formatted [Team]sub![Number]![Position]"""
+        split_string = action.split("!")
+        number = int(split_string[1])
+        position = int(split_string[2])
+        team = split_string[0][0]
+        action = SpecialActions.Substitute(
+            actions.Team.from_string(team), number, position, time_stamp
+        )
+        self.add_logical([action])
+
+    def add_action_set_serving_team_from_string(
+        self, action: str, time_stamp=None
+    ) -> None:
+        """add a SetServingTeam action from a string formatted [Team]serve"""
+        team = action[0][0]
+        action = SpecialActions.SetServingTeam(
+            actions.Team.from_string(team), time_stamp
+        )
+        self.add_logical([action])
+
+    def add_string(self, action: str, time_stamp=None):
         if "sub" in action:
-            l = action.split("!")
-            number = int(l[1])
-            position = int(l[2])
-            team = l[0][0]
-            action = SpecialActions.Substitute(
-                actions.Team.from_string(team), number, position
-            )
-            self.add_logical(action)
+            self.add_action_substitution_from_string(action, time_stamp)
         elif "serve" in action:
-            team = action[0][0]
-            action = SpecialActions.SetServingTeam(actions.Team.from_string(team))
-            self.add_logical(action)
+            self.add_action_set_serving_team_from_string(action, time_stamp)
         elif "point" in action:
+            # TODO: continue the refactoring here
             l = action.split("!")
             number = int(l[1])
             team = l[0][0]
-            action = SpecialActions.SetServingTeam(actions.Team.from_string(team))
-            self.add_logical(action)
+            action = SpecialActions.SetServingTeam(
+                actions.Team.from_string(team), time_stamp
+            )
+            self.add_logical([action])
         elif "endset" in action:
             team = action[0][0]
-            action = SpecialActions.Endset(actions.Team.from_string(team))
-            self.add_logical(action)
+            action = SpecialActions.Endset(actions.Team.from_string(team), time_stamp)
+            self.add_logical([action])
         elif "rota" in action:
             l = action.split("!")
             team = l[0][0]
             direction = True if int(l[1]) > 0 else False
-            action = SpecialActions.Rotation(actions.Team.from_string(team), direction)
-            self.add_logical(action)
+            action = SpecialActions.Rotation(
+                actions.Team.from_string(team), direction, time_stamp
+            )
+            self.add_logical([action])
         elif "team" in action:
             l = action.split("!")
             team = l[0][0]
@@ -252,69 +304,82 @@ class GameState:
             position = l[3]
             p = Player(playernumber, Player.PlayerPosition.from_string(position), name)
             self.players[int(actions.Team.from_string(team))].append(p)
+        if "HC" in action:
+            self.details.append(action)
+        if "AC" in action:
+            self.details.append(action)
+        if "Refs" in action:
+            self.details.append(action)
         else:
             str1, str2 = split_string(action)
             allactions = []
-            allactions.append(copy.copy(Gameaction.from_string(str1)))
+            allactions.append(copy.copy(Gameaction.from_string(str1, time_stamp)))
             if str2:
-                allactions.append(copy.copy(Gameaction.from_string(str2)))
-            for thisaction in allactions:
-                self.add_logical(thisaction)
+                allactions.append(copy.copy(Gameaction.from_string(str2, time_stamp)))
+            self.add_logical(allactions, time_stamp)
 
-    def add_logical(self, action):
-        self._current_actions.append(action)
-        if isinstance(action, SpecialActions.Substitute):
-            who = action.team_
-            field = self.court.fields[int(who)].players
-            pos = action.position_in - 1
-            fpos = field[:pos]
-            fpos.append(Player(action.player_in))
-            self.court.fields[int(who)].players = fpos + field[pos + 1 :]
-            self.flush_actions()
-        elif isinstance(action, SpecialActions.Endset):
-            self.score[0] = 0
-            self.score[1] = 0
-            self.court.fields[0] = Field()
-            self.court.fields[1] = Field()
-            self.flush_actions()
-        elif isinstance(action, SpecialActions.Rotation):
-            self.court.rotate(int(action.team_))
-            self.flush_actions()
-        elif isinstance(action, SpecialActions.SetServingTeam):
-            self._last_serve = action.team_
-            self.flush_actions()
-        elif isinstance(action, SpecialActions.Point):
-            self.score[int(action.team_)] += action.value
-            self.flush_actions()
-        else:
-            who, was_score = is_scoring(action)
-            if was_score:
-                index = int(who)
-                self._current_actions.append(actions.Point(who))
-
-                # flush the current action before housekeeping
+    def add_logical(self, action_list, time_stamp=None):
+        for action in action_list:
+            self._current_actions.append(action)
+        for action in action_list:
+            if isinstance(action, SpecialActions.Substitute):
+                who = action.team_
+                field = self.court.fields[int(who)].players
+                pos = action.position_in - 1
+                fpos = field[:pos]
+                fpos.append(Player(action.player_in))
+                self.court.fields[int(who)].players = fpos + field[pos + 1 :]
                 self.flush_actions()
+            elif isinstance(action, SpecialActions.Endset):
+                self.score[0] = 0
+                self.score[1] = 0
+                self.court.fields[0] = Field()
+                self.court.fields[1] = Field()
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.Rotation):
+                self.court.rotate(int(action.team_))
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.SetServingTeam):
+                self._last_serve = action.team_
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.Point):
+                self.score[int(action.team_)] += action.value
+                self.flush_actions()
+            else:
+                who, was_score = is_scoring(action)
+                if was_score:
+                    index = int(who)
+                    self._current_actions.append(
+                        actions.Point(who, time_stamp=time_stamp)
+                    )
 
-                # housekeeping: serve
-                if who is not self._last_serve:
-                    self._current_actions.append(actions.Rotation(who))
-                    self.court.rotate(index)
-                self._last_serve = who
-
-                # housekeeping: scoring
-                opponent = int(actions.Team.inverse(who))
-                self.score[index] += 1
-                if (
-                    self.score[index] >= self.max_points_in_set()
-                    and self.score[index] - 2 >= self.score[opponent]
-                ):
-                    self._current_actions.append(actions.Endset(who))
+                    # flush the current action before housekeeping
                     self.flush_actions()
-                    self.set_score[index] += 1
-                    self.score[0] = 0
-                    self.score[1] = 0
-                    self.court.fields[0] = Field()
-                    self.court.fields[1] = Field()
+
+                    # housekeeping: serve
+                    if who is not self._last_serve:
+                        self._current_actions.append(
+                            actions.Rotation(who, time_stamp=time_stamp)
+                        )
+                        self.court.rotate(index)
+                    self._last_serve = who
+
+                    # housekeeping: scoring
+                    opponent = int(actions.Team.inverse(who))
+                    self.score[index] += 1
+                    if (
+                        self.score[index] >= self.max_points_in_set()
+                        and self.score[index] - 2 >= self.score[opponent]
+                    ):
+                        self._current_actions.append(
+                            actions.Endset(who, time_stamp=time_stamp)
+                        )
+                        self.flush_actions()
+                        self.set_score[index] += 1
+                        self.score[0] = 0
+                        self.score[1] = 0
+                        self.court.fields[0] = Field()
+                        self.court.fields[1] = Field()
 
     def flush_actions(self):
         c = Court()
@@ -331,9 +396,6 @@ class GameState:
             )
         )
         self._current_actions.clear()
-
-    def add_plain(self, action):
-        pass
 
     def max_points_in_set(self):
         if self.set_score[0] + self.set_score[1] < 4:
@@ -495,3 +557,35 @@ class GameState:
                             if action.quality == Quality.Error:
                                 playerstats["team"]["error"] += 1
         return playerstats
+
+    def fix_time_stamps(self, old_game_state) -> None:
+        for rally in self.rallies:
+            filter_string = (
+                str(rally[2][0])
+                + str(rally[2][0] + 1)
+                + str(rally[2][1])
+                + str(rally[2][1] + 1)
+                + str(rally[3][0])
+                + str(rally[3][1])
+                + "@"
+                + "@"
+            )
+            old_rallies = ralley_filter(filter_string, old_game_state.rallies)
+            for new_action in rally[0]:
+                if isinstance(new_action, Gameaction):
+                    for rally in old_rallies:
+                        if not new_action.time_stamp:
+                            for old_action in rally[0]:
+                                if isinstance(old_action, Gameaction):
+                                    if str(old_action) == str(new_action):
+                                        new_action.time_stamp = old_action.time_stamp
+                                        break
+        last_time_stamp = None
+        for rally in self.rallies:
+            for action in rally[0]:
+                if action.time_stamp and last_time_stamp:
+                    if action.time_stamp < last_time_stamp:
+                        action.time_stamp = last_time_stamp
+                elif last_time_stamp:
+                    action.time_stamp = last_time_stamp
+                last_time_stamp = action.time_stamp

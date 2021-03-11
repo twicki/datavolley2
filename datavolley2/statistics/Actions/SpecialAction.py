@@ -6,8 +6,8 @@ class Substitute(AbstractAction):
     player_in: int
     position_in: int
 
-    def __init__(self, team: Team, player_in: int, position_in: int):
-        super().__init__()
+    def __init__(self, team: Team, player_in: int, position_in: int, time_stamp=None):
+        super().__init__(time_stamp)
         self.team_ = team
         self.player_in = player_in
         self.position_in = position_in
@@ -26,8 +26,8 @@ class Rotation(AbstractAction):
     team_: Team
     positive: bool
 
-    def __init__(self, team: Team, direction: bool = True):
-        super().__init__()
+    def __init__(self, team: Team, direction: bool = True, time_stamp=None):
+        super().__init__(time_stamp)
         self.team_ = team
         self.positive = direction
 
@@ -39,8 +39,8 @@ class Point(AbstractAction):
     team_: Team
     value: int
 
-    def __init__(self, team: Team, value: int = 1):
-        super().__init__()
+    def __init__(self, team: Team, value: int = 1, time_stamp=None):
+        super().__init__(time_stamp)
         self.team_ = team
         self.value = value
 
@@ -51,8 +51,8 @@ class Point(AbstractAction):
 class Endset(AbstractAction):
     team_: Team
 
-    def __init__(self, team: Team):
-        super().__init__()
+    def __init__(self, team: Team, time_stamp=None):
+        super().__init__(time_stamp)
         self.team_ = team
 
     def __str__(self):
@@ -62,8 +62,8 @@ class Endset(AbstractAction):
 class SetServingTeam(AbstractAction):
     team_: Team
 
-    def __init__(self, team: Team):
-        super().__init__()
+    def __init__(self, team: Team, time_stamp=None):
+        super().__init__(time_stamp)
         self.team_ = team
 
     def __str__(self):

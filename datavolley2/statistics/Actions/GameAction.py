@@ -52,7 +52,7 @@ class Quality(Enum):
     @staticmethod
     def inverse(quality):
         if quality == Quality.Kill:
-            return Quality.Bad
+            return Quality.Over
         elif quality == Quality.Perfect:
             return Quality.Bad
         elif quality == Quality.Good:
@@ -106,7 +106,8 @@ class Gameaction(AbstractAction):
     action = None
     quality = None
 
-    def __init__(self):
+    def __init__(self, time_stamp=None):
+        super().__init__(time_stamp)
         self.team = Team.Home
         self.player = 0
         self.action = Action.Hit
@@ -118,8 +119,8 @@ class Gameaction(AbstractAction):
         )[0]
 
     @classmethod
-    def from_string(cls, s):
-        new = cls()
+    def from_string(cls, s, time_stamp=None):
+        new = cls(time_stamp)
         new.team = Team.from_string(s[0])
         new.player = int(s[1:3])
         new.action = Action.from_string(s[3])
