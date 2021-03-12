@@ -78,16 +78,16 @@ class Action(Enum):
 
 
 class Combination(Enum):
-    Default(0, "D0")
-    Fast_1(1, "X1")
-    Fast_2(1, "X2")
-    Fast_3(1, "X3")
-    Medium_1(1, "C1")
-    Medium_2(1, "C2")
-    Medium_3(1, "C3")
-    High_1(1, "V1")
-    High_2(1, "V2")
-    High_3(1, "V3")
+    Default = (0, "D0")
+    Fast_1 = (1, "X1")
+    Fast_2 = (1, "X2")
+    Fast_3 = (1, "X3")
+    Medium_1 = (1, "C1")
+    Medium_2 = (1, "C2")
+    Medium_3 = (1, "C3")
+    High_1 = (1, "V1")
+    High_2 = (1, "V2")
+    High_3 = (1, "V3")
 
     @classmethod
     def from_string(cls, s):
@@ -115,12 +115,18 @@ class Gameaction(AbstractAction):
         self.player = 0
         self.action = Action.Hit
         self.quality = Quality.Good
-        self.direction = [-1, -1]
         self.combination = Combination.Default
+        self.direction = [0, 0]
 
     def __str__(self):
         return gs.expandString(
-            str(self.team) + str(self.player) + str(self.action) + str(self.quality)
+            str(self.team)
+            + str(self.player)
+            + str(self.action)
+            + str(self.quality)
+            + str(self.combination)
+            + str(self.direction[0])
+            + str(self.direction[1])
         )[0]
 
     @classmethod
@@ -136,6 +142,12 @@ class Gameaction(AbstractAction):
             new.quality = Quality.from_string(s[4])
         else:
             raise TVRSyntaxError()
+        if Combination.from_string(s[5:7]):
+            new.combination = Combination.from_string(s[5:7])
+        else:
+            raise TVRSyntaxError()
+        new.direction[0] = str(s[7])
+        new.direction[1] = str(s[8])
         return new
 
 

@@ -221,7 +221,7 @@ class Main(QtWidgets.QWidget, Ui_Form):
             total = 0
             leaders = {}
             for action in self.actions:
-                if action.direction[0] == (position + 1):
+                if int(action.direction[0]) == (position + 1):
                     total += 1
                     name = str(action.team) + str(action.player)
                     if name in leaders:
@@ -256,7 +256,7 @@ class Main(QtWidgets.QWidget, Ui_Form):
         total = 0
         leaders = {}
         for action in self.actions:
-            if action.direction[0] == (-1):
+            if int(action.direction[0]) == 0:
                 total += 1
                 name = str(action.team) + str(action.player)
                 if name in leaders:

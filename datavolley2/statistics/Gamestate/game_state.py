@@ -79,22 +79,74 @@ def set_action(user_string, returnvalue):
 
 def set_quality(user_string, returnvalue):
     if len(user_string):
-        returnvalue = returnvalue[:4] + user_string[0]
+        if user_string[0] in ["#", "+", "-", "=", "p", "o"]:
+            returnvalue = returnvalue[:4] + user_string[0] + returnvalue[5:]
+            user_string = user_string[1:]
+            return returnvalue, user_string, True
+    return returnvalue, user_string, False
+
+
+def set_combination(user_string, returnvalue):
+    if len(user_string) > 1:
+        if user_string[0] in ["D", "X", "C"]:
+            returnvalue = returnvalue[:5] + user_string[0:2] + returnvalue[8:]
+            user_string = user_string[2:]
+        return returnvalue, user_string
+    return returnvalue, user_string
+
+
+def set_from_direction(user_string, returnvalue):
+    if len(user_string):
+        returnvalue = returnvalue[:7] + user_string[0] + returnvalue[8:]
+        user_string = user_string[1:]
+        return returnvalue, user_string, True
+    return returnvalue, user_string, False
+
+
+def set_to_direction(user_string, returnvalue):
+    if len(user_string):
+        returnvalue = returnvalue[:8] + user_string[0]
         return returnvalue, True
     return returnvalue, False
 
 
 def expandString(user_string):
-    returnvalue = "*00h+"
+    returnvalue = "*00h+D000"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
     returnvalue, user_string = set_number(user_string, returnvalue)
     returnvalue, user_string, action_set = set_action(user_string, returnvalue)
-    returnvalue, quality_set = set_quality(user_string, returnvalue)
+    returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
 
-    return returnvalue, team_set, action_set, quality_set
+    returnvalue, user_string = set_combination(user_string, returnvalue)
+    returnvalue, user_string, from_direction_set = set_from_direction(
+        user_string, returnvalue
+    )
+    returnvalue, to_directon_set = set_to_direction(user_string, returnvalue)
+
+    return (
+        returnvalue,
+        team_set,
+        action_set,
+        quality_set,
+        from_direction_set,
+        to_directon_set,
+    )
 
 
-def correct_strings(s1, team, action, quality, s2, team2, action2, quality2):
+def correct_strings(
+    s1,
+    team,
+    action,
+    quality,
+    from_set,
+    to_set,
+    s2,
+    team2,
+    action2,
+    quality2,
+    from_set2,
+    to_set2,
+):
     ## correct the teams
     if not team2:
         s2 = str(actions.Team.inverse(actions.Team.from_string(s1[0]))) + s2[1:]
@@ -117,29 +169,66 @@ def correct_strings(s1, team, action, quality, s2, team2, action2, quality2):
 
     ## correct the quality
     if not quality2:
-        s2 = s2[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s1[4])))
+        s2 = (
+            s2[:4]
+            + str(actions.Quality.inverse(actions.Quality.from_string(s1[4])))
+            + s2[5:]
+        )
     if not quality and quality2:
-        s1 = s1[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s2[4])))
+        s1 = (
+            s1[:4]
+            + str(actions.Quality.inverse(actions.Quality.from_string(s2[4])))
+            + s1[5:]
+        )
+
+    ## correct the from and to position:
+    if not from_set2:
+        s2 = s2[:7] + s1[8] + s2[8:]
+    if not to_set2:
+        s2 = s2[:8] + s1[7]
+    if not from_set:
+        s1 = s1[:7] + s2[8] + s1[8:]
+    if not to_set:
+        s1 = s1[:8] + s2[7]
+
     return s1, s2
 
 
 def split_string(input):
     strings = input.split(".")
     if len(strings) > 1:
-        s1, team_set, action_set, quality_set = expandString(strings[0])
-        s2, team_set_2, action_set_2, quality_set_2 = expandString(strings[1])
+        (
+            s1,
+            team_set,
+            action_set,
+            quality_set,
+            from_direction_set,
+            to_directon_set,
+        ) = expandString(strings[0])
+        (
+            s2,
+            team_set_2,
+            action_set_2,
+            quality_set_2,
+            from_direction_set_2,
+            to_directon_set_2,
+        ) = expandString(strings[1])
         s1, s2 = correct_strings(
             s1,
             team_set,
             action_set,
             quality_set,
+            from_direction_set,
+            to_directon_set,
             s2,
             team_set_2,
             action_set_2,
             quality_set_2,
+            from_direction_set_2,
+            to_directon_set_2,
         )
     else:
-        s1, _, _, _ = expandString(strings[0])
+        s1, _, _, _, _, _ = expandString(strings[0])
         s2 = None
     return s1, s2
 

@@ -178,7 +178,7 @@ class StaticWriter:
                 "serve": setstat_home["Serve"]["Points"],
                 "attack": setstat_home["Attack"]["Points"],
                 "block": setstat_home["Blocks"],
-                "errors": len(action_filter_from_string("/@@@=", current_rallies)),
+                "errors": len(action_filter_from_string("/@@@=@@@@", current_rallies)),
             }
             self.teamstats["home"]["Per_set"].append(setstat_home)
 
@@ -190,7 +190,7 @@ class StaticWriter:
                 "serve": setstat_guest["Serve"]["Points"],
                 "attack": setstat_guest["Attack"]["Points"],
                 "block": setstat_guest["Blocks"],
-                "errors": len(action_filter_from_string("*@@@=", current_rallies)),
+                "errors": len(action_filter_from_string("*@@@=@@@@", current_rallies)),
             }
             self.teamstats["guest"]["Per_set"].append(setstat_guest)
 
@@ -293,9 +293,9 @@ class StaticWriter:
             positive_rallies = []
             negative_rallies = []
             for ralley in rece_rallies:
-                has_positive = len(action_filter_from_string("@@@r+", [ralley])) + len(
-                    action_filter_from_string("@@@rp", [ralley])
-                )
+                has_positive = len(
+                    action_filter_from_string("@@@r+@@@@", [ralley])
+                ) + len(action_filter_from_string("@@@rp@@@@", [ralley]))
                 if has_positive > 0:
                     positive_rallies.append(ralley)
                 else:
@@ -442,19 +442,19 @@ class StaticWriter:
         rallies = self.gamestate.rallies if rallies is None else rallies
         fulldata = {}
         fulldata["Attack"] = {}
-        filterstring = str(team) + player_number + "h" + "@"
+        filterstring = str(team) + player_number + "h" + "@@@@@"
         fulldata["Attack"]["Total"] = len(
             action_filter_from_string(filterstring, rallies)
         )
-        filterstring = str(team) + player_number + "h" + "#"
+        filterstring = str(team) + player_number + "h" + "#@@@@"
         fulldata["Attack"]["Points"] = len(
             action_filter_from_string(filterstring, rallies)
         )
-        filterstring = str(team) + player_number + "h" + "="
+        filterstring = str(team) + player_number + "h" + "=@@@@"
         fulldata["Attack"]["Error"] = len(
             action_filter_from_string(filterstring, rallies)
         )
-        filterstring = str(team) + player_number + "h" + "o"
+        filterstring = str(team) + player_number + "h" + "o@@@@"
         fulldata["Attack"]["Blocked"] = len(
             action_filter_from_string(filterstring, rallies)
         )
