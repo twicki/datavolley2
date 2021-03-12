@@ -1168,6 +1168,20 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="2">
+    <widget class="QCheckBox" name="analyze_from">
+     <property name="text">
+      <string>From Zone</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QCheckBox" name="analyze_to">
+     <property name="text">
+      <string>To Zone</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

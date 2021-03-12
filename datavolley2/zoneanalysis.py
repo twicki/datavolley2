@@ -33,10 +33,28 @@ class Main(QtWidgets.QWidget, Ui_Form):
         self.reset_button.clicked.connect(self.reset_filters_and_apply)
         self.load_button.clicked.connect(self.load_file)
 
+        self.analyze_from.setChecked(True)
+        self.analyze_from.clicked.connect(self.check_from)
+        self.analyze_to.setChecked(False)
+        self.analyze_to.clicked.connect(self.check_to)
+
         self.reset_all_filters()
         self.court = []
         self.intialize_court_with_widgets()
         self.players = [[], []]
+        self.position_to_check = 0
+
+    def check_from(self):
+        self.analyze_from.setChecked(True)
+        self.analyze_to.setChecked(False)
+        self.position_to_check = 0
+        self.apply_all_filters()
+
+    def check_to(self):
+        self.analyze_from.setChecked(False)
+        self.analyze_to.setChecked(True)
+        self.position_to_check = 1
+        self.apply_all_filters()
 
     def intialize_court_with_widgets(self):
         self.court.append(
@@ -221,7 +239,7 @@ class Main(QtWidgets.QWidget, Ui_Form):
             total = 0
             leaders = {}
             for action in self.actions:
-                if int(action.direction[0]) == (position + 1):
+                if int(action.direction[self.position_to_check]) == (position + 1):
                     total += 1
                     name = str(action.team) + str(action.player)
                     if name in leaders:
@@ -256,7 +274,7 @@ class Main(QtWidgets.QWidget, Ui_Form):
         total = 0
         leaders = {}
         for action in self.actions:
-            if int(action.direction[0]) == 0:
+            if int(action.direction[self.position_to_check]) == 0:
                 total += 1
                 name = str(action.team) + str(action.player)
                 if name in leaders:
