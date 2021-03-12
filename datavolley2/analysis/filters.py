@@ -7,10 +7,6 @@ def compare_action_to_string(action_string: str, filter_string: str) -> bool:
     the string is formatted
     [Team][2-Digit Player Number][Action][Quality]
     """
-    # assert len(action_string) == len(filter_string)
-    # for i in range(len(filter_string)):
-    #     if filter_string[i] != "@" and action_string[i] != filter_string[i]:
-    #         return False
     for filter_char, action_char in zip(filter_string, action_string):
         if filter_char != "@" and action_char != filter_char:
             return False
