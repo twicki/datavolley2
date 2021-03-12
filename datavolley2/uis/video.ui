@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1033</width>
+    <width>899</width>
     <height>752</height>
    </rect>
   </property>
@@ -14,44 +14,51 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,1,10,0,0" columnstretch="10,0,1">
+   <item row="1" column="0">
+    <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,1,1,10,0,0" columnstretch="10,0,1">
+     <item row="5" column="0">
+      <widget class="QSlider" name="horizontalSlider">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="5">
+      <widget class="QVideoWidget" name="widget" native="true"/>
+     </item>
      <item row="0" column="2">
       <widget class="QLineEdit" name="lineEdit"/>
      </item>
-     <item row="5" column="0">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="3">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_2">
+     <item row="6" column="0">
+      <layout class="QGridLayout" name="gridLayout" columnstretch="2,0,2,12,2,0,2">
+       <item row="0" column="4">
+        <widget class="QPushButton" name="loadFile_button">
          <property name="text">
-          <string>pause</string>
+          <string>load file</string>
          </property>
         </widget>
        </item>
        <item row="0" column="0">
         <widget class="QPushButton" name="pushButton">
          <property name="text">
-          <string>open</string>
+          <string>open video</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="4">
-        <widget class="QPushButton" name="pushButton_3">
+       <item row="0" column="6">
+        <widget class="QPushButton" name="saveFile_button">
          <property name="text">
-          <string>jump</string>
+          <string>save file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>pause</string>
          </property>
         </widget>
        </item>
@@ -68,20 +75,33 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="3">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="5">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
-     </item>
-     <item row="3" column="2" rowspan="3">
-      <widget class="QTableWidget" name="tableWidget"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QSlider" name="horizontalSlider">
-       <property name="maximum">
-        <number>10000</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
      </item>
      <item row="2" column="2">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -92,10 +112,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="add_court_filter">
+       <item row="2" column="1">
+        <widget class="QPushButton" name="reset_filters">
          <property name="text">
-          <string>CourtFilter</string>
+          <string>Reset Filters</string>
          </property>
         </widget>
        </item>
@@ -106,6 +126,20 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="apply_filters_button">
+         <property name="text">
+          <string>Apply Filters</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="add_court_filter">
+         <property name="text">
+          <string>CourtFilter</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QPushButton" name="add_rally_filter">
          <property name="text">
@@ -113,17 +147,13 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="reset_filters">
-         <property name="text">
-          <string>Reset Filters</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
-     <item row="0" column="0" rowspan="4">
-      <widget class="QVideoWidget" name="widget" native="true"/>
+     <item row="4" column="2" rowspan="3">
+      <widget class="QTableWidget" name="tableWidget"/>
+     </item>
+     <item row="3" column="2">
+      <widget class="QTableWidget" name="filter_table"/>
      </item>
     </layout>
    </item>

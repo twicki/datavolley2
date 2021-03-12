@@ -2,6 +2,7 @@ from enum import Enum
 from .AbstractAction import AbstractAction
 import datavolley2.statistics.Gamestate.game_state as gs
 from datavolley2.statistics.Players.players import Team
+from datavolley2.utils.errors import TVRSyntaxError
 
 
 class Quality(Enum):
@@ -99,8 +100,14 @@ class Gameaction(AbstractAction):
         new = cls(time_stamp)
         new.team = Team.from_string(s[0])
         new.player = int(s[1:3])
-        new.action = Action.from_string(s[3])
-        new.quality = Quality.from_string(s[4])
+        if Action.from_string(s[3]):
+            new.action = Action.from_string(s[3])
+        else:
+            raise TVRSyntaxError()
+        if Quality.from_string(s[4]):
+            new.quality = Quality.from_string(s[4])
+        else:
+            raise TVRSyntaxError()
         return new
 
 

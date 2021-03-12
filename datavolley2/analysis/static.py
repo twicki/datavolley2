@@ -1,11 +1,14 @@
-#!/usr/bin/env python3
+import sys
+import os
+
 import datavolley2
 import datavolley2.statistics as stats
 from datavolley2.statistics.Players.players import Team, Player
 import datavolley2.statistics.Gamestate.game_state as gs
 from datavolley2.statistics.Actions.GameAction import Gameaction
-
 from datavolley2.analysis.filters import *
+
+from datavolley2.statistics.Actions.SpecialAction import Endset
 from typing import List, Any, Dict
 
 from jinja2 import Environment, FileSystemLoader
@@ -37,12 +40,24 @@ class StaticWriter:
 
     def fill_scores(self) -> None:
         partialscores = []
+        start_times = []
+        end_times = []
         intermediates = [8, 16, 21]
         intermediate = intermediates[0]
         for rally in self.gamestate.rallies:
             setnumber = rally[3][0] + rally[3][1] + 1
             if len(partialscores) < setnumber:
                 partialscores.append({"finalscore": [], "mid_results": []})
+            if len(start_times) < setnumber:
+                for action in rally[0]:
+                    if action.time_stamp:
+                        start_times.append(action.time_stamp)
+                        continue
+            if len(end_times) < setnumber:
+                for action in rally[0]:
+                    if isinstance(action, Endset):
+                        end_times.append(action.time_stamp)
+                        continue
 
             if rally[2][0] == intermediate or rally[2][1] == intermediate:
                 partialscores[setnumber - 1]["mid_results"].append(rally[2])
@@ -52,6 +67,8 @@ class StaticWriter:
                     intermediate = intermediates[0]
             if rally[2][0] == 25 or rally[2][1] == 25:
                 partialscores[setnumber - 1]["finalscore"] = rally[2]
+        if len(start_times) != len(end_times):
+            end_times.append(self.gamestate.rallies[-1][0][-1].time_stamp)
         last = self.gamestate.score
         if last[0] != 25 and last[1] != 25 and (last[0] != 0 and last[1] != 0):
             setnumber = self.gamestate.set_score[0] + self.gamestate.set_score[1] + 1
@@ -60,6 +77,7 @@ class StaticWriter:
         # get final score
         home_total = 0
         away_total = 0
+        total_time = 0
         for scores in partialscores:
             home_total += scores["finalscore"][0]
             away_total += scores["finalscore"][1]
@@ -69,17 +87,26 @@ class StaticWriter:
             "guest": self.gamestate.set_score[1],
         }
         self.scores["final_score"] = {}
-        self.scores["final_score"]["duration"] = -1
         self.scores["final_score"]["score"] = {
             "home": home_total,
             "guest": away_total,
         }
         self.scores["setresults"] = []
         for i in range(len(partialscores)):
+            if (
+                len(start_times) > i
+                and len(end_times) > i
+                and start_times[i]
+                and end_times[i]
+            ):
+                time = int((end_times[i] - start_times[i]) / 60.0)
+                total_time += time
+            else:
+                time = ""
             self.scores["setresults"].append(
                 {
                     "setnumber": i + 1,
-                    "time": -1,
+                    "time": time,
                     "finalresult": {
                         "home": partialscores[i]["finalscore"][0],
                         "guest": partialscores[i]["finalscore"][1],
@@ -102,6 +129,7 @@ class StaticWriter:
                             "guest": ".",
                         }
                     )
+        self.scores["final_score"]["duration"] = total_time if total_time > 0 else ""
 
     def fill_global_info(self):
         self.global_info["teamnames"] = {
@@ -538,9 +566,8 @@ class StaticWriter:
         self.fill_player_stats()
         self.fill_detailed_info()
 
-        file_loader = FileSystemLoader(
-            "/home/tobiasw/Documents/Volley/playoff/datavolley2/datavolley2/analysis/template"
-        )
+        TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "template")
+        file_loader = FileSystemLoader(TEMPLATE_PATH)
         env = Environment(loader=file_loader)
 
         template = env.get_template("template.jinja2")
@@ -551,6 +578,7 @@ class StaticWriter:
             playerstats=self.playerstats,
             teamstats=self.teamstats,
             detailed_infos=self.detailed_infos,
+            template_path=TEMPLATE_PATH,
         )
 
         with open("template.tex", "w") as f:

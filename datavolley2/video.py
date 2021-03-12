@@ -5,9 +5,9 @@ from PyQt5.QtCore import QTimer
 from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QFrame, QFileDialog
 
-from uis.video import Ui_Dialog
+from datavolley2.uis.video import Ui_Dialog
 import datavolley2.utils.vlc as vlc
-
+from datavolley2.serializer.serializer import Serializer
 from datavolley2.analysis.filters import *
 
 
@@ -16,11 +16,13 @@ class TimestampedAction:
         self,
         action,
         row_that_displays,
+        rally,
         absolute_timestamp=None,
         relative_timestamp=None,
     ):
         super().__init__()
         self.action = action
+        self.from_rally = rally
         self.row_that_displays = row_that_displays
         self.absolute_timestamp = absolute_timestamp
         self.relative_timestamp = relative_timestamp
@@ -34,23 +36,56 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         self.mediaplayer = self.instance.media_player_new()
         self.pushButton.clicked.connect(self.open)
         self.pushButton_2.clicked.connect(self.PlayPause)
-        self.pushButton_3.clicked.connect(self.jump)
         self.horizontalSlider.sliderMoved.connect(self.setPosition)
         self.tableWidget.cellClicked.connect(self.cell_was_clicked)
+        self.loadFile_button.clicked.connect(self.load_file)
+        self.saveFile_button.clicked.connect(self.save_file)
 
-        self.add_action_filter.clicked.connect(self.apply_action_filter)
+        self.add_action_filter.clicked.connect(self.store_action_filter)
+        self.add_court_filter.clicked.connect(self.store_court_filter)
+        self.add_rally_filter.clicked.connect(self.store_rally_filter)
+        self.reset_filters.clicked.connect(self.reset_filters_and_apply)
+        self.apply_filters_button.clicked.connect(self.apply_all_filters)
 
         self.timer = QTimer(self)
         self.timer.setInterval(200)
         self.timer.timeout.connect(self.updateUI)
-        self.game_state = game_state
+        self.set_up_game_state(game_state)
 
+        self.filter_table.setRowCount(4)
+        self.filter_table.setColumnCount(2)
+        for i, what, filter_string in zip(
+            range(4),
+            ["Action", "Rally", "Court", "SubAction"],
+            [
+                self.action_filter,
+                self.rally_filter,
+                self.court_filter,
+                self.sub_action_filter,
+            ],
+        ):
+            self.filter_table.setItem(i, 0, QtWidgets.QTableWidgetItem(what))
+            self.filter_table.setItem(i, 1, QtWidgets.QTableWidgetItem(filter_string))
+
+    def reset_data(self):
         self.all_actions = []
         self.all_time_stamp_deltas = []
         self.all_time_stamps = []
         self.total_nuber_of_actions = 0
         self.total_time = None
+        self.isPaused = False
+        self.leadup_time = 3
 
+    def reset_all_filters(self):
+        self.action_filter = "@@@@@"
+        self.rally_filter = "@@@@@@@@"
+        self.court_filter = "@@@@@@@@@@@@@"
+        self.sub_action_filter = "@@@@@"
+
+    def set_up_game_state(self, game_state):
+        self.game_state = game_state
+        self.reset_data()
+        self.reset_all_filters()
         # set up detailed view
         if game_state:
             # get the total count of actions:
@@ -65,7 +100,9 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
             initial_time_stamp = None
             for rally in self.game_state.rallies:
                 for action in rally[0]:
-                    self.tableWidget.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
+                    self.tableWidget.setItem(
+                        0, i, QtWidgets.QTableWidgetItem(str(action))
+                    )
                     if initial_time_stamp is None:
                         initial_time_stamp = action.time_stamp
                     if action.time_stamp:
@@ -76,6 +113,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
                         TimestampedAction(
                             action,
                             i,
+                            rally,
                             relative_time_stamp,
                             relative_time_stamp,
                         )
@@ -83,16 +121,77 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
                     i += 1
             self.tableWidget.scrollToBottom()
 
-    def apply_action_filter(self):
+    def load_file(self):
+        filename = QFileDialog.getOpenFileName(
+            self, "Open File", os.path.expanduser("~")
+        )[0]
+        if not filename:
+            return
+        ser = Serializer()
+        game_state = ser.deserialize(filename)
+        self.set_up_game_state(game_state)
+
+    def save_file(self):
+        for new_action in self.all_actions:
+            rally = new_action.from_rally
+            action = new_action.action
+            filter_string = (
+                str(rally[2][0])
+                + str(rally[2][0] + 1)
+                + str(rally[2][1])
+                + str(rally[2][1] + 1)
+                + str(rally[3][0])
+                + str(rally[3][1])
+                + "@"
+                + "@"
+            )
+            old_rallies = ralley_filter_from_string(
+                filter_string, self.game_state.rallies
+            )
+            for old_rally in old_rallies:
+                for old_action in old_rally[0]:
+                    if str(old_action) == str(action):
+                        old_action.time_stamp = new_action.absolute_timestamp
+                        break
+        ser = Serializer(self.game_state)
+        ser.serialize("output_timed.tvr")
+
+    def reset_filters_and_apply(self):
+        self.reset_all_filters()
+        self.apply_all_filters()
+
+    def store_rally_filter(self):
+        self.rally_filter = self.lineEdit.text()
+        self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(self.rally_filter))
+        self.lineEdit.clear()
+        self.apply_all_filters()
+
+    def store_court_filter(self):
+        self.court_filter = self.lineEdit.text()
+        self.filter_table.setItem(2, 1, QtWidgets.QTableWidgetItem(self.court_filter))
+        self.lineEdit.clear()
+        self.apply_all_filters()
+
+    def store_action_filter(self):
+        self.action_filter = self.lineEdit.text()
+        self.filter_table.setItem(0, 1, QtWidgets.QTableWidgetItem(self.action_filter))
+        self.lineEdit.clear()
+        self.apply_all_filters()
+
+    def apply_all_filters(self):
         self.tableWidget.setRowCount(self.total_nuber_of_actions)
         filter_string = self.lineEdit.text()
         i = 0
         for action in self.all_actions:
             if isinstance(action.action, Gameaction):
                 current_action = str(action.action)
-                if compare_action_to_string(current_action, filter_string):
+                if (
+                    compare_ralley_to_string(self.rally_filter, action.from_rally)
+                    and compare_court_to_string(action.from_rally[1], self.court_filter)
+                    and compare_action_to_string(current_action, self.action_filter)
+                ):
                     self.tableWidget.setItem(
-                        0, i, QtGui.QTableWidgetItem(current_action)
+                        0, i, QtWidgets.QTableWidgetItem(current_action)
                     )
                     action.row_that_displays = i
                     i += 1
@@ -119,7 +218,12 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
                 break
 
         if modifiers == QtCore.Qt.ControlModifier:
-            percentage = current_action.absolute_timestamp / self.total_time
+            start_with_leadup = (
+                current_action.absolute_timestamp - self.leadup_time
+                if current_action.absolute_timestamp - self.leadup_time > 0
+                else 0
+            )
+            percentage = start_with_leadup / self.total_time
             self.mediaplayer.set_position(percentage)
         elif modifiers == QtCore.Qt.ShiftModifier:
             # percentage:
@@ -152,10 +256,14 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         """updates the user interface"""
         # setting the slider to the desired position
         self.horizontalSlider.setValue(self.mediaplayer.get_position() * 10000)
-
-    def jump(self):
-        self.mediaplayer.set_position(0.2)
-        self.updateUI()
+        if not self.mediaplayer.is_playing():
+            # no need to call this function if nothing is played
+            self.timer.stop()
+            if not self.isPaused:
+                # after the video finished, the play button stills shows
+                # "Pause", not the desired behavior of a media player
+                # this will fix it
+                self.Stop()
 
     def open(self):
         self.OpenFile()
@@ -205,11 +313,21 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         """Toggle play/pause status"""
         if self.mediaplayer.is_playing():
             self.mediaplayer.pause()
+            self.pushButton_2.setText("Play")
+            self.isPaused = True
         else:
             if self.mediaplayer.play() == -1:
                 self.OpenFile()
                 return
             self.mediaplayer.play()
+            self.pushButton_2.setText("Pause")
+            self.timer.start()
+            self.isPaused = False
+
+    def Stop(self):
+        """Stop player"""
+        self.mediaplayer.stop()
+        self.pushButton_2.setText("Play")
 
 
 if __name__ == "__main__":

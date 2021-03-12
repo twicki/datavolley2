@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFileDialog
@@ -15,9 +16,10 @@ import matplotlib as mp
 import numpy as np
 import time
 
-from uis import Ui_Form, Ui_MainWindow
-from uis.third import Ui_Form as thridUI
-from uis.fourth import Ui_Form as fourthUI
+from datavolley2.uis.first import Ui_MainWindow
+from datavolley2.uis.second import Ui_Form
+from datavolley2.uis.third import Ui_Form as thridUI
+from datavolley2.uis.fourth import Ui_Form as fourthUI
 
 
 from datavolley2.video import Main
@@ -102,6 +104,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
         self.update()
 
+    def highlight_errors(self):
+
+        fulltext = self.textEdit.toPlainText()
+        positions = []
+        for illegal_string in self.illegal:
+            for m in re.finditer(illegal_string, fulltext):
+                positions.append((m.start(), m.end()))
+        cursor = QtGui.QTextCursor(self.textEdit.document())
+        formatting = QtGui.QTextCharFormat()
+        color = QtGui.QColor("red")
+        formatting.setBackground(color)
+        for position in positions:
+            cursor.setPosition(position[0], QtGui.QTextCursor.MoveAnchor)
+            cursor.setPosition(position[1], QtGui.QTextCursor.KeepAnchor)
+            cursor.setCharFormat(formatting)
+
     def update(self):
         self.time_stamps.append(time.time())
         text = self.lineEdit.text()
@@ -118,7 +136,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 try:
                     self.game_state.add_string(command, self.time_stamps[0])
                 except:
-                    self.illegal.append(command, self.time_stamps[0])
+                    self.illegal.append(command)
         else:
             for command in s:
                 try:
@@ -128,6 +146,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.time_stamps.clear()
         self.textEdit.setText(self.fullstring)
+        self.highlight_errors()
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
 
         ## update my view:
