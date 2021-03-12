@@ -82,6 +82,7 @@ class Gameaction(AbstractAction):
     player = None
     action = None
     quality = None
+    direction = []
 
     def __init__(self, time_stamp=None):
         super().__init__(time_stamp)
@@ -89,6 +90,7 @@ class Gameaction(AbstractAction):
         self.player = 0
         self.action = Action.Hit
         self.quality = Quality.Good
+        self.direction = [-1, -1]
 
     def __str__(self):
         return gs.expandString(
