@@ -527,8 +527,102 @@ class StaticWriter:
         fulldata["Points"]["BP"] = len(
             action_filter_from_string(filterstring, break_rallies)
         )
-
         return fulldata
+
+    def compute_vote(self, team: Team, player_number: Player, fulldata: Dict) -> float:
+        # here is the vote computation that we're never using
+        votes = 0
+        vote = 0
+        filterstring = str(team) + "@@" + "s" + "@"
+        total_serves = len(
+            action_filter_from_string(filterstring, self.gamestate.rallies)
+        )
+        if fulldata["Serve"]["Total"] / total_serves > 0.05:
+            filterstring = str(team) + player_number + "s" + "p"
+            serve_overs = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            filterstring = str(team) + player_number + "s" + "+"
+            serve_plus = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            filterstring = str(team) + player_number + "s" + "-"
+            serve_minus = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            serve_vote = (
+                fulldata["Serve"]["Points"] * 10
+                + serve_overs * 8
+                + serve_plus * 7
+                + serve_minus * 4
+            ) / fulldata["Serve"]["Total"]
+            vote += serve_vote if serve_vote > 5.5 else 5.5
+            votes += 1
+
+        filterstring = str(team) + "@@" + "r" + "@"
+        total_receptions = len(
+            action_filter_from_string(filterstring, self.gamestate.rallies)
+        )
+        if fulldata["Reception"]["Total"] / total_serves > 0.07:
+            filterstring = str(team) + player_number + "r" + "p"
+            perfect = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            filterstring = str(team) + player_number + "r" + "+"
+            positive = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            filterstring = str(team) + player_number + "r" + "-"
+            negative = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            filterstring = str(team) + player_number + "r" + "o"
+            errors = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            rece_vote = (
+                perfect * 10 + positive * 7 + negative * -1 + errors * -3
+            ) / fulldata["Reception"]["Total"]
+            vote += rece_vote if rece_vote > 5.5 else 5.5
+            votes += 1
+
+        filterstring = str(team) + "@@" + "h" + "@"
+        total_hits = len(
+            action_filter_from_string(filterstring, self.gamestate.rallies)
+        )
+        if fulldata["Attack"]["Total"] / total_hits > 0.07:
+            filterstring = str(team) + player_number + "h" + "#"
+            kills = len(action_filter_from_string(filterstring, self.gamestate.rallies))
+            filterstring = str(team) + player_number + "r" + "+"
+            positive = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            filterstring = str(team) + player_number + "r" + "-"
+            negative = len(
+                action_filter_from_string(filterstring, self.gamestate.rallies)
+            )
+            hit_vote = (kills * 10 + positive * 5 + negative * 5) / fulldata["Attack"][
+                "Total"
+            ]
+            vote += hit_vote if hit_vote > 5.5 else 5.5
+            votes += 1
+
+        sets_played = 0
+        for start in fulldata["Starts"]:
+            if start != 0:
+                sets_played += 1
+        blocks_per_set = fulldata["Blocks"] / sets_played
+        if blocks_per_set > 1:
+            vote += 8.5
+            votes += 1
+        elif blocks_per_set > 0.8:
+            vote += 8
+            votes += 1
+        elif blocks_per_set > 0.5:
+            vote += 7
+            votes += 1
+
+        return round(vote / votes, 1) if votes > 0 else "."
 
     def collect_individual_statistics(self, team: Team, player: Player) -> Dict:
         player_number = "%02d" % player.Number
@@ -557,6 +651,9 @@ class StaticWriter:
                         elif fulldata["Starts"][setnumber] == 0:
                             fulldata["Starts"][setnumber] = -1
 
+        # currently disables as we don't need it
+        if False:
+            fulldata["Vote"] = self.compute_vote(team, player_number, fulldata)
         return fulldata
 
     def analyze(self) -> None:
