@@ -77,6 +77,31 @@ class Action(Enum):
             return Action.Hit
 
 
+class Combination(Enum):
+    Default(0, "D0")
+    Fast_1(1, "X1")
+    Fast_2(1, "X2")
+    Fast_3(1, "X3")
+    Medium_1(1, "C1")
+    Medium_2(1, "C2")
+    Medium_3(1, "C3")
+    High_1(1, "V1")
+    High_2(1, "V2")
+    High_3(1, "V3")
+
+    @classmethod
+    def from_string(cls, s):
+        for combination in cls:
+            if combination.value[1] == s:
+                return combination
+
+    def __str__(self):
+        return self.value[1]
+
+    def __int__(self):
+        return self.value[0]
+
+
 class Gameaction(AbstractAction):
     team = None
     player = None
@@ -91,6 +116,7 @@ class Gameaction(AbstractAction):
         self.action = Action.Hit
         self.quality = Quality.Good
         self.direction = [-1, -1]
+        self.combination = Combination.Default
 
     def __str__(self):
         return gs.expandString(

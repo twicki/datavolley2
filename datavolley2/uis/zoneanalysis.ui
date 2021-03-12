@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,12,12,12" columnstretch="8,0,2,2,2,2,6,2">
-   <item row="4" column="6" colspan="2">
-    <widget class="QFrame" name="frame_2">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,12,12,12,3" columnstretch="8,0,2,2,2,2,6,2">
+   <item row="6" column="2" colspan="4">
+    <widget class="QFrame" name="frame_6">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
@@ -25,7 +25,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_5">
+     <widget class="QWidget" name="horizontalLayoutWidget_3">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -34,21 +34,21 @@
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_2" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_6" stretch="5,1,5">
        <item>
-        <widget class="QLabel" name="total_2">
+        <widget class="QLabel" name="total_6">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_5">
+        <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -61,66 +61,73 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="total_perc_2">
+        <widget class="QLabel" name="total_perc_6">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_5">
+     <widget class="QWidget" name="verticalLayoutWidget_3">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="leads_2">
+      <layout class="QVBoxLayout" name="leads_6">
        <item>
-        <widget class="QLabel" name="lead_2">
+        <widget class="QLabel" name="lead_6">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="second_2">
+        <widget class="QLabel" name="second_6">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="third_2">
+        <widget class="QLabel" name="third_6">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fourth_2">
+        <widget class="QLabel" name="fourth_6">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fifth_2">
+        <widget class="QLabel" name="fifth_6">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="action_filter_button">
+     <property name="text">
+      <string>ActionFilter</string>
+     </property>
     </widget>
    </item>
    <item row="6" column="6" colspan="2">
@@ -152,7 +159,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -177,7 +184,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -187,7 +194,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
@@ -196,40 +203,47 @@
        <item>
         <widget class="QLabel" name="lead_1">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="second_1">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="third_1">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fourth_1">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fifth_1">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="rally_button">
+     <property name="text">
+      <string>RallyFilter</string>
+     </property>
     </widget>
    </item>
    <item row="0" column="4">
@@ -239,21 +253,15 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLineEdit" name="lineEdit"/>
-   </item>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="rally_button">
+   <item row="1" column="7">
+    <widget class="QPushButton" name="reset_button">
      <property name="text">
-      <string>RallyFilter</string>
+      <string>Reset</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="8">
-    <widget class="QTableWidget" name="filter_table"/>
-   </item>
-   <item row="5" column="6" colspan="2">
-    <widget class="QFrame" name="frame_7">
+   <item row="4" column="6" colspan="2">
+    <widget class="QFrame" name="frame_2">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
@@ -263,7 +271,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_7">
+     <widget class="QWidget" name="horizontalLayoutWidget_5">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -272,21 +280,21 @@
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_7" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_2" stretch="5,1,5">
        <item>
-        <widget class="QLabel" name="total_7">
+        <widget class="QLabel" name="total_2">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_7">
+        <spacer name="horizontalSpacer_5">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -299,279 +307,61 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="total_perc_7">
+        <widget class="QLabel" name="total_perc_2">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_7">
+     <widget class="QWidget" name="verticalLayoutWidget_5">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="leads_7">
+      <layout class="QVBoxLayout" name="leads_2">
        <item>
-        <widget class="QLabel" name="lead_7">
+        <widget class="QLabel" name="lead_2">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="second_7">
+        <widget class="QLabel" name="second_2">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="third_7">
+        <widget class="QLabel" name="third_2">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fourth_7">
+        <widget class="QLabel" name="fourth_2">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fifth_7">
+        <widget class="QLabel" name="fifth_2">
          <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
-   <item row="6" column="2" colspan="4">
-    <widget class="QFrame" name="frame_6">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(48, 136, 145);</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>251</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="header_6" stretch="5,1,5">
-       <item>
-        <widget class="QLabel" name="total_6">
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="total_perc_6">
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>251</width>
-        <height>141</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="leads_6">
-       <item>
-        <widget class="QLabel" name="lead_6">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="second_6">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="third_6">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="fourth_6">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="fifth_6">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QFrame" name="frame_4">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(48, 136, 145);</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>251</width>
-        <height>141</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="leads_4">
-       <item>
-        <widget class="QLabel" name="lead_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="second_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="third_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="fourth_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="fifth_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>251</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="header_4" stretch="5,1,5">
-       <item>
-        <widget class="QLabel" name="total_4">
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="total_perc_4">
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -608,7 +398,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -633,7 +423,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -643,7 +433,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
@@ -652,47 +442,40 @@
        <item>
         <widget class="QLabel" name="lead_8">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="second_8">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="third_8">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fourth_8">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fifth_8">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QPushButton" name="action_filter_button">
-     <property name="text">
-      <string>ActionFilter</string>
-     </property>
     </widget>
    </item>
    <item row="3" column="0" colspan="8">
@@ -711,8 +494,8 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QFrame" name="frame_9">
+   <item row="5" column="6" colspan="2">
+    <widget class="QFrame" name="frame_7">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
@@ -722,7 +505,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_9">
+     <widget class="QWidget" name="horizontalLayoutWidget_7">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -731,21 +514,21 @@
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_9" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_7" stretch="5,1,5">
        <item>
-        <widget class="QLabel" name="total_9">
+        <widget class="QLabel" name="total_7">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_9">
+        <spacer name="horizontalSpacer_7">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -758,66 +541,73 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="total_perc_9">
+        <widget class="QLabel" name="total_perc_7">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_9">
+     <widget class="QWidget" name="verticalLayoutWidget_7">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="leads_9">
+      <layout class="QVBoxLayout" name="leads_7">
        <item>
-        <widget class="QLabel" name="lead_9">
+        <widget class="QLabel" name="lead_7">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="second_9">
+        <widget class="QLabel" name="second_7">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="third_9">
+        <widget class="QLabel" name="third_7">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fourth_9">
+        <widget class="QLabel" name="fourth_7">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fifth_9">
+        <widget class="QLabel" name="fifth_7">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="QPushButton" name="subaction_filter_button">
+     <property name="text">
+      <string>SubactionFilter</string>
+     </property>
     </widget>
    </item>
    <item row="4" column="2" colspan="4">
@@ -849,7 +639,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -874,7 +664,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -884,7 +674,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
@@ -893,35 +683,35 @@
        <item>
         <widget class="QLabel" name="lead_3">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="second_3">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="third_3">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fourth_3">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fifth_3">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -929,12 +719,124 @@
      </widget>
     </widget>
    </item>
-   <item row="0" column="5">
-    <widget class="QPushButton" name="subaction_filter_button">
+   <item row="0" column="7">
+    <widget class="QPushButton" name="load_button">
      <property name="text">
-      <string>SubactionFilter</string>
+      <string>Load File</string>
      </property>
     </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QFrame" name="frame_4">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(48, 136, 145);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>251</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="leads_4">
+       <item>
+        <widget class="QLabel" name="lead_4">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="second_4">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="third_4">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="fourth_4">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="fifth_4">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="header_4" stretch="5,1,5">
+       <item>
+        <widget class="QLabel" name="total_4">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="total_perc_4">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLineEdit" name="lineEdit"/>
    </item>
    <item row="6" column="0">
     <widget class="QFrame" name="frame_5">
@@ -965,7 +867,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -990,7 +892,7 @@
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -1000,7 +902,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>60</y>
         <width>251</width>
         <height>141</height>
        </rect>
@@ -1009,35 +911,35 @@
        <item>
         <widget class="QLabel" name="lead_5">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="second_5">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="third_5">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fourth_5">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="fifth_5">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -1045,18 +947,225 @@
      </widget>
     </widget>
    </item>
-   <item row="0" column="7">
-    <widget class="QPushButton" name="load_button">
-     <property name="text">
-      <string>Load File</string>
+   <item row="2" column="0" colspan="8">
+    <widget class="QTableWidget" name="filter_table"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QFrame" name="frame_9">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QWidget" name="horizontalLayoutWidget_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="header_9" stretch="5,1,5">
+       <item>
+        <widget class="QLabel" name="total_9">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="total_perc_9">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>251</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="leads_9">
+       <item>
+        <widget class="QLabel" name="lead_9">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="second_9">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="third_9">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="fourth_9">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="fifth_9">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
-   <item row="1" column="7">
-    <widget class="QPushButton" name="reset_button">
-     <property name="text">
-      <string>Reset</string>
+   <item row="7" column="0" colspan="8">
+    <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QWidget" name="horizontalLayoutWidget_10">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="header_10" stretch="5,1,5">
+       <item>
+        <widget class="QLabel" name="total_10">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="total_perc_10">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_11">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>10</y>
+        <width>831</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="lead_10">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="second_10">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="third_10">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="fourth_10">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="fifth_10">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
