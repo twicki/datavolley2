@@ -51,8 +51,9 @@ class StaticWriter:
             if len(start_times) < setnumber:
                 for action in rally[0]:
                     if action.time_stamp:
-                        start_times.append(action.time_stamp)
-                        continue
+                        if isinstance(action, Gameaction):
+                            start_times.append(action.time_stamp)
+                            continue
             if len(end_times) < setnumber:
                 for action in rally[0]:
                     if isinstance(action, Endset):
