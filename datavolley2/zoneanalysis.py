@@ -11,6 +11,7 @@ from datavolley2.statistics import Gameaction
 from datavolley2.statistics.Actions.SpecialAction import InitializePlayer
 from datavolley2.statistics.Players.players import Team, Player
 from datavolley2.analysis.filters import *
+from datavolley2.analysis.basic_filter_widget import Basic_Filter
 
 
 class Position:
@@ -21,17 +22,16 @@ class Position:
         self.leaders = [first, second, thrid, fourth, fifth]
 
 
-class Main(QtWidgets.QWidget, Ui_Form):
+def keyPressed(evt):
+    print("Key pressed")
+
+
+class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
+    sigKeyPress = QtCore.pyqtSignal(object)
+
     def __init__(self, game_state=None):
         super().__init__()
-        self.setupUi(self)
-        self.game_state = None
-
-        self.action_filter_button.clicked.connect(self.store_action_filter)
-        self.court_filter_button.clicked.connect(self.store_court_filter)
-        self.rally_button.clicked.connect(self.store_rally_filter)
-        self.reset_button.clicked.connect(self.reset_filters_and_apply)
-        self.load_button.clicked.connect(self.load_file)
+        Basic_Filter.__init__(self)
 
         self.analyze_from.setChecked(True)
         self.analyze_from.clicked.connect(self.check_from)
@@ -41,8 +41,6 @@ class Main(QtWidgets.QWidget, Ui_Form):
         self.reset_all_filters()
         self.court = []
         self.intialize_court_with_widgets()
-        self.players = [[], []]
-        self.position_to_check = 0
 
     def check_from(self):
         self.analyze_from.setChecked(True)
@@ -168,72 +166,6 @@ class Main(QtWidgets.QWidget, Ui_Form):
             )
         )
 
-    def initialize_table(self):
-        self.filter_table.setRowCount(2)
-        self.filter_table.setColumnCount(4)
-        for i, what, filter_string in zip(
-            range(4),
-            ["Action", "Rally", "Court", "SubAction"],
-            [
-                self.action_filter,
-                self.rally_filter,
-                self.court_filter,
-                self.sub_action_filter,
-            ],
-        ):
-            self.filter_table.setItem(0, i, QtWidgets.QTableWidgetItem(what))
-            self.filter_table.setItem(1, i, QtWidgets.QTableWidgetItem(filter_string))
-
-    def reset_all_filters(self):
-        self.action_filter = "@@@@@"
-        self.rally_filter = "@@@@@@@@"
-        self.court_filter = "@@@@@@@@@@@@@"
-        self.sub_action_filter = "@@@@@"
-        self.initialize_table()
-
-    def reset_filters_and_apply(self):
-        self.reset_all_filters()
-        self.apply_all_filters()
-
-    def store_rally_filter(self):
-        self.rally_filter = self.lineEdit.text()
-        self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(self.rally_filter))
-        self.lineEdit.clear()
-        self.apply_all_filters()
-
-    def store_court_filter(self):
-        self.court_filter = self.lineEdit.text()
-        self.filter_table.setItem(1, 2, QtWidgets.QTableWidgetItem(self.court_filter))
-        self.lineEdit.clear()
-        self.apply_all_filters()
-
-    def store_action_filter(self):
-        self.action_filter = self.lineEdit.text()
-        self.filter_table.setItem(1, 0, QtWidgets.QTableWidgetItem(self.action_filter))
-        self.lineEdit.clear()
-        self.apply_all_filters()
-
-    def apply_all_filters(self):
-        self.actions = []
-        self.players = [[], []]
-        if self.game_state is None:
-            self.load_file()
-            if self.game_state is None:
-                return
-        for rally in self.game_state.rallies:
-            for action in rally[0]:
-                if isinstance(action, InitializePlayer):
-                    p = Player(action.number, action.position, action.name)
-                    self.players[int(action.team)].append(p)
-                if compare_ralley_to_string(
-                    self.rally_filter, rally
-                ) and compare_court_to_string(rally[1], self.court_filter):
-                    if isinstance(action, Gameaction):
-                        current_action = str(action)
-                        if compare_action_to_string(current_action, self.action_filter):
-                            self.actions.append(action)
-        self.analyze()
-
     def analyze(self):
         for position in range(9):
             total = 0
@@ -306,18 +238,10 @@ class Main(QtWidgets.QWidget, Ui_Form):
         for label, leader in zip(self.court[9].leaders, sorted_leaders):
             label.setText(str(leader[0]) + " : " + str(leader[1]))
 
-    def load_file(self):
-        filename = QFileDialog.getOpenFileName(
-            self, "Open File", os.path.expanduser("~")
-        )[0]
-        if not filename:
-            return
-        ser = Serializer()
-        self.game_state = ser.deserialize(filename)
-
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     w = Main()
     w.show()
+    w.sigKeyPress.connect(keyPressed)
     sys.exit(app.exec())
