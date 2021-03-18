@@ -679,6 +679,6 @@ class StaticWriter:
             template_path=TEMPLATE_PATH,
         )
 
-        with open("template.tex", "w") as f:
+        with open("gamestats.tex", "w") as f:
             f.write(output)
             f.close()
