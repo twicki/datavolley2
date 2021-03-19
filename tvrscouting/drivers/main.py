@@ -17,7 +17,7 @@ import numpy as np
 import time
 
 from tvrscouting.uis.first import Ui_MainWindow
-from tvrscouting.uis.second import Ui_Form
+from tvrscouting.uis.second import Ui_Form as commentatorUI
 from tvrscouting.uis.third import Ui_Form as thridUI
 from tvrscouting.uis.fourth import Ui_Form as fourthUI
 
@@ -979,7 +979,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.FourthWindow.show()
 
 
-class SecondWindow(QtWidgets.QWidget, Ui_Form):
+class SecondWindow(QtWidgets.QWidget, commentatorUI):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
