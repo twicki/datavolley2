@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_27" rowstretch="3,0,0,3" columnstretch="5,1">
+  <layout class="QGridLayout" name="gridLayout_27" rowstretch="5,0,0,5" columnstretch="5,1">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0">
+    <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0">
      <item row="1" column="3">
       <layout class="QGridLayout" name="gridLayout_12" rowstretch="1,1,1,1,1,1">
        <item row="2" column="1">
@@ -1744,9 +1744,9 @@
     </layout>
    </item>
    <item row="3" column="0">
-    <layout class="QGridLayout" name="gridLayout_14" columnstretch="1,1,1,1">
+    <layout class="QGridLayout" name="gridLayout_14" columnstretch="0,0,0,0">
      <item row="1" column="3">
-      <layout class="QGridLayout" name="gridLayout_25">
+      <layout class="QGridLayout" name="gridLayout_25" rowstretch="1,1,1,1,1,1">
        <item row="4" column="2">
         <widget class="QLCDNumber" name="rece_pct_23">
          <property name="styleSheet">
@@ -1881,7 +1881,7 @@
       </layout>
      </item>
      <item row="1" column="1">
-      <layout class="QGridLayout" name="gridLayout_19">
+      <layout class="QGridLayout" name="gridLayout_19" rowstretch="1,1,1,1,1,1">
        <item row="1" column="2">
         <widget class="QLCDNumber" name="hit_pct_17">
          <property name="styleSheet">
@@ -2016,7 +2016,7 @@
       </layout>
      </item>
      <item row="2" column="1">
-      <layout class="QGridLayout" name="gridLayout_20">
+      <layout class="QGridLayout" name="gridLayout_20" rowstretch="1,1,1,1,1,1">
        <item row="1" column="0">
         <widget class="QLabel" name="l_hits_18">
          <property name="text">
@@ -2151,7 +2151,7 @@
       </layout>
      </item>
      <item row="0" column="3">
-      <layout class="QGridLayout" name="gridLayout_24">
+      <layout class="QGridLayout" name="gridLayout_24" rowstretch="1,1,1,1,1,1">
        <item row="4" column="0">
         <widget class="QLabel" name="l_rece_22">
          <property name="text">
@@ -2286,7 +2286,7 @@
       </layout>
      </item>
      <item row="2" column="0">
-      <layout class="QGridLayout" name="gridLayout_17">
+      <layout class="QGridLayout" name="gridLayout_17" rowstretch="1,1,1,1,1,1">
        <item row="4" column="0">
         <widget class="QLabel" name="l_rece_15">
          <property name="text">
@@ -2421,7 +2421,7 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <layout class="QGridLayout" name="gridLayout_13">
+      <layout class="QGridLayout" name="gridLayout_13" rowstretch="1,1,1,1,1,1">
        <item row="2" column="0">
         <widget class="QLabel" name="l_serve_13">
          <property name="text">
@@ -2556,7 +2556,7 @@
       </layout>
      </item>
      <item row="0" column="2">
-      <layout class="QGridLayout" name="gridLayout_21">
+      <layout class="QGridLayout" name="gridLayout_21" rowstretch="1,1,1,1,1,1">
        <item row="4" column="1">
         <widget class="QLCDNumber" name="rece_19">
          <property name="font">
@@ -2691,7 +2691,7 @@
       </layout>
      </item>
      <item row="2" column="2">
-      <layout class="QGridLayout" name="gridLayout_23">
+      <layout class="QGridLayout" name="gridLayout_23" rowstretch="1,1,1,1,1,1">
        <item row="4" column="1">
         <widget class="QLCDNumber" name="rece_21">
          <property name="font">
@@ -2826,7 +2826,7 @@
       </layout>
      </item>
      <item row="0" column="1">
-      <layout class="QGridLayout" name="gridLayout_18">
+      <layout class="QGridLayout" name="gridLayout_18" rowstretch="1,1,1,1,1,1">
        <item row="2" column="1">
         <widget class="QLCDNumber" name="serve_16">
          <property name="styleSheet">
@@ -2961,7 +2961,7 @@
       </layout>
      </item>
      <item row="1" column="2">
-      <layout class="QGridLayout" name="gridLayout_22">
+      <layout class="QGridLayout" name="gridLayout_22" rowstretch="1,1,1,1,1,1">
        <item row="2" column="1">
         <widget class="QLCDNumber" name="serve_20">
          <property name="styleSheet">
@@ -3096,7 +3096,7 @@
       </layout>
      </item>
      <item row="1" column="0">
-      <layout class="QGridLayout" name="gridLayout_15">
+      <layout class="QGridLayout" name="gridLayout_15" rowstretch="0,1,1,1,1,1,1">
        <item row="3" column="1">
         <widget class="QLCDNumber" name="serve_14">
          <property name="styleSheet">
@@ -3231,7 +3231,7 @@
       </layout>
      </item>
      <item row="2" column="3">
-      <layout class="QGridLayout" name="gridLayout_28">
+      <layout class="QGridLayout" name="gridLayout_28" rowstretch="1,1,1,1,1,1">
        <item row="4" column="1">
         <widget class="QLCDNumber" name="rece_24">
          <property name="styleSheet">

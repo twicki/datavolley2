@@ -5,6 +5,7 @@ from collections import OrderedDict
 
 
 import tvrscouting.statistics.Actions as actions
+from tvrscouting.utils.errors import TVRSyntaxError
 
 from tvrscouting.statistics.Actions.GameAction import (
     Gameaction,
@@ -89,14 +90,14 @@ def set_quality(user_string, returnvalue):
 def set_combination(user_string, returnvalue):
     if len(user_string) > 1:
         if user_string[0] in ["D", "X", "C"]:
-            returnvalue = returnvalue[:5] + user_string[0:2] + returnvalue[8:]
+            returnvalue = returnvalue[:5] + user_string[0:2] + returnvalue[7:]
             user_string = user_string[2:]
         return returnvalue, user_string
     return returnvalue, user_string
 
 
 def set_from_direction(user_string, returnvalue):
-    if len(user_string):
+    if len(user_string) and user_string[0].isnumeric():
         returnvalue = returnvalue[:7] + user_string[0] + returnvalue[8:]
         user_string = user_string[1:]
         return returnvalue, user_string, True
@@ -104,9 +105,11 @@ def set_from_direction(user_string, returnvalue):
 
 
 def set_to_direction(user_string, returnvalue):
-    if len(user_string):
+    if len(user_string) and user_string[0].isnumeric():
         returnvalue = returnvalue[:8] + user_string[0]
         return returnvalue, True
+    elif len(user_string):
+        raise TVRSyntaxError()
     return returnvalue, False
 
 
@@ -470,7 +473,9 @@ class GameState:
             playerstats[player.Number]["played"] = False
             for teams_player in self.players[int(team)]:
                 if teams_player.Number == player.Number:
-                    playerstats[player.Number]["name"] = teams_player.Name
+                    playerstats[player.Number]["name"] = (
+                        str(player.Number) + " " + teams_player.Name
+                    )
             playerstats[player.Number]["serve"] = {}
             playerstats[player.Number]["serve"]["kill"] = 0
             playerstats[player.Number]["serve"]["total"] = 0
@@ -533,6 +538,9 @@ class GameState:
             del playerstats[numbers]
 
         playerstats["team"] = {}
+        playerstats["team"]["name"] = (
+            self.teamnames[int(team)] if self.teamnames[int(team)] else ""
+        )
         playerstats["team"]["group"] = 7
         playerstats["team"]["serve"] = {}
         playerstats["team"]["serve"]["kill"] = 0
