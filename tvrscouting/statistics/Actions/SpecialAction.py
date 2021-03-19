@@ -1,4 +1,4 @@
-from datavolley2.statistics.Players.players import Team, Player
+from tvrscouting.statistics.Players.players import Team, Player
 from .AbstractAction import AbstractAction
 
 

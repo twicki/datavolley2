@@ -6,10 +6,10 @@ from PyQt5.QtCore import QTimer
 from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QFrame, QFileDialog
 
-from datavolley2.uis.video import Ui_Dialog
-import datavolley2.utils.vlc as vlc
-from datavolley2.serializer.serializer import Serializer
-from datavolley2.analysis.filters import *
+from tvrscouting.uis.video import Ui_Dialog
+import tvrscouting.utils.vlc as vlc
+from tvrscouting.serializer.serializer import Serializer
+from tvrscouting.analysis.filters import *
 
 
 class TimestampedAction:

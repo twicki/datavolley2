@@ -1,5 +1,5 @@
 import pickle
-from datavolley2.statistics import GameState
+from tvrscouting.statistics import GameState
 
 
 class Serializer:

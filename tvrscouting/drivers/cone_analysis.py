@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from datavolley2.uis.cone_analysis import Ui_Form
-from datavolley2.analysis.basic_filter_widget import Basic_Filter
-from datavolley2.statistics.Actions.GameAction import Quality
+from tvrscouting.uis.cone_analysis import Ui_Form
+from tvrscouting.analysis.basic_filter_widget import Basic_Filter
+from tvrscouting.statistics.Actions.GameAction import Quality
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 

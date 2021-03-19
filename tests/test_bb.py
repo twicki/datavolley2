@@ -1,9 +1,9 @@
-import datavolley2
+import tvrscouting
 
-import datavolley2.statistics as stats
-import datavolley2.statistics.Actions as actions
+import tvrscouting.statistics as stats
+import tvrscouting.statistics.Actions as actions
 
-from datavolley2.statistics.Gamestate.game_state import (
+from tvrscouting.statistics.Gamestate.game_state import (
     expandString,
     split_string,
     Player,

@@ -4,17 +4,17 @@ from copy import deepcopy
 from collections import OrderedDict
 
 
-import datavolley2.statistics.Actions as actions
+import tvrscouting.statistics.Actions as actions
 
-from datavolley2.statistics.Actions.GameAction import (
+from tvrscouting.statistics.Actions.GameAction import (
     Gameaction,
     is_scoring,
     Action,
     Quality,
 )
-import datavolley2.statistics.Actions.SpecialAction as SpecialActions
-from datavolley2.statistics.Players.players import Player
-from datavolley2.analysis.filters import *
+import tvrscouting.statistics.Actions.SpecialAction as SpecialActions
+from tvrscouting.statistics.Players.players import Player
+from tvrscouting.analysis.filters import *
 
 
 def truncate_list(in_list, size=11):

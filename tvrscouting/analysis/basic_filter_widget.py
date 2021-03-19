@@ -3,13 +3,13 @@ import os
 from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog
 
-import datavolley2
-from datavolley2.serializer.serializer import Serializer
+import tvrscouting
+from tvrscouting.serializer.serializer import Serializer
 
-from datavolley2.statistics import Gameaction
-from datavolley2.statistics.Actions.SpecialAction import InitializePlayer
-from datavolley2.statistics.Players.players import Team, Player
-from datavolley2.analysis.filters import *
+from tvrscouting.statistics import Gameaction
+from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
+from tvrscouting.statistics.Players.players import Team, Player
+from tvrscouting.analysis.filters import *
 
 
 class Basic_Filter:

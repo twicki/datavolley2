@@ -1,8 +1,8 @@
 from enum import Enum
 from .AbstractAction import AbstractAction
-import datavolley2.statistics.Gamestate.game_state as gs
-from datavolley2.statistics.Players.players import Team
-from datavolley2.utils.errors import TVRSyntaxError
+import tvrscouting.statistics.Gamestate.game_state as gs
+from tvrscouting.statistics.Players.players import Team
+from tvrscouting.utils.errors import TVRSyntaxError
 
 
 class Quality(Enum):

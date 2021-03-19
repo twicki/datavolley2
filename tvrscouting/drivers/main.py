@@ -5,21 +5,21 @@ import re
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFileDialog
 
-import datavolley2
-from datavolley2.statistics.Players.players import Team
-from datavolley2.statistics import GameState
-from datavolley2.analysis.static import StaticWriter
+import tvrscouting
+from tvrscouting.statistics.Players.players import Team
+from tvrscouting.statistics import GameState
+from tvrscouting.analysis.static import StaticWriter
 
-from datavolley2.serializer.serializer import Serializer
+from tvrscouting.serializer.serializer import Serializer
 
 import matplotlib as mp
 import numpy as np
 import time
 
-from datavolley2.uis.first import Ui_MainWindow
-from datavolley2.uis.second import Ui_Form
-from datavolley2.uis.third import Ui_Form as thridUI
-from datavolley2.uis.fourth import Ui_Form as fourthUI
+from tvrscouting.uis.first import Ui_MainWindow
+from tvrscouting.uis.second import Ui_Form
+from tvrscouting.uis.third import Ui_Form as thridUI
+from tvrscouting.uis.fourth import Ui_Form as fourthUI
 
 
 class PlayerProfileInView:

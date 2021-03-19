@@ -1,14 +1,14 @@
 import sys
 import os
 
-import datavolley2
-import datavolley2.statistics as stats
-from datavolley2.statistics.Players.players import Team, Player
-import datavolley2.statistics.Gamestate.game_state as gs
-from datavolley2.statistics.Actions.GameAction import Gameaction
-from datavolley2.analysis.filters import *
+import tvrscouting
+import tvrscouting.statistics as stats
+from tvrscouting.statistics.Players.players import Team, Player
+import tvrscouting.statistics.Gamestate.game_state as gs
+from tvrscouting.statistics.Actions.GameAction import Gameaction
+from tvrscouting.analysis.filters import *
 
-from datavolley2.statistics.Actions.SpecialAction import Endset
+from tvrscouting.statistics.Actions.SpecialAction import Endset
 from typing import List, Any, Dict
 
 from jinja2 import Environment, FileSystemLoader
