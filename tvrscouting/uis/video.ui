@@ -95,7 +95,7 @@
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QPushButton" name="loadFile_button">
+        <widget class="QPushButton" name="load_button">
          <property name="text">
           <string>Load File</string>
          </property>
@@ -113,44 +113,37 @@
      <item row="2" column="2">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="1" column="1">
-        <widget class="QPushButton" name="add_contain_filter">
+        <widget class="QPushButton" name="subaction_filter_button">
          <property name="text">
           <string>SubActionFilter</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QPushButton" name="reset_filters">
-         <property name="text">
-          <string>Reset Filters</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
-        <widget class="QPushButton" name="add_action_filter">
+        <widget class="QPushButton" name="action_filter_button">
          <property name="text">
           <string>ActionFilter</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="apply_filters_button">
-         <property name="text">
-          <string>Apply Filters</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="add_court_filter">
+        <widget class="QPushButton" name="court_filter_button">
          <property name="text">
           <string>CourtFilter</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="add_rally_filter">
+        <widget class="QPushButton" name="rally_button">
          <property name="text">
           <string>RallyFilter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="reset_button">
+         <property name="text">
+          <string>Reset Filters</string>
          </property>
         </widget>
        </item>

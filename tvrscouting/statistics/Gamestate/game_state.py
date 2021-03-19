@@ -577,10 +577,10 @@ class GameState:
     def fix_time_stamps(self, old_game_state) -> None:
         for rally in self.rallies:
             filter_string = (
-                str(rally[2][0])
-                + str(rally[2][0] + 1)
-                + str(rally[2][1])
-                + str(rally[2][1] + 1)
+                "%02d" % (rally[2][0])
+                + "%02d" % (rally[2][0] + 1)
+                + "%02d" % (rally[2][1])
+                + "%02d" % (rally[2][1] + 1)
                 + str(rally[3][0])
                 + str(rally[3][1])
                 + "@"

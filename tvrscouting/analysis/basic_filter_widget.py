@@ -23,6 +23,7 @@ class Basic_Filter:
         self.rally_button.clicked.connect(self.store_rally_filter)
         self.reset_button.clicked.connect(self.reset_filters_and_apply)
         self.load_button.clicked.connect(self.load_file)
+        self.subaction_filter_button.clicked.connect(self.store_subaction_filter)
 
         self.reset_all_filters()
         self.players = [[], []]
@@ -46,7 +47,7 @@ class Basic_Filter:
 
     def reset_all_filters(self):
         self.action_filters = ["@@@@@"]
-        self.rally_filters = ["@@@@@@@@"]
+        self.rally_filters = ["@@@@@@@@@@@@"]
         self.court_filters = ["@@@@@@@@@@@@@"]
         self.sub_action_filters = ["@@@@@"]
         self.initialize_table()
@@ -57,10 +58,19 @@ class Basic_Filter:
 
     def store_rally_filter(self):
         rally_filter = self.lineEdit.text()
-        if len(self.rally_filters) == 1 and self.rally_filters[0] == "@@@@@@@@":
+        if len(self.rally_filters) == 1 and self.rally_filters[0] == "@@@@@@@@@@@@":
             self.rally_filters.clear()
         self.rally_filters.append(rally_filter)
         self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(rally_filter))
+        self.lineEdit.clear()
+        self.apply_all_filters()
+
+    def store_subaction_filter(self):
+        subaction_filter = self.lineEdit.text()
+        if len(self.sub_action_filters) == 1 and self.sub_action_filters[0] == "@@@@@":
+            self.sub_action_filters.clear()
+        self.sub_action_filters.append(subaction_filter)
+        self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(subaction_filter))
         self.lineEdit.clear()
         self.apply_all_filters()
 
@@ -94,6 +104,12 @@ class Basic_Filter:
                 return True
         return False
 
+    def check_all_subaction_filters(self, rally):
+        for subaction_filter in self.sub_action_filters:
+            if rally_filter_from_action_string(subaction_filter, rally):
+                return True
+        return False
+
     def check_all_action_filters(self, action):
         for action_filter in self.action_filters:
             if compare_action_to_string(action, action_filter):
@@ -112,8 +128,10 @@ class Basic_Filter:
                 if isinstance(action, InitializePlayer):
                     p = Player(action.number, action.position, action.name)
                     self.players[int(action.team)].append(p)
-                if self.check_all_rally_filters(rally) and self.check_all_court_filters(
-                    rally[1]
+                if (
+                    self.check_all_rally_filters(rally)
+                    and self.check_all_court_filters(rally[1])
+                    and self.check_all_subaction_filters(rally)
                 ):
                     if isinstance(action, Gameaction):
                         current_action = str(action)

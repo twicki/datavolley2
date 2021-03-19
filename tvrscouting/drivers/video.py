@@ -10,6 +10,7 @@ from tvrscouting.uis.video import Ui_Dialog
 import tvrscouting.utils.vlc as vlc
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.analysis.filters import *
+from tvrscouting.analysis.basic_filter_widget import Basic_Filter
 
 
 class TimestampedAction:
@@ -27,14 +28,15 @@ class TimestampedAction:
         self.relative_timestamp = relative_timestamp
 
 
-class Main(QtWidgets.QWidget, Ui_Dialog):
+class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def __init__(self, game_state=None):
         super().__init__()
-        self.setupUi(self)
+        Basic_Filter.__init__(self)
+        # self.setupUi(self)
         self._qt_setup()
         self._media_player_setup()
         self.set_up_game_state(game_state)
-        self._filter_setup()
+        # self._filter_setup()
         self.current_action_index = 0
         self.nex_action_index = 1
         self.total_time = None
@@ -49,12 +51,6 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         self.all_time_stamp_deltas = []
         self.all_time_stamps = []
         self.total_nuber_of_actions = 0
-
-    def reset_all_filters(self):
-        self.action_filter = "@@@@@"
-        self.rally_filter = "@@@@@@@@"
-        self.court_filter = "@@@@@@@@@@@@@"
-        self.sub_action_filter = "@@@@@"
 
     def set_up_game_state(self, game_state):
         self.game_state = game_state
@@ -108,10 +104,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
             rally = new_action.from_rally
             action = new_action.action
             filter_string = (
-                str(rally[2][0])
-                + str(rally[2][0] + 1)
-                + str(rally[2][1])
-                + str(rally[2][1] + 1)
+                "%02d" % (rally[2][0])
+                + "%02d" % (rally[2][0] + 1)
+                + "%02d" % (rally[2][1])
+                + "%02d" % (rally[2][1] + 1)
                 + str(rally[3][0])
                 + str(rally[3][1])
                 + "@"
@@ -128,29 +124,11 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         ser = Serializer(self.game_state)
         ser.serialize("output_timed.tvr")
 
-    def reset_filters_and_apply(self):
-        self.reset_all_filters()
-        self.apply_all_filters()
-
-    def store_rally_filter(self):
-        self.rally_filter = self.lineEdit.text()
-        self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(self.rally_filter))
-        self.lineEdit.clear()
-        self.apply_all_filters()
-
-    def store_court_filter(self):
-        self.court_filter = self.lineEdit.text()
-        self.filter_table.setItem(2, 1, QtWidgets.QTableWidgetItem(self.court_filter))
-        self.lineEdit.clear()
-        self.apply_all_filters()
-
-    def store_action_filter(self):
-        self.action_filter = self.lineEdit.text()
-        self.filter_table.setItem(0, 1, QtWidgets.QTableWidgetItem(self.action_filter))
-        self.lineEdit.clear()
-        self.apply_all_filters()
-
     def apply_all_filters(self):
+        if self.game_state is None:
+            self.load_file()
+            if self.game_state is None:
+                return
         self.tableWidget.setRowCount(self.total_nuber_of_actions)
         filter_string = self.lineEdit.text()
         i = 0
@@ -159,9 +137,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
             if isinstance(action.action, Gameaction):
                 current_action = str(action.action)
                 if (
-                    compare_ralley_to_string(self.rally_filter, action.from_rally)
-                    and compare_court_to_string(action.from_rally[1], self.court_filter)
-                    and compare_action_to_string(current_action, self.action_filter)
+                    self.check_all_rally_filters(action.from_rally)
+                    and self.check_all_court_filters(action.from_rally[1])
+                    and self.check_all_subaction_filters(action.from_rally)
+                    and self.check_all_action_filters(current_action)
                 ):
                     self.tableWidget.setItem(
                         0, i, QtWidgets.QTableWidgetItem(current_action)
@@ -357,31 +336,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog):
         self.horizontalSlider.sliderMoved.connect(self.setPosition)
         self.tableWidget.cellClicked.connect(self.cell_was_clicked)
         self.tableWidget.itemSelectionChanged.connect(self.update_player)
+        self.load_button.clicked.disconnect()
+        self.load_button.clicked.connect(self.load_file)
 
-        self.loadFile_button.clicked.connect(self.load_file)
         self.saveFile_button.clicked.connect(self.save_file)
-
-        self.add_action_filter.clicked.connect(self.store_action_filter)
-        self.add_court_filter.clicked.connect(self.store_court_filter)
-        self.add_rally_filter.clicked.connect(self.store_rally_filter)
-        self.reset_filters.clicked.connect(self.reset_filters_and_apply)
-        self.apply_filters_button.clicked.connect(self.apply_all_filters)
-
-    def _filter_setup(self):
-        self.filter_table.setRowCount(4)
-        self.filter_table.setColumnCount(2)
-        for i, what, filter_string in zip(
-            range(4),
-            ["Action", "Rally", "Court", "SubAction"],
-            [
-                self.action_filter,
-                self.rally_filter,
-                self.court_filter,
-                self.sub_action_filter,
-            ],
-        ):
-            self.filter_table.setItem(i, 0, QtWidgets.QTableWidgetItem(what))
-            self.filter_table.setItem(i, 1, QtWidgets.QTableWidgetItem(filter_string))
 
 
 if __name__ == "__main__":

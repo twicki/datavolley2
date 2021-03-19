@@ -167,7 +167,7 @@ class StaticWriter:
             number_of_sets += 1
         for i in range(number_of_sets):
 
-            ralley_filter_string = "@@@@@@" + str(i) + "@"
+            ralley_filter_string = "@@@@@@@@@@" + str(i) + "@"
             current_rallies = ralley_filter_from_string(
                 ralley_filter_string, self.gamestate.rallies
             )
@@ -258,7 +258,7 @@ class StaticWriter:
                 )
             # Number of sideout points
             rece_rallies = ralley_filter_from_string(
-                "@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
+                "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
             )
             side_out_points = self.collect_stats_from_number(team, "@@", rece_rallies)[
                 "Points"
@@ -272,7 +272,7 @@ class StaticWriter:
 
             # Number of break points
             serve_rallies = ralley_filter_from_string(
-                "@@@@@@@" + str(team), self.gamestate.rallies
+                "@@@@@@@@@@@" + str(team), self.gamestate.rallies
             )
             break_points = self.collect_stats_from_number(team, "@@", serve_rallies)[
                 "Points"
@@ -289,7 +289,7 @@ class StaticWriter:
                 "negative": {},
             }
             rece_rallies = ralley_filter_from_string(
-                "@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
+                "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
             )
             positive_rallies = []
             negative_rallies = []
@@ -408,7 +408,7 @@ class StaticWriter:
                             ):
                                 points_k2 += 1
             serve_rallies = ralley_filter_from_string(
-                "@@@@@@@" + str(team), self.gamestate.rallies
+                "@@@@@@@@@@@" + str(team), self.gamestate.rallies
             )
             for ralley in serve_rallies:
                 for action in ralley[0]:
@@ -522,7 +522,7 @@ class StaticWriter:
         fulldata["Points"]["Plus_minus"] = total_points - total_errors
 
         break_rallies = ralley_filter_from_string(
-            "@@@@@@@" + str(team), self.gamestate.rallies
+            "@@@@@@@@@@@" + str(team), self.gamestate.rallies
         )
         filterstring = str(team) + player_number + "@#"
         fulldata["Points"]["BP"] = len(
