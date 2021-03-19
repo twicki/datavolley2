@@ -299,9 +299,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def update_timeline(self):
         totals, delta = self.game_state.return_timeline()
-        self.ThirdWindow.graphicsView.clear()
-        self.ThirdWindow.graphicsView.plot(totals, delta)
-        self.ThirdWindow.graphicsView.showGrid(True, True, 0.8)
+        self.ThirdWindow.update_timeline(totals, delta)
 
     def update_recent_scores_view(self):
         score = {
@@ -330,10 +328,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def update(self):
         self.add_input_to_game_state()
         self.update_main_view()
-
         self.update_commentator_view()
 
-    def print_stats(self):
+    def display_commentator_windows(self):
         if self.secondWindow is None:
             self.secondWindow = SecondWindow()
             s = SecondWindow()
@@ -346,7 +343,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.FourthWindow.show()
 
     def qt_setup(self):
-        self.pushButton.clicked.connect(self.print_stats)
+        self.pushButton.clicked.connect(self.display_commentator_windows)
         self.pushButton_2.clicked.connect(self.save_and_reset)
         self.pushButton_3.clicked.connect(self.write_analysis)
         self.lineEdit.returnPressed.connect(self.update)
@@ -924,6 +921,11 @@ class ThirdWindow(QtWidgets.QWidget, thridUI):
         super().__init__()
         self.setupUi(self)
 
+    def update_timeline(self, totals, delta):
+        self.graphicsView.clear()
+        self.graphicsView.plot(totals, delta)
+        self.graphicsView.showGrid(True, True, 0.8)
+
 
 class FourthWindow(QtWidgets.QWidget, fourthUI):
     home_scores = []
@@ -932,6 +934,9 @@ class FourthWindow(QtWidgets.QWidget, fourthUI):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.qt_setup()
+
+    def qt_setup(self):
         self.home_scores = [
             self.lcdNumber,
             self.lcdNumber_2,
