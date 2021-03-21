@@ -32,6 +32,9 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
     def __init__(self, game_state=None):
         super().__init__()
         Basic_Filter.__init__(self)
+        ICON_PATH = os.path.join(os.path.dirname(__file__), "icon/")
+        icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
+        self.setWindowIcon(icon)
 
         self.analyze_from.setChecked(True)
         self.analyze_from.clicked.connect(self.check_from)

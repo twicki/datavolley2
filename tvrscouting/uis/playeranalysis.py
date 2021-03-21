@@ -123,7 +123,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Player Analysis"))
         self.action_filter_button.setText(_translate("Form", "ActionFilter"))
         self.reset_button.setText(_translate("Form", "Reset"))
         self.court_filter_button.setText(_translate("Form", "CourtFilter"))

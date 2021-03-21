@@ -32,11 +32,12 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def __init__(self, game_state=None):
         super().__init__()
         Basic_Filter.__init__(self)
-        # self.setupUi(self)
+        ICON_PATH = os.path.join(os.path.dirname(__file__), "icon/")
+        icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
+        self.setWindowIcon(icon)
         self._qt_setup()
         self._media_player_setup()
         self.set_up_game_state(game_state)
-        # self._filter_setup()
         self.current_action_index = 0
         self.nex_action_index = 1
         self.total_time = None

@@ -16,7 +16,7 @@ import matplotlib as mp
 import numpy as np
 import time
 
-from tvrscouting.uis.first import Ui_MainWindow
+from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.uis.second import Ui_Form as commentatorUI
 from tvrscouting.uis.third import Ui_Form as thridUI
 from tvrscouting.uis.fourth import Ui_Form as fourthUI
@@ -104,25 +104,13 @@ class TeamView:
         self.point_score = point_score
 
 
-def no_actions_performed(player_details):
-    if player_details["group"] < 7:
-        if player_details["hit"]["kill"] > 0:
-            return False
-        if player_details["serve"]["kill"] > 0:
-            return False
-        if player_details["block"] > 0:
-            return False
-        if player_details["rece"]["total"] > 0:
-            return False
-        if player_details["error"] > 0:
-            return False
-    return True
-
-
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        ICON_PATH = os.path.join(os.path.dirname(__file__), "icon/")
+        icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
+        self.setWindowIcon(icon)
         self.game_state = GameState()
         self.fullstring = ""
         self.secondWindow = None
@@ -385,9 +373,21 @@ class SecondWindow(QtWidgets.QWidget, commentatorUI):
         super().__init__()
         self.setupUi(self)
         self.player_profiles = [[], []]
+        self.team_profiles = [{}, {}]
         self.qt_setup()
 
     def qt_setup(self):
+        self.team_profiles = [{}, {}]
+        self.team_profiles[0]["name"] = self.l_team_home
+        self.team_profiles[0]["hit"] = self.home_hits
+        self.team_profiles[0]["serve"] = self.home_serve
+        self.team_profiles[0]["block"] = self.home_block
+        self.team_profiles[0]["error"] = self.home_error
+        self.team_profiles[1]["name"] = self.l_team_guest
+        self.team_profiles[1]["hit"] = self.guest_hits
+        self.team_profiles[1]["serve"] = self.guest_serve
+        self.team_profiles[1]["block"] = self.guest_block
+        self.team_profiles[1]["error"] = self.guest_error
         self.player_profiles = [[], []]
         self.player_profiles[0].append(
             PlayerProfileInView(
@@ -872,11 +872,30 @@ class SecondWindow(QtWidgets.QWidget, commentatorUI):
 
     def update_team_view(self, results):
         for team in range(2):
-            self.l_team_home.setText(results[team]["team"]["name"])
-            self.home_hits.display(results[team]["team"]["hit"]["kill"])
-            self.home_serve.display(results[team]["team"]["serve"]["kill"])
-            self.home_block.display(results[team]["team"]["block"])
-            self.home_error.display(results[team]["team"]["error"])
+            self.team_profiles[team]["name"].setText(results[team]["team"]["name"])
+            self.team_profiles[team]["hit"].display(
+                results[team]["team"]["hit"]["kill"]
+            )
+            self.team_profiles[team]["serve"].display(
+                results[team]["team"]["serve"]["kill"]
+            )
+            self.team_profiles[team]["block"].display(results[team]["team"]["block"])
+            self.team_profiles[team]["error"].display(results[team]["team"]["error"])
+
+    @staticmethod
+    def no_actions_performed(player_details):
+        if player_details["group"] < 7:
+            if player_details["hit"]["kill"] > 0:
+                return False
+            if player_details["serve"]["kill"] > 0:
+                return False
+            if player_details["block"] > 0:
+                return False
+            if player_details["rece"]["total"] > 0:
+                return False
+            if player_details["error"] > 0:
+                return False
+        return True
 
     def find_candidate_results_in_team(self, result):
         candidate_found = False
@@ -888,7 +907,7 @@ class SecondWindow(QtWidgets.QWidget, commentatorUI):
                 value = result.popitem(False)
                 if value == None:
                     candidate_found = True
-                elif not no_actions_performed(value[1]):
+                elif not SecondWindow.no_actions_performed(value[1]):
                     candidate_found = True
         return value
 

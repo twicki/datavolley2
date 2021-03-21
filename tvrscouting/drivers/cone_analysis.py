@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -15,17 +15,6 @@ class ConeAnalysis:
         self.to_position = to_position
         self.quality = quality
         self.percentage = percentage
-
-
-# def paint_court_out(painter):
-#     # surrouding field:
-#     background_color = QColor(21, 157, 136, 255)
-#     painter.fillRect(10, 10, 640, 340, background_color)
-
-
-# def paintEvent_out(widget, event):
-#     painter = QPainter(widget)
-#     paint_court_out(painter)
 
 
 def quality_to_float(quality):
@@ -45,6 +34,9 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
     def __init__(self, game_state=None):
         super().__init__()
         Basic_Filter.__init__(self)
+        ICON_PATH = os.path.join(os.path.dirname(__file__), "icon/")
+        icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
+        self.setWindowIcon(icon)
         self.game_state = None
         self.outline_color = QColor(167, 176, 174, 255)
         self.net_color = QColor(0, 0, 0, 255)

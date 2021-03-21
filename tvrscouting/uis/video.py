@@ -101,7 +101,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Video Analysis"))
         self.pushButton.setText(_translate("Dialog", "Open Video"))
         self.pushButton_2.setText(_translate("Dialog", "Play"))
         self.saveFile_button.setText(_translate("Dialog", "Save File"))

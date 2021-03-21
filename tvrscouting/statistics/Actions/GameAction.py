@@ -37,7 +37,7 @@ class Quality(Enum):
         elif quality == Quality.Bad:
             return Quality.Good
         elif quality == Quality.Over:
-            return Quality.Good
+            return Quality.Kill
         elif quality == Quality.Error:
             return Quality.Good
 
