@@ -46,6 +46,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.displayed_actions = []
         self.next_item = None
         self.play_Actions = False
+        self.auto_jump = True
 
     def reset_data(self):
         self.all_actions = []
@@ -87,17 +88,20 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                             relative_time_stamp,
                         )
                     )
+                    self.displayed_actions.append(
+                        TimestampedAction(
+                            action,
+                            rally,
+                            relative_time_stamp,
+                            relative_time_stamp,
+                        )
+                    )
                     i += 1
             self.tableWidget.scrollToBottom()
 
     def load_file(self):
-        filename = QFileDialog.getOpenFileName(
-            self, "Open File", os.path.expanduser("~")
-        )[0]
-        if not filename:
-            return
-        ser = Serializer()
-        game_state = ser.deserialize(filename)
+        ser = Serializer(self)
+        game_state = ser.deserialize()
         self.set_up_game_state(game_state)
 
     def save_file(self):
@@ -122,8 +126,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                     if str(old_action) == str(action):
                         old_action.time_stamp = new_action.absolute_timestamp
                         break
-        ser = Serializer(self.game_state)
-        ser.serialize("output_timed.tvr")
+        ser = Serializer(self, self.game_state)
+        ser.serialize()
 
     def apply_all_filters(self):
         if self.game_state is None:
@@ -152,67 +156,41 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.tableWidget.scrollToBottom()
         self.lineEdit.clear()
 
-    def setPosition(self, position):
+    def set_mediaplayer_from_sliderposition(self, position):
         """Set the position"""
         # setting the position to where the slider was dragged
         self.mediaplayer.set_position(position / 10000.0)
 
     def cell_was_clicked(self, row, column):
         modifiers = QtWidgets.QApplication.keyboardModifiers()
-
-        current_action = None
         current_action = self.displayed_actions[row]
-
         if modifiers == QtCore.Qt.ControlModifier:
-            start_with_leadup = (
-                current_action.absolute_timestamp - self.leadup_time
-                if current_action.absolute_timestamp - self.leadup_time > 0
-                else 0
-            )
-            percentage = start_with_leadup / self.total_time
-            self.mediaplayer.set_position(percentage)
-        elif modifiers == QtCore.Qt.ShiftModifier:
-            position = self.mediaplayer.get_position()
-            seconds = position * self.total_time
-            delta_to_original = seconds - current_action.relative_timestamp
-            previousActions = True
-            for action in self.all_actions:
-                if action.action == current_action.action:
-                    previousActions = False
-                if previousActions:
-                    if (
-                        action.absolute_timestamp is not None
-                        and action.absolute_timestamp > seconds
-                    ):
-                        action.absolute_timestamp = seconds
-                else:
-                    if action.relative_timestamp is not None:
-                        action.absolute_timestamp = (
-                            action.relative_timestamp + delta_to_original
-                        )
-
+            self.jump_to_current_action(current_action)
         elif modifiers == (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier):
-            position = self.mediaplayer.get_position()
-            seconds = position * self.total_time
-            current_action.absolute_timestamp = seconds
+            self.set_current_event_to_time(current_action)
+        elif modifiers == QtCore.Qt.ShiftModifier:
+            self.set_all_following_events_to_times(current_action)
+
         self.updateUI()
 
     def updateUI(self):
         """updates the user interface"""
         # setting the slider to the desired position
         self.horizontalSlider.setValue(int(self.mediaplayer.get_position() * 10000))
-        current_time = self.mediaplayer.get_position() * self.total_time
-        self.next_item = None
-        for index in range(len(self.displayed_actions) - 1):
-            if (
-                current_time > self.displayed_actions[index].absolute_timestamp
-                and current_time < self.displayed_actions[index + 1].absolute_timestamp
-            ):
-                self.tableWidget.clearSelection()
-                self.tableWidget.item(index, 0).setSelected(True)
-                self.next_item = self.displayed_actions[index + 1]
-                # TODO: scroll to this spot
-                break
+        current_time = self.get_current_second_of_player()
+        if self.auto_jump:
+            self.next_item = None
+            for index in range(len(self.displayed_actions) - 1):
+                if (
+                    current_time > self.displayed_actions[index].absolute_timestamp
+                    and current_time
+                    < self.displayed_actions[index + 1].absolute_timestamp
+                ):
+                    self.tableWidget.clearSelection()
+                    self.tableWidget.item(index, 0).setSelected(True)
+                    self.next_item = self.displayed_actions[index + 1]
+                    # TODO: scroll to this spot
+                    break
 
         if self.mediaplayer.is_playing():
             self.pushButton_2.setText("Pause")
@@ -312,16 +290,117 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.mediaplayer.stop()
         self.pushButton_2.setText("Play")
 
+    def set_all_following_events_to_times(self, current_action):
+        seconds = self.get_current_second_of_player()
+        delta_to_original = seconds - current_action.relative_timestamp
+        previousActions = True
+        for action in self.all_actions:
+            if action.action == current_action.action:
+                previousActions = False
+            if previousActions:
+                if (
+                    action.absolute_timestamp is not None
+                    and action.absolute_timestamp > seconds
+                ):
+                    action.absolute_timestamp = seconds
+            else:
+                if action.relative_timestamp is not None:
+                    action.absolute_timestamp = (
+                        action.relative_timestamp + delta_to_original
+                    )
+
+    def set_current_event_to_time(self, current_action):
+        current_action.absolute_timestamp = self.get_current_second_of_player()
+
+    def jump_to_current_action(self, current_action):
+        if self.total_time is None:
+            self.OpenFile()
+            return
+        start_with_leadup = (
+            current_action.absolute_timestamp - self.leadup_time
+            if current_action.absolute_timestamp - self.leadup_time > 0
+            else 0
+        )
+        percentage = start_with_leadup / self.total_time
+        self.mediaplayer.set_position(percentage)
+
+    def get_current_action_from_highlight(self):
+        current_action = None
+        if len(self.tableWidget.selectionModel().selectedRows()):
+            row = self.get_current_row_of_selection()
+            current_action = self.displayed_actions[row]
+        return current_action
+
+    def get_current_row_of_selection(self):
+        if len(self.tableWidget.selectionModel().selectedRows()):
+            return self.tableWidget.selectionModel().selectedRows()[0].row()
+        else:
+            return 0
+
+    def select_next_cell(self):
+        row = self.get_current_row_of_selection()
+        self.tableWidget.clearSelection()
+        if row < self.tableWidget.rowCount() - 1:
+            self.tableWidget.item(row + 1, 0).setSelected(True)
+
+    def select_previous_cell(self):
+        row = self.get_current_row_of_selection()
+        self.tableWidget.clearSelection()
+        if row > 1:
+            self.tableWidget.item(row - 1, 0).setSelected(True)
+
+    def center_new_selection(self):
+        row = self.get_current_row_of_selection()
+        self.tableWidget.scrollToItem(
+            self.tableWidget.item(row, 0),
+            QtWidgets.QAbstractItemView.PositionAtCenter,
+        )
+
     def keyPressEvent(self, e):
+        current_action = self.get_current_action_from_highlight()
         print("event", e)
-        if e.key() == QtCore.Qt.Key_Return:
-            print(" return")
-        elif e.key() == QtCore.Qt.Key_Enter:
-            print(" enter")
+        if e.key() == QtCore.Qt.Key_F1:
+            print(" jump to the event")
+            if current_action:
+                self.jump_to_current_action(current_action)
+                self.center_new_selection()
         elif e.key() == QtCore.Qt.Key_F2:
-            print(" F2")
-            self.filter_table.clearSelection()
-            self.filter_table.item(3, 0).setSelected(True)
+            print(" setting current event")
+            if current_action:
+                self.set_current_event_to_time(current_action)
+                self.select_next_cell()
+                self.center_new_selection()
+        elif e.key() == QtCore.Qt.Key_F4:
+            print(" setting following events")
+            if current_action:
+                self.set_all_following_events_to_times(current_action)
+        elif e.key() == QtCore.Qt.Key_Left:
+            self.scroll_from_current_position(-5)
+        elif e.key() == QtCore.Qt.Key_Right:
+            self.scroll_from_current_position(5)
+        elif e.key() == QtCore.Qt.Key_Down:
+            self.select_next_cell()
+            self.center_new_selection()
+        elif e.key() == QtCore.Qt.Key_Up:
+            self.select_previous_cell()
+            self.center_new_selection()
+        elif e.key() == QtCore.Qt.Key_Space:
+            self.PlayPause()
+
+    def set_position_from_time(self, time):
+        if self.total_time:
+            new_position = time / self.total_time
+            self.mediaplayer.set_position(new_position)
+
+    def get_current_second_of_player(self) -> float:
+        if self.total_time:
+            position = self.mediaplayer.get_position()
+            return position * self.total_time
+        return 0
+
+    def scroll_from_current_position(self, time):
+        new_time = self.get_current_second_of_player() + time
+        self.set_position_from_time(new_time)
 
     def _media_player_setup(self):
         self.instance = vlc.Instance()
@@ -330,17 +409,46 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.timer.setInterval(200)
         self.timer.timeout.connect(self.updateUI)
 
+    def set_leadup_time(self):
+        number = self.lineEdit.text()
+        if number.isnumeric():
+            self.leadup_time = float(number)
+        else:
+            print("unknown reset time")
+        self.lineEdit.clear()
+
+    def update_jumping_to_action(self):
+        self.auto_jump = self.auto_jump_box.isChecked()
+
     def _qt_setup(self):
         self.pushButton.clicked.connect(self.open)
         self.pushButton_2.clicked.connect(self.PlayEverything)
         self.pushButton_3.clicked.connect(self.PlayPauseActions)
-        self.horizontalSlider.sliderMoved.connect(self.setPosition)
+        self.horizontalSlider.sliderMoved.connect(
+            self.set_mediaplayer_from_sliderposition
+        )
         self.tableWidget.cellClicked.connect(self.cell_was_clicked)
         self.tableWidget.itemSelectionChanged.connect(self.update_player)
         self.load_button.clicked.disconnect()
         self.load_button.clicked.connect(self.load_file)
-
         self.saveFile_button.clicked.connect(self.save_file)
+        self.reset_time_button.clicked.connect(self.set_leadup_time)
+        self.auto_jump_box.clicked.connect(self.update_jumping_to_action)
+
+        self.pushButton.keyPressEvent = self.keyPressEvent
+        self.pushButton_2.keyPressEvent = self.keyPressEvent
+        self.pushButton_3.keyPressEvent = self.keyPressEvent
+        self.horizontalSlider.keyPressEvent = self.keyPressEvent
+        self.tableWidget.keyPressEvent = self.keyPressEvent
+        self.load_button.keyPressEvent = self.keyPressEvent
+        self.saveFile_button.keyPressEvent = self.keyPressEvent
+        self.action_filter_button.keyPressEvent = self.keyPressEvent
+        self.court_filter_button.keyPressEvent = self.keyPressEvent
+        self.rally_button.keyPressEvent = self.keyPressEvent
+        self.reset_button.keyPressEvent = self.keyPressEvent
+        self.load_button.keyPressEvent = self.keyPressEvent
+        self.subaction_filter_button.keyPressEvent = self.keyPressEvent
+        self.auto_jump_box.keyPressEvent = self.keyPressEvent
 
 
 if __name__ == "__main__":

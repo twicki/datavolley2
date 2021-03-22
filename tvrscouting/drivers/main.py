@@ -125,17 +125,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.qt_setup()
 
     def save_file(self):
-        ser = Serializer(self.game_state)
-        ser.serialize("output.tvr")
+        ser = Serializer(self, self.game_state)
+        ser.serialize()
 
     def load_file(self):
-        filename = QFileDialog.getOpenFileName(
-            self, "Open File", os.path.expanduser("~")
-        )[0]
-        if not filename:
-            return
-        ser = Serializer()
-        self.game_state = ser.deserialize(filename)
+        ser = Serializer(self)
+        self.game_state = ser.deserialize()
         self.fullstring = ""
         for rally in self.game_state.rallies:
             for action in rally[0]:

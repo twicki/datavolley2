@@ -51,6 +51,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 leaders[name]["total"] += 1
             else:
                 leaders[name] = {"total": 1, "perfect": 0}
+            # TODO: add perfect actions here
         sorted_leaders = []
         for number, amounts in leaders.items():
             name = number

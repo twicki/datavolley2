@@ -61,7 +61,19 @@ class Basic_Filter:
         if len(self.rally_filters) == 1 and self.rally_filters[0] == "@@@@@@@@@@@@":
             self.rally_filters.clear()
         self.rally_filters.append(rally_filter)
-        self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(rally_filter))
+        # TODO: refactor this out
+        self.filter_table.setRowCount(
+            max(
+                len(self.rally_filters),
+                len(self.sub_action_filters),
+                len(self.court_filters),
+                len(self.action_filters),
+            )
+            + 1
+        )
+        self.filter_table.setItem(
+            len(self.rally_filters), 1, QtWidgets.QTableWidgetItem(rally_filter)
+        )
         self.lineEdit.clear()
         self.apply_all_filters()
 
@@ -70,7 +82,20 @@ class Basic_Filter:
         if len(self.sub_action_filters) == 1 and self.sub_action_filters[0] == "@@@@@":
             self.sub_action_filters.clear()
         self.sub_action_filters.append(subaction_filter)
-        self.filter_table.setItem(1, 1, QtWidgets.QTableWidgetItem(subaction_filter))
+        self.filter_table.setRowCount(
+            max(
+                len(self.rally_filters),
+                len(self.sub_action_filters),
+                len(self.court_filters),
+                len(self.action_filters),
+            )
+            + 1
+        )
+        self.filter_table.setItem(
+            len(self.sub_action_filters),
+            3,
+            QtWidgets.QTableWidgetItem(subaction_filter),
+        )
         self.lineEdit.clear()
         self.apply_all_filters()
 
@@ -79,7 +104,18 @@ class Basic_Filter:
         if len(self.court_filters) == 1 and self.court_filters[0] == "@@@@@@@@@@@@@":
             self.court_filters.clear()
         self.court_filters.append(court_filter)
-        self.filter_table.setItem(1, 2, QtWidgets.QTableWidgetItem(court_filter))
+        self.filter_table.setRowCount(
+            max(
+                len(self.rally_filters),
+                len(self.sub_action_filters),
+                len(self.court_filters),
+                len(self.action_filters),
+            )
+            + 1
+        )
+        self.filter_table.setItem(
+            len(self.court_filters), 2, QtWidgets.QTableWidgetItem(court_filter)
+        )
         self.lineEdit.clear()
         self.apply_all_filters()
 
@@ -88,7 +124,18 @@ class Basic_Filter:
         if len(self.action_filters) == 1 and self.action_filters[0] == "@@@@@":
             self.action_filters.clear()
         self.action_filters.append(action_filter)
-        self.filter_table.setItem(1, 0, QtWidgets.QTableWidgetItem(action_filter))
+        self.filter_table.setRowCount(
+            max(
+                len(self.rally_filters),
+                len(self.sub_action_filters),
+                len(self.court_filters),
+                len(self.action_filters),
+            )
+            + 1
+        )
+        self.filter_table.setItem(
+            len(self.action_filters), 0, QtWidgets.QTableWidgetItem(action_filter)
+        )
         self.lineEdit.clear()
         self.apply_all_filters()
 
@@ -143,10 +190,5 @@ class Basic_Filter:
         raise NotImplementedError()
 
     def load_file(self):
-        filename = QFileDialog.getOpenFileName(
-            self, "Open File", os.path.expanduser("~")
-        )[0]
-        if not filename:
-            return
-        ser = Serializer()
-        self.game_state = ser.deserialize(filename)
+        ser = Serializer(self)
+        self.game_state = ser.deserialize()
