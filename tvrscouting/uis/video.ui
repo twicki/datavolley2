@@ -33,63 +33,13 @@
       <widget class="QLineEdit" name="lineEdit"/>
      </item>
      <item row="6" column="0">
-      <layout class="QGridLayout" name="gridLayout" columnstretch="2,0,2,2,12,2,0,2,0,0">
+      <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,1,2,1,0,1">
        <item row="0" column="6">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="7">
-        <widget class="QPushButton" name="load_button">
-         <property name="text">
-          <string>Load File</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="text">
-          <string>Play Actions</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="5">
-        <widget class="QCheckBox" name="auto_jump_box">
-         <property name="text">
-          <string>Jump to next Action</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="9">
         <widget class="QPushButton" name="saveFile_button">
          <property name="text">
           <string>Save File</string>
          </property>
         </widget>
-       </item>
-       <item row="0" column="8">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="0" column="1">
         <spacer name="horizontalSpacer">
@@ -104,12 +54,18 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>Open Video</string>
+       <item row="0" column="5">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="pushButton_2">
@@ -119,7 +75,21 @@
         </widget>
        </item>
        <item row="0" column="4">
-        <spacer name="horizontalSpacer_4">
+        <widget class="QPushButton" name="load_button">
+         <property name="text">
+          <string>Load File</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Open Video</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -135,17 +105,10 @@
      </item>
      <item row="2" column="2">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QPushButton" name="action_filter_button">
+       <item row="0" column="1">
+        <widget class="QPushButton" name="court_filter_button">
          <property name="text">
-          <string>Action Filter</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QPushButton" name="reset_button">
-         <property name="text">
-          <string>Reset Filters</string>
+          <string>Court Filter</string>
          </property>
         </widget>
        </item>
@@ -156,10 +119,13 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="court_filter_button">
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="action_reel_box">
          <property name="text">
-          <string>Court Filter</string>
+          <string>view action reel</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -174,6 +140,30 @@
         <widget class="QPushButton" name="subaction_filter_button">
          <property name="text">
           <string>Subaction Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="action_filter_button">
+         <property name="text">
+          <string>Action Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="reset_button">
+         <property name="text">
+          <string>Reset Filters</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="jump_on_select_box">
+         <property name="text">
+          <string>jump on select</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

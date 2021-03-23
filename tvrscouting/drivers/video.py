@@ -6,11 +6,13 @@ from PyQt5.QtCore import QTimer
 from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QFrame, QFileDialog
 
+from tvrscouting.statistics import GameState
 from tvrscouting.uis.video import Ui_Dialog
 import tvrscouting.utils.vlc as vlc
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.analysis.filters import *
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
+import contextlib
 
 
 class TimestampedAction:
@@ -18,12 +20,14 @@ class TimestampedAction:
         self,
         action,
         rally,
+        index=0,
         absolute_timestamp=None,
         relative_timestamp=None,
     ):
         super().__init__()
         self.action = action
         self.from_rally = rally
+        self.action_index = index
         self.absolute_timestamp = absolute_timestamp
         self.relative_timestamp = relative_timestamp
 
@@ -42,11 +46,17 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.nex_action_index = 1
         self.total_time = None
         self.leadup_time = 3
+        self.jump_threshold = 5
         self.isPaused = False
         self.displayed_actions = []
         self.next_item = None
         self.play_Actions = False
         self.auto_jump = True
+        self.concurent_action = True
+
+        self.jump_next_action_timer = QtCore.QTimer(self)
+        self.jump_next_action_timer.setInterval(2 * self.leadup_time * 1000)
+        self.jump_next_action_timer.timeout.connect(self.select_next_cell)
 
     def reset_data(self):
         self.all_actions = []
@@ -59,16 +69,30 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.reset_data()
         self.reset_all_filters()
         if game_state:
-            # get the total count of actions:
-            self.total_nuber_of_actions = 0
-            for rally in self.game_state.rallies:
-                for action in rally[0]:
-                    self.total_nuber_of_actions += 1
+            self.update_action_view_from_game_state()
 
+    def set_total_number_of_actions(self):
+        self.total_nuber_of_actions = 0
+        for rally in self.game_state.rallies:
+            for action in rally[0]:
+                self.total_nuber_of_actions += 1
+
+    @contextlib.contextmanager
+    def edit_table(self):
+        self.tableWidget.itemChanged.connect(self.save_modified_version)
+        self.tableWidget.itemChanged.disconnect()
+        yield
+        self.tableWidget.itemChanged.connect(self.save_modified_version)
+
+    def update_action_view_from_game_state(self):
+        self.set_total_number_of_actions()
+        with self.edit_table():
             self.tableWidget.setRowCount(self.total_nuber_of_actions)
             self.tableWidget.setColumnCount(1)
             i = 0
             initial_time_stamp = None
+            self.all_actions = []
+            self.displayed_actions = []
             for rally in self.game_state.rallies:
                 for action in rally[0]:
                     self.tableWidget.setItem(
@@ -84,6 +108,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         TimestampedAction(
                             action,
                             rally,
+                            i,
                             relative_time_stamp,
                             relative_time_stamp,
                         )
@@ -92,6 +117,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         TimestampedAction(
                             action,
                             rally,
+                            i,
                             relative_time_stamp,
                             relative_time_stamp,
                         )
@@ -105,61 +131,61 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.set_up_game_state(game_state)
 
     def save_file(self):
+        new_game_state = GameState()
         for new_action in self.all_actions:
-            rally = new_action.from_rally
-            action = new_action.action
-            filter_string = (
-                "%02d" % (rally[2][0])
-                + "%02d" % (rally[2][0] + 1)
-                + "%02d" % (rally[2][1])
-                + "%02d" % (rally[2][1] + 1)
-                + str(rally[3][0])
-                + str(rally[3][1])
-                + "@"
-                + "@"
-            )
-            old_rallies = ralley_filter_from_string(
-                filter_string, self.game_state.rallies
-            )
-            for old_rally in old_rallies:
-                for old_action in old_rally[0]:
-                    if str(old_action) == str(action):
-                        old_action.time_stamp = new_action.absolute_timestamp
-                        break
+            new_action.action.time_stamp = new_action.absolute_timestamp
+            new_game_state.add_plain([new_action.action])
+        self.game_state = new_game_state
         ser = Serializer(self, self.game_state)
         ser.serialize()
+
+    def save_modified_version(self, item):
+        row = item.row()
+        col = item.column()
+        changed_action_index = self.displayed_actions[row].action_index
+        new_game_state = GameState()
+        for new_action in self.all_actions:
+            if new_action.action_index == changed_action_index:
+                action_str = item.text()
+                new_game_state.add_plain_from_string(
+                    action_str, new_action.absolute_timestamp
+                )
+            else:
+                new_action.action.time_stamp = new_action.absolute_timestamp
+                new_game_state.add_plain([new_action.action])
+
+        self.game_state = new_game_state
+        self.update_action_view_from_game_state()
+        self.apply_all_filters()
 
     def apply_all_filters(self):
         if self.game_state is None:
             self.load_file()
             if self.game_state is None:
                 return
-        self.tableWidget.setRowCount(self.total_nuber_of_actions)
-        filter_string = self.lineEdit.text()
-        i = 0
-        self.displayed_actions = []
-        for action in self.all_actions:
-            if isinstance(action.action, Gameaction):
-                current_action = str(action.action)
-                if (
-                    self.check_all_rally_filters(action.from_rally)
-                    and self.check_all_court_filters(action.from_rally[1])
-                    and self.check_all_subaction_filters(action.from_rally)
-                    and self.check_all_action_filters(current_action)
-                ):
-                    self.tableWidget.setItem(
-                        0, i, QtWidgets.QTableWidgetItem(current_action)
-                    )
-                    self.displayed_actions.append(action)
-                    i += 1
-        self.tableWidget.setRowCount(i)
+
+        with self.edit_table():
+            self.tableWidget.setRowCount(self.total_nuber_of_actions)
+            filter_string = self.lineEdit.text()
+            i = 0
+            self.displayed_actions = []
+            for action in self.all_actions:
+                if isinstance(action.action, Gameaction):
+                    current_action = str(action.action)
+                    if (
+                        self.check_all_rally_filters(action.from_rally)
+                        and self.check_all_court_filters(action.from_rally[1])
+                        and self.check_all_subaction_filters(action.from_rally)
+                        and self.check_all_action_filters(current_action)
+                    ):
+                        self.tableWidget.setItem(
+                            0, i, QtWidgets.QTableWidgetItem(current_action)
+                        )
+                        self.displayed_actions.append(action)
+                        i += 1
+            self.tableWidget.setRowCount(i)
         self.tableWidget.scrollToBottom()
         self.lineEdit.clear()
-
-    def set_mediaplayer_from_sliderposition(self, position):
-        """Set the position"""
-        # setting the position to where the slider was dragged
-        self.mediaplayer.set_position(position / 10000.0)
 
     def cell_was_clicked(self, row, column):
         modifiers = QtWidgets.QApplication.keyboardModifiers()
@@ -177,28 +203,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         """updates the user interface"""
         # setting the slider to the desired position
         self.horizontalSlider.setValue(int(self.mediaplayer.get_position() * 10000))
-        current_time = self.get_current_second_of_player()
-        if self.auto_jump:
-            self.next_item = None
-            for index in range(len(self.displayed_actions) - 1):
-                if (
-                    current_time > self.displayed_actions[index].absolute_timestamp
-                    and current_time
-                    < self.displayed_actions[index + 1].absolute_timestamp
-                ):
-                    self.tableWidget.clearSelection()
-                    self.tableWidget.item(index, 0).setSelected(True)
-                    self.next_item = self.displayed_actions[index + 1]
-                    # TODO: scroll to this spot
-                    break
-
         if self.mediaplayer.is_playing():
             self.pushButton_2.setText("Pause")
-            self.pushButton_3.hide()
         else:
             self.pushButton_2.setText("Play")
-            self.pushButton_3.show()
-            self.pushButton_3.setText("Play Actions")
         if not self.mediaplayer.is_playing():
             # no need to call this function if nothing is played
             self.timer.stop()
@@ -258,6 +266,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         """Toggle play/pause status"""
         if self.mediaplayer.is_playing():
             self.mediaplayer.pause()
+            self.jump_next_action_timer.stop()
             self.isPaused = True
         else:
             if self.mediaplayer.play() == -1:
@@ -265,25 +274,20 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                 return
             self.mediaplayer.play()
             self.timer.start()
+            if self.concurent_action:
+                self.jump_next_action_timer.start()
             self.isPaused = False
 
-    def PlayEverything(self):
-        self.play_Actions = False
-        self.PlayPause()
+    def set_mediaplayer_from_sliderposition(self, position):
+        """Set the position"""
+        # setting the position to where the slider was dragged
+        self.mediaplayer.set_position(position / 10000.0)
 
-    def update_player(self):
-        # TODO: this does not work
-        if self.play_Actions:
-            sleep(self.leadup_time)
-            start_with_leadup = self.next_item.absolute_timestamp - self.leadup_time
-            percentage = start_with_leadup / self.total_time
-            self.mediaplayer.set_position(percentage)
-            self.updateUI()
-
-    def PlayPauseActions(self):
-        """Toggle play/pause status"""
-        self.play_Actions = True
-        self.PlayPause()
+    def jump_to_current_cell(self):
+        if self.auto_jump:
+            current_action = self.get_current_action_from_highlight()
+            if current_action:
+                self.jump_to_current_action(current_action, self.jump_threshold)
 
     def Stop(self):
         """Stop player"""
@@ -312,7 +316,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def set_current_event_to_time(self, current_action):
         current_action.absolute_timestamp = self.get_current_second_of_player()
 
-    def jump_to_current_action(self, current_action):
+    def jump_to_current_action(self, current_action, jump_threshold=0):
         if self.total_time is None:
             self.OpenFile()
             return
@@ -321,8 +325,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             if current_action.absolute_timestamp - self.leadup_time > 0
             else 0
         )
-        percentage = start_with_leadup / self.total_time
-        self.mediaplayer.set_position(percentage)
+        current_time = self.get_current_second_of_player()
+        if abs(current_time - start_with_leadup) > jump_threshold:
+            percentage = start_with_leadup / self.total_time
+            self.mediaplayer.set_position(percentage)
 
     def get_current_action_from_highlight(self):
         current_action = None
@@ -358,20 +364,16 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
     def keyPressEvent(self, e):
         current_action = self.get_current_action_from_highlight()
-        print("event", e)
         if e.key() == QtCore.Qt.Key_F1:
-            print(" jump to the event")
             if current_action:
                 self.jump_to_current_action(current_action)
                 self.center_new_selection()
         elif e.key() == QtCore.Qt.Key_F2:
-            print(" setting current event")
             if current_action:
                 self.set_current_event_to_time(current_action)
                 self.select_next_cell()
                 self.center_new_selection()
         elif e.key() == QtCore.Qt.Key_F4:
-            print(" setting following events")
             if current_action:
                 self.set_all_following_events_to_times(current_action)
         elif e.key() == QtCore.Qt.Key_Left:
@@ -417,27 +419,44 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             print("unknown reset time")
         self.lineEdit.clear()
 
+    def update_view_action_reel(self):
+        self.concurent_action = self.action_reel_box.isChecked()
+        if self.concurent_action:
+            self.auto_jump = True
+            self.jump_on_select_box.setChecked(True)
+
+        if self.mediaplayer.is_playing() and self.concurent_action:
+            self.jump_next_action_timer.start()
+        else:
+            self.jump_next_action_timer.stop()
+
     def update_jumping_to_action(self):
-        self.auto_jump = self.auto_jump_box.isChecked()
+        self.auto_jump = self.jump_on_select_box.isChecked()
+        if not self.auto_jump:
+            self.concurent_action = False
+            self.action_reel_box.setChecked(False)
+        if self.mediaplayer.is_playing() and self.concurent_action:
+            self.jump_next_action_timer.start()
+        else:
+            self.jump_next_action_timer.stop()
 
     def _qt_setup(self):
         self.pushButton.clicked.connect(self.open)
-        self.pushButton_2.clicked.connect(self.PlayEverything)
-        self.pushButton_3.clicked.connect(self.PlayPauseActions)
+        self.pushButton_2.clicked.connect(self.PlayPause)
         self.horizontalSlider.sliderMoved.connect(
             self.set_mediaplayer_from_sliderposition
         )
         self.tableWidget.cellClicked.connect(self.cell_was_clicked)
-        self.tableWidget.itemSelectionChanged.connect(self.update_player)
+        self.tableWidget.itemSelectionChanged.connect(self.jump_to_current_cell)
         self.load_button.clicked.disconnect()
         self.load_button.clicked.connect(self.load_file)
         self.saveFile_button.clicked.connect(self.save_file)
         self.reset_time_button.clicked.connect(self.set_leadup_time)
-        self.auto_jump_box.clicked.connect(self.update_jumping_to_action)
+        self.jump_on_select_box.clicked.connect(self.update_jumping_to_action)
+        self.action_reel_box.clicked.connect(self.update_view_action_reel)
 
         self.pushButton.keyPressEvent = self.keyPressEvent
         self.pushButton_2.keyPressEvent = self.keyPressEvent
-        self.pushButton_3.keyPressEvent = self.keyPressEvent
         self.horizontalSlider.keyPressEvent = self.keyPressEvent
         self.tableWidget.keyPressEvent = self.keyPressEvent
         self.load_button.keyPressEvent = self.keyPressEvent
@@ -448,7 +467,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.reset_button.keyPressEvent = self.keyPressEvent
         self.load_button.keyPressEvent = self.keyPressEvent
         self.subaction_filter_button.keyPressEvent = self.keyPressEvent
-        self.auto_jump_box.keyPressEvent = self.keyPressEvent
+        self.jump_on_select_box.keyPressEvent = self.keyPressEvent
+        self.action_reel_box.keyPressEvent = self.keyPressEvent
 
 
 if __name__ == "__main__":

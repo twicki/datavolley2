@@ -37,7 +37,13 @@ class Rotation(AbstractAction):
         self.positive = direction
 
     def __str__(self):
-        return str(self.team_) + "rota!" + str(int(self.positive))
+        return (
+            str(self.team_)
+            + "rota!"
+            + str(int(self.positive))
+            + "!"
+            + str(self.auto_generated)
+        )
 
 
 class Point(AbstractAction):
@@ -52,7 +58,7 @@ class Point(AbstractAction):
         self.value = value
 
     def __str__(self):
-        return str(self.team_) + "point"
+        return str(self.team_) + "point" + "!" + str(self.auto_generated)
 
 
 class Endset(AbstractAction):
@@ -63,7 +69,7 @@ class Endset(AbstractAction):
         self.team_ = team
 
     def __str__(self):
-        return str(self.team_) + "endset"
+        return str(self.team_) + "endset" + "!" + str(self.auto_generated)
 
 
 class SetServingTeam(AbstractAction):
@@ -74,7 +80,7 @@ class SetServingTeam(AbstractAction):
         self.team_ = team
 
     def __str__(self):
-        return str(self.team_) + "serve"
+        return str(self.team_) + "serve" + "!" + str(self.auto_generated)
 
 
 class InitializePlayer(AbstractAction):

@@ -124,6 +124,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
         self.qt_setup()
 
+    def log_change(self, item):
+        # TODO: this is still a bit messy, maybe we can clean it up? -> see idea from update in video
+        gamestate = GameState()
+        for action_number in range(self.tableWidget.rowCount()):
+            action_str = self.tableWidget.item(action_number, 0).text()
+            gamestate.add_plain_from_string(action_str)
+        gamestate.fix_time_stamps(self.game_state)
+        self.game_state = gamestate
+        self.fullstring = ""
+        for rally in self.game_state.rallies:
+            for action in rally[0]:
+                if not action.auto_generated:
+                    self.fullstring += str(action) + " "
+            if self.fullstring[-1] != "\n":
+                self.fullstring += "\n"
+        self.update()
+
     def save_file(self):
         ser = Serializer(self, self.game_state)
         ser.serialize()
@@ -255,6 +272,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
                 positionview.name_label.setText(full_label)
 
     def display_detailed_actions(self):
+        self.tableWidget.itemChanged.connect(self.log_change)
+        self.tableWidget.itemChanged.disconnect()
         self.tableWidget.setRowCount(10000)
         self.tableWidget.setColumnCount(1)
         i = 0
@@ -264,6 +283,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
                 i += 1
         self.tableWidget.setRowCount(i)
         self.tableWidget.scrollToBottom()
+        self.tableWidget.itemChanged.connect(self.log_change)
 
     def update_main_view(self):
         self.update_full_text_view()

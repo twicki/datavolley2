@@ -1,5 +1,6 @@
 import copy
 import enum
+import ast
 from copy import deepcopy
 from collections import OrderedDict
 
@@ -275,9 +276,13 @@ class GameState:
         self, action: str, time_stamp=None
     ) -> None:
         """add a SetServingTeam action from a string formatted [Team]serve"""
-        team = action[0][0]
+        split_string = action.split("!")
+        autogen = False
+        if len(split_string) > 1:
+            autogen = ast.literal_eval(split_string[1])
+        team = split_string[0][0]
         action = SpecialActions.SetServingTeam(
-            actions.Team.from_string(team), time_stamp
+            actions.Team.from_string(team), time_stamp, autogen
         )
         self.add_logical([action])
 
@@ -291,9 +296,7 @@ class GameState:
             l = action.split("!")
             number = int(l[1])
             team = l[0][0]
-            action = SpecialActions.SetServingTeam(
-                actions.Team.from_string(team), time_stamp
-            )
+            action = SpecialActions.Point(actions.Team.from_string(team), time_stamp)
             self.add_logical([action])
         elif "endset" in action:
             team = action[0][0]
@@ -320,6 +323,66 @@ class GameState:
             if str2:
                 allactions.append(copy.copy(Gameaction.from_string(str2, time_stamp)))
             self.add_logical(allactions, time_stamp)
+
+    def add_plain_from_string(self, action, time_stamp=None):
+        # TODO: refactor things out here
+        if "sub" in action:
+            self.add_action_substitution_from_string(action, time_stamp)
+        elif "serve" in action:
+            l = action.split("!")
+            self.add_action_set_serving_team_from_string(action, time_stamp)
+        elif "point" in action:
+            # TODO: continue the refactoring here
+            l = action.split("!")
+            autogen = ast.literal_eval(l[1])
+            team = l[0][0]
+            action = SpecialActions.Point(
+                actions.Team.from_string(team),
+                time_stamp=time_stamp,
+                auto_generated=autogen,
+            )
+            self.add_logical([action])
+        elif "endset" in action:
+            l = action.split("!")
+            autogen = ast.literal_eval(l[1])
+            team = l[0][0]
+            action = SpecialActions.Endset(
+                actions.Team.from_string(team),
+                time_stamp=time_stamp,
+                auto_generated=autogen,
+            )
+            self.add_logical([action])
+        elif "rota" in action:
+            l = action.split("!")
+            autogen = ast.literal_eval(l[2])
+            team = l[0][0]
+            direction = True if int(l[1]) > 0 else False
+            action = SpecialActions.Rotation(
+                actions.Team.from_string(team),
+                direction,
+                time_stamp=time_stamp,
+                auto_generated=autogen,
+            )
+            self.add_logical([action])
+        elif "team" in action:
+            action = SpecialActions.InitializeTeamName(action, time_stamp)
+            self.add_logical([action])
+        elif "player" in action:
+            action = SpecialActions.InitializePlayer(action, time_stamp)
+            self.add_logical([action])
+        else:
+            self.add_plain([Gameaction.from_string(action, time_stamp)])
+
+    def add_plain(self, action_list, time_stamp=None):
+        for action in action_list:
+            self._current_actions.append(action)
+        for action in action_list:
+            if isinstance(action, Gameaction):
+                _, was_score = is_scoring(action)
+                if was_score:
+                    self.flush_actions()
+            else:
+                self.flush_actions()
 
     def add_logical(self, action_list, time_stamp=None):
         for action in action_list:
