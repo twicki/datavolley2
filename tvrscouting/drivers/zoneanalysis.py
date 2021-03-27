@@ -199,7 +199,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
             self.court[position].percentage.setText("")
             self.court[position].total.setText(str(total) if total > 0 else "")
             self.court[position].percentage.setText(
-                str(int(100 * (total / len(self.actions)))) + " %"
+                str(round(100 * (total / len(self.actions)))) + " %"
                 if len(self.actions) and int(100 * (total / len(self.actions))) > 0
                 else ""
             )

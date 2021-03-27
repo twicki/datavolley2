@@ -13,8 +13,4 @@ from tvrscouting.statistics.Gamestate.game_state import (
 from tvrscouting.analysis.static import StaticWriter
 
 gs = stats.GameState()
-
-
-gs.add_string("/1s#1.1-2")
-
-print(sw.gamestate.score)
+print(gs.score)

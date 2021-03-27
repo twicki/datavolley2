@@ -8,6 +8,7 @@ from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.uis.playeranalysis import Ui_Form
 
 from tvrscouting.statistics import Gameaction
+from tvrscouting.statistics.Actions.GameAction import Quality
 from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
 from tvrscouting.statistics.Players.players import Team, Player
 from tvrscouting.analysis.filters import *
@@ -51,7 +52,8 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 leaders[name]["total"] += 1
             else:
                 leaders[name] = {"total": 1, "perfect": 0}
-            # TODO: add perfect actions here
+            if action.quality == Quality.Perfect or action.quality == Quality.Kill:
+                leaders[name]["perfect"] += 1
         sorted_leaders = []
         for number, amounts in leaders.items():
             name = number

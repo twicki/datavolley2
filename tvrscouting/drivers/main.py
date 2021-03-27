@@ -127,8 +127,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def log_change(self, item):
         # TODO: this is still a bit messy, maybe we can clean it up? -> see idea from update in video
         gamestate = GameState()
-        for action_number in range(self.tableWidget.rowCount()):
-            action_str = self.tableWidget.item(action_number, 0).text()
+        for action_number in range(self.action_view.rowCount()):
+            action_str = self.action_view.item(action_number, 0).text()
             gamestate.add_plain_from_string(action_str)
         gamestate.fix_time_stamps(self.game_state)
         self.game_state = gamestate
@@ -153,7 +153,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             for action in rally[0]:
                 if not action.auto_generated:
                     self.fullstring += str(action) + " "
-            self.fullstring += "\n"
+            if self.fullstring[-1] != "\n":
+                self.fullstring += "\n"
         self.update()
 
     def write_analysis(self):
@@ -272,18 +273,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
                 positionview.name_label.setText(full_label)
 
     def display_detailed_actions(self):
-        self.tableWidget.itemChanged.connect(self.log_change)
-        self.tableWidget.itemChanged.disconnect()
-        self.tableWidget.setRowCount(10000)
-        self.tableWidget.setColumnCount(1)
+        self.action_view.itemChanged.connect(self.log_change)
+        self.action_view.itemChanged.disconnect()
+        self.action_view.setRowCount(10000)
+        self.action_view.setColumnCount(1)
         i = 0
         for rally in self.game_state.rallies:
             for action in rally[0]:
-                self.tableWidget.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
+                self.action_view.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
                 i += 1
-        self.tableWidget.setRowCount(i)
-        self.tableWidget.scrollToBottom()
-        self.tableWidget.itemChanged.connect(self.log_change)
+        self.action_view.setRowCount(i)
+        self.action_view.scrollToBottom()
+        self.action_view.itemChanged.connect(self.log_change)
 
     def update_main_view(self):
         self.update_full_text_view()

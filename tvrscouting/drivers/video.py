@@ -79,23 +79,23 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
     @contextlib.contextmanager
     def edit_table(self):
-        self.tableWidget.itemChanged.connect(self.save_modified_version)
-        self.tableWidget.itemChanged.disconnect()
+        self.action_view.itemChanged.connect(self.save_modified_version)
+        self.action_view.itemChanged.disconnect()
         yield
-        self.tableWidget.itemChanged.connect(self.save_modified_version)
+        self.action_view.itemChanged.connect(self.save_modified_version)
 
     def update_action_view_from_game_state(self):
         self.set_total_number_of_actions()
         with self.edit_table():
-            self.tableWidget.setRowCount(self.total_nuber_of_actions)
-            self.tableWidget.setColumnCount(1)
+            self.action_view.setRowCount(self.total_nuber_of_actions)
+            self.action_view.setColumnCount(1)
             i = 0
             initial_time_stamp = None
             self.all_actions = []
             self.displayed_actions = []
             for rally in self.game_state.rallies:
                 for action in rally[0]:
-                    self.tableWidget.setItem(
+                    self.action_view.setItem(
                         0, i, QtWidgets.QTableWidgetItem(str(action))
                     )
                     if initial_time_stamp is None:
@@ -123,7 +123,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         )
                     )
                     i += 1
-            self.tableWidget.scrollToBottom()
+            self.action_view.scrollToBottom()
 
     def load_file(self):
         ser = Serializer(self)
@@ -165,7 +165,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                 return
 
         with self.edit_table():
-            self.tableWidget.setRowCount(self.total_nuber_of_actions)
+            self.action_view.setRowCount(self.total_nuber_of_actions)
             filter_string = self.lineEdit.text()
             i = 0
             self.displayed_actions = []
@@ -178,13 +178,13 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         and self.check_all_subaction_filters(action.from_rally)
                         and self.check_all_action_filters(current_action)
                     ):
-                        self.tableWidget.setItem(
+                        self.action_view.setItem(
                             0, i, QtWidgets.QTableWidgetItem(current_action)
                         )
                         self.displayed_actions.append(action)
                         i += 1
-            self.tableWidget.setRowCount(i)
-        self.tableWidget.scrollToBottom()
+            self.action_view.setRowCount(i)
+        self.action_view.scrollToBottom()
         self.lineEdit.clear()
 
     def cell_was_clicked(self, row, column):
@@ -332,33 +332,33 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
     def get_current_action_from_highlight(self):
         current_action = None
-        if len(self.tableWidget.selectionModel().selectedRows()):
+        if len(self.action_view.selectionModel().selectedRows()):
             row = self.get_current_row_of_selection()
             current_action = self.displayed_actions[row]
         return current_action
 
     def get_current_row_of_selection(self):
-        if len(self.tableWidget.selectionModel().selectedRows()):
-            return self.tableWidget.selectionModel().selectedRows()[0].row()
+        if len(self.action_view.selectionModel().selectedRows()):
+            return self.action_view.selectionModel().selectedRows()[0].row()
         else:
             return 0
 
     def select_next_cell(self):
         row = self.get_current_row_of_selection()
-        self.tableWidget.clearSelection()
-        if row < self.tableWidget.rowCount() - 1:
-            self.tableWidget.item(row + 1, 0).setSelected(True)
+        self.action_view.clearSelection()
+        if row < self.action_view.rowCount() - 1:
+            self.action_view.item(row + 1, 0).setSelected(True)
 
     def select_previous_cell(self):
         row = self.get_current_row_of_selection()
-        self.tableWidget.clearSelection()
+        self.action_view.clearSelection()
         if row > 1:
-            self.tableWidget.item(row - 1, 0).setSelected(True)
+            self.action_view.item(row - 1, 0).setSelected(True)
 
     def center_new_selection(self):
         row = self.get_current_row_of_selection()
-        self.tableWidget.scrollToItem(
-            self.tableWidget.item(row, 0),
+        self.action_view.scrollToItem(
+            self.action_view.item(row, 0),
             QtWidgets.QAbstractItemView.PositionAtCenter,
         )
 
@@ -446,8 +446,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.horizontalSlider.sliderMoved.connect(
             self.set_mediaplayer_from_sliderposition
         )
-        self.tableWidget.cellClicked.connect(self.cell_was_clicked)
-        self.tableWidget.itemSelectionChanged.connect(self.jump_to_current_cell)
+        self.action_view.cellClicked.connect(self.cell_was_clicked)
+        self.action_view.itemSelectionChanged.connect(self.jump_to_current_cell)
         self.load_button.clicked.disconnect()
         self.load_button.clicked.connect(self.load_file)
         self.saveFile_button.clicked.connect(self.save_file)
@@ -458,7 +458,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.pushButton.keyPressEvent = self.keyPressEvent
         self.pushButton_2.keyPressEvent = self.keyPressEvent
         self.horizontalSlider.keyPressEvent = self.keyPressEvent
-        self.tableWidget.keyPressEvent = self.keyPressEvent
+        self.action_view.keyPressEvent = self.keyPressEvent
         self.load_button.keyPressEvent = self.keyPressEvent
         self.saveFile_button.keyPressEvent = self.keyPressEvent
         self.action_filter_button.keyPressEvent = self.keyPressEvent

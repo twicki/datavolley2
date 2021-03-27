@@ -90,7 +90,7 @@ def set_quality(user_string, returnvalue):
 
 def set_combination(user_string, returnvalue):
     if len(user_string) > 1:
-        if user_string[0] in ["D", "X", "C"]:
+        if user_string[0] in ["D", "X", "C", "V"]:
             returnvalue = returnvalue[:5] + user_string[0:2] + returnvalue[7:]
             user_string = user_string[2:]
         return returnvalue, user_string
@@ -108,10 +108,8 @@ def set_from_direction(user_string, returnvalue):
 def set_to_direction(user_string, returnvalue):
     if len(user_string) and user_string[0].isnumeric():
         returnvalue = returnvalue[:8] + user_string[0]
-        return returnvalue, True
-    elif len(user_string):
-        raise TVRSyntaxError()
-    return returnvalue, False
+        return returnvalue, True, user_string[1:]
+    return returnvalue, False, user_string
 
 
 def expandString(user_string):
@@ -125,8 +123,13 @@ def expandString(user_string):
     returnvalue, user_string, from_direction_set = set_from_direction(
         user_string, returnvalue
     )
-    returnvalue, to_directon_set = set_to_direction(user_string, returnvalue)
-
+    returnvalue, to_directon_set, user_string = set_to_direction(
+        user_string, returnvalue
+    )
+    if not quality_set:
+        returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
+    if len(user_string):
+        raise TVRSyntaxError()
     return (
         returnvalue,
         team_set,

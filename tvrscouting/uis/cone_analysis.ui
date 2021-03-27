@@ -13,37 +13,13 @@
   <property name="windowTitle">
    <string>Zone Analysis</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,8" columnstretch="8,1,1,1,1,1">
-   <item row="1" column="5">
-    <widget class="QPushButton" name="reset_button">
-     <property name="text">
-      <string>Reset</string>
-     </property>
-    </widget>
-   </item>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,6" columnstretch="4,1,1,1,1,1" rowminimumheight="3,1,1,0">
    <item row="0" column="3">
     <widget class="QPushButton" name="court_filter_button">
      <property name="text">
       <string>CourtFilter</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QPushButton" name="rally_button">
-     <property name="text">
-      <string>RallyFilter</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="5">
-    <widget class="QPushButton" name="load_button">
-     <property name="text">
-      <string>Load File</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="6">
-    <widget class="QTableWidget" name="filter_table"/>
    </item>
    <item row="0" column="0">
     <widget class="QLineEdit" name="lineEdit"/>
@@ -55,6 +31,16 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="0" colspan="6">
+    <widget class="QWidget" name="widget" native="true"/>
+   </item>
+   <item row="1" column="5">
+    <widget class="QPushButton" name="reset_button">
+     <property name="text">
+      <string>Reset</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="1">
     <widget class="QPushButton" name="action_filter_button">
      <property name="text">
@@ -62,8 +48,22 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="6">
-    <widget class="QWidget" name="widget" native="true"/>
+   <item row="2" column="0" colspan="6">
+    <widget class="QTableWidget" name="filter_table"/>
+   </item>
+   <item row="0" column="5">
+    <widget class="QPushButton" name="load_button">
+     <property name="text">
+      <string>Load File</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="rally_button">
+     <property name="text">
+      <string>RallyFilter</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
