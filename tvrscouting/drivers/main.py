@@ -187,7 +187,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         fulltext = self.textEdit.toPlainText()
         positions = []
         for illegal_string in self.illegal:
-            for m in re.finditer(illegal_string, fulltext):
+            # TODO: clean up
+            output_string = ""
+            for c in illegal_string:
+                if c == "*":
+                    output_string = output_string + "\*"
+                else:
+                    output_string = output_string + c
+            for m in re.finditer(output_string, fulltext):
                 positions.append((m.start(), m.end()))
         cursor = QtGui.QTextCursor(self.textEdit.document())
         formatting = QtGui.QTextCharFormat()

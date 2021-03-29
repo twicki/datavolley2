@@ -220,7 +220,7 @@ def split_string(input):
             quality_set_2,
             from_direction_set_2,
             to_directon_set_2,
-        ) = expandString(strings[1], True)
+        ) = expandString(strings[1], False)
         s1, s2 = correct_strings(
             s1,
             team_set,
@@ -500,13 +500,12 @@ class GameState:
                                 )
                             )
                             self.flush_actions()
-                            self.requires_flush()
                             self.set_score[index] += 1
                             self.score[0] = 0
                             self.score[1] = 0
                             self.court.fields[0] = Field()
                             self.court.fields[1] = Field()
-                elif action.was_compound and self.required_flush:
+                elif self.required_flush:
                     who = self.who_flushes
                     # TODO: refactor this out
                     self.required_flush = False
@@ -543,14 +542,13 @@ class GameState:
                             )
                         )
                         self.flush_actions()
-                        self.requires_flush()
                         self.set_score[index] += 1
                         self.score[0] = 0
                         self.score[1] = 0
                         self.court.fields[0] = Field()
                         self.court.fields[1] = Field()
-                elif not action.was_compound and self.required_flush:
-                    raise TVRSyntaxError()
+                # elif not action.was_compound and self.required_flush:
+                #     raise TVRSyntaxError()
 
     def flush_actions(self):
         c = Court()
