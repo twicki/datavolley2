@@ -112,7 +112,7 @@ def set_to_direction(user_string, returnvalue):
     return returnvalue, False, user_string
 
 
-def expandString(user_string):
+def expandString(user_string, was_compound=False):
     returnvalue = "*00h+D000"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
     returnvalue, user_string = set_number(user_string, returnvalue)
@@ -130,6 +130,7 @@ def expandString(user_string):
         returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
     if len(user_string):
         raise TVRSyntaxError()
+    returnvalue = returnvalue + "0" if not was_compound else returnvalue + "1"
     return (
         returnvalue,
         team_set,
@@ -192,11 +193,11 @@ def correct_strings(
     if not from_set2:
         s2 = s2[:7] + s1[8] + s2[8:]
     if not to_set2:
-        s2 = s2[:8] + s1[7]
+        s2 = s2[:8] + s1[7] + s2[9:]
     if not from_set:
         s1 = s1[:7] + s2[8] + s1[8:]
     if not to_set:
-        s1 = s1[:8] + s2[7]
+        s1 = s1[:8] + s2[7] + s1[9:]
 
     return s1, s2
 
@@ -211,7 +212,7 @@ def split_string(input):
             quality_set,
             from_direction_set,
             to_directon_set,
-        ) = expandString(strings[0])
+        ) = expandString(strings[0], True)
         (
             s2,
             team_set_2,
@@ -219,7 +220,7 @@ def split_string(input):
             quality_set_2,
             from_direction_set_2,
             to_directon_set_2,
-        ) = expandString(strings[1])
+        ) = expandString(strings[1], True)
         s1, s2 = correct_strings(
             s1,
             team_set,
@@ -235,7 +236,7 @@ def split_string(input):
             to_directon_set_2,
         )
     else:
-        s1, _, _, _, _, _ = expandString(strings[0])
+        s1, _, _, _, _, _ = expandString(strings[0], False)
         s2 = None
     return s1, s2
 
@@ -263,6 +264,7 @@ class GameState:
         self.players = [[], []]
 
         self.details = []
+        self.required_flush = False
 
     def add_action_substitution_from_string(self, action: str, time_stamp=None) -> None:
         """add a substitiution action from a string formatted [Team]sub![Number]![Position]"""
@@ -457,14 +459,62 @@ class GameState:
             else:
                 who, was_score = is_scoring(action)
                 if was_score:
+                    # flush the current action before housekeeping
+                    if action.was_compound:
+                        self.required_flush = True
+                        self.who_flushes = who
+                    else:
+                        self.flush_actions()
+                        index = int(who)
+                        self._current_actions.append(
+                            actions.Point(
+                                who, time_stamp=time_stamp, auto_generated=True
+                            )
+                        )
+
+                        # housekeeping: serve
+                        if who is not self._last_serve:
+                            self._current_actions.append(
+                                actions.Rotation(
+                                    who, time_stamp=time_stamp, auto_generated=True
+                                )
+                            )
+                            self._current_actions.append(
+                                actions.SetServingTeam(
+                                    who, time_stamp=time_stamp, auto_generated=True
+                                )
+                            )
+                            self.court.rotate(index)
+                        self._last_serve = who
+                        self.flush_actions()
+                        # housekeeping: scoring
+                        opponent = int(actions.Team.inverse(who))
+                        self.score[index] += 1
+                        if (
+                            self.score[index] >= self.max_points_in_set()
+                            and self.score[index] - 2 >= self.score[opponent]
+                        ):
+                            self._current_actions.append(
+                                actions.Endset(
+                                    who, time_stamp=time_stamp, auto_generated=True
+                                )
+                            )
+                            self.flush_actions()
+                            self.requires_flush()
+                            self.set_score[index] += 1
+                            self.score[0] = 0
+                            self.score[1] = 0
+                            self.court.fields[0] = Field()
+                            self.court.fields[1] = Field()
+                elif action.was_compound and self.required_flush:
+                    who = self.who_flushes
+                    # TODO: refactor this out
+                    self.required_flush = False
+                    self.flush_actions()
                     index = int(who)
                     self._current_actions.append(
                         actions.Point(who, time_stamp=time_stamp, auto_generated=True)
                     )
-
-                    # flush the current action before housekeeping
-                    self.flush_actions()
-
                     # housekeeping: serve
                     if who is not self._last_serve:
                         self._current_actions.append(
@@ -479,7 +529,7 @@ class GameState:
                         )
                         self.court.rotate(index)
                     self._last_serve = who
-
+                    self.flush_actions()
                     # housekeeping: scoring
                     opponent = int(actions.Team.inverse(who))
                     self.score[index] += 1
@@ -493,11 +543,14 @@ class GameState:
                             )
                         )
                         self.flush_actions()
+                        self.requires_flush()
                         self.set_score[index] += 1
                         self.score[0] = 0
                         self.score[1] = 0
                         self.court.fields[0] = Field()
                         self.court.fields[1] = Field()
+                elif not action.was_compound and self.required_flush:
+                    raise TVRSyntaxError()
 
     def flush_actions(self):
         c = Court()

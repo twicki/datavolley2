@@ -20,6 +20,7 @@ from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.uis.second import Ui_Form as commentatorUI
 from tvrscouting.uis.third import Ui_Form as thridUI
 from tvrscouting.uis.fourth import Ui_Form as fourthUI
+from tvrscouting.utils.errors import TVRSyntaxError
 
 
 class PlayerProfileInView:
@@ -173,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         for command in s:
             try:
                 self.game_state.add_string(command)
-            except:
+            except TVRSyntaxError:
                 self.illegal.append(command)
 
         self.game_state.fix_time_stamps(oldstate)

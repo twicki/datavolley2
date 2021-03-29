@@ -117,6 +117,7 @@ class Gameaction(AbstractAction):
         self.quality = Quality.Good
         self.combination = Combination.Default
         self.direction = [0, 0]
+        self.was_compound = False
 
     def __str__(self):
         return gs.expandString(
@@ -126,7 +127,8 @@ class Gameaction(AbstractAction):
             + str(self.quality)
             + str(self.combination)
             + str(self.direction[0])
-            + str(self.direction[1])
+            + str(self.direction[1]),
+            self.was_compound,
         )[0]
 
     @classmethod
@@ -148,6 +150,7 @@ class Gameaction(AbstractAction):
             raise TVRSyntaxError()
         new.direction[0] = str(s[7])
         new.direction[1] = str(s[8])
+        new.was_compound = bool(int(s[9]))
         return new
 
 
