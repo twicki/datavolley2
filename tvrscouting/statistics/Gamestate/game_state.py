@@ -380,7 +380,39 @@ class GameState:
         for action in action_list:
             self._current_actions.append(action)
         for action in action_list:
-            if isinstance(action, Gameaction):
+            ## todo: this is copied form below, refactor!
+            if isinstance(action, SpecialActions.Substitute):
+                who = action.team_
+                field = self.court.fields[int(who)].players
+                pos = action.position_in - 1
+                fpos = field[:pos]
+                fpos.append(Player(action.player_in))
+                self.court.fields[int(who)].players = fpos + field[pos + 1 :]
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.Endset):
+                self.set_score[int(action.team_)] += 1
+                self.score[0] = 0
+                self.score[1] = 0
+                self.court.fields[0] = Field()
+                self.court.fields[1] = Field()
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.Rotation):
+                self.court.rotate(int(action.team_))
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.SetServingTeam):
+                self._last_serve = action.team_
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.Point):
+                self.score[int(action.team_)] += action.value
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.InitializePlayer):
+                p = Player(action.number, action.position, action.name)
+                self.players[int(action.team)].append(p)
+                self.flush_actions()
+            elif isinstance(action, SpecialActions.InitializeTeamName):
+                self.teamnames[int(action.team)] = action.name
+                self.flush_actions()
+            elif isinstance(action, Gameaction):
                 _, was_score = is_scoring(action)
                 if was_score:
                     self.flush_actions()
@@ -400,6 +432,7 @@ class GameState:
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
                 self.flush_actions()
             elif isinstance(action, SpecialActions.Endset):
+                self.set_score[int(action.team_)] += 1
                 self.score[0] = 0
                 self.score[1] = 0
                 self.court.fields[0] = Field()

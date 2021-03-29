@@ -48,17 +48,20 @@ class StaticWriter:
             setnumber = rally[3][0] + rally[3][1] + 1
             if len(partialscores) < setnumber:
                 partialscores.append({"finalscore": [], "mid_results": []})
+                if setnumber == 5:
+                    intermediates = [5, 10, 12]
+                    intermediate = intermediates[0]
             if len(start_times) < setnumber:
                 for action in rally[0]:
                     if action.time_stamp:
                         if isinstance(action, Gameaction):
                             start_times.append(action.time_stamp)
-                            continue
+                            break
             if len(end_times) < setnumber:
                 for action in rally[0]:
                     if isinstance(action, Endset):
                         end_times.append(action.time_stamp)
-                        continue
+                        break
 
             if rally[2][0] == intermediate or rally[2][1] == intermediate:
                 partialscores[setnumber - 1]["mid_results"].append(rally[2])
@@ -66,12 +69,18 @@ class StaticWriter:
                     intermediate = intermediates[intermediates.index(intermediate) + 1]
                 except IndexError:
                     intermediate = intermediates[0]
-            if rally[2][0] == 25 or rally[2][1] == 25:
+            # TODO: rename
+            totalscore = 25 if rally[3][0] + rally[3][1] < 4 else 15
+            if rally[2][0] == totalscore or rally[2][1] == totalscore:
                 partialscores[setnumber - 1]["finalscore"] = rally[2]
         if len(start_times) != len(end_times):
             end_times.append(self.gamestate.rallies[-1][0][-1].time_stamp)
         last = self.gamestate.score
-        if last[0] != 25 and last[1] != 25 and (last[0] != 0 and last[1] != 0):
+        if (
+            last[0] != totalscore
+            and last[1] != totalscore
+            and (last[0] != 0 and last[1] != 0)
+        ):
             setnumber = self.gamestate.set_score[0] + self.gamestate.set_score[1] + 1
             partialscores[setnumber - 1]["finalscore"] = last
 
@@ -79,6 +88,9 @@ class StaticWriter:
         home_total = 0
         away_total = 0
         total_time = 0
+        for score in partialscores:
+            if len(score["finalscore"]) == 0:
+                partialscores.remove(score)
         for scores in partialscores:
             home_total += scores["finalscore"][0]
             away_total += scores["finalscore"][1]
@@ -631,6 +643,7 @@ class StaticWriter:
         fulldata["Name"] = player.Name
         fulldata["Number"] = player.Number
         fulldata["Role"] = ""
+        fulldata["IsSetter"] = player.PlayerPosition.Setter == player.Position
         if player.is_capitain:
             fulldata["Role"] = "C"
         elif player.Position == Player.PlayerPosition.Libera:
