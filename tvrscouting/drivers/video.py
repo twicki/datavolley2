@@ -272,6 +272,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             if self.mediaplayer.play() == -1:
                 self.OpenFile()
                 return
+            ## TODO: add slider
+            self.mediaplayer.audio_set_volume(0)
             self.mediaplayer.play()
             self.timer.start()
             if self.concurent_action:

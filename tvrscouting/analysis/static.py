@@ -272,9 +272,8 @@ class StaticWriter:
             rece_rallies = ralley_filter_from_string(
                 "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
             )
-            side_out_points = self.collect_stats_from_number(team, "@@", rece_rallies)[
-                "Points"
-            ]["Total"]
+            filterstring = str(team) + "@@@" + "#"
+            side_out_points = len(action_filter_from_string(filterstring, rece_rallies))
             self.detailed_infos[name]["SideOut"] = side_out_points
 
             total_rece = self.teamstats[name]["Total"]["Reception"]["Total"]
@@ -286,9 +285,8 @@ class StaticWriter:
             serve_rallies = ralley_filter_from_string(
                 "@@@@@@@@@@@" + str(team), self.gamestate.rallies
             )
-            break_points = self.collect_stats_from_number(team, "@@", serve_rallies)[
-                "Points"
-            ]["Total"]
+            filterstring = str(team) + "@@@" + "#"
+            break_points = len(action_filter_from_string(filterstring, serve_rallies))
             self.detailed_infos[name]["Break_Points"] = break_points
 
             total_serve = self.teamstats[name]["Total"]["Serve"]["Total"]

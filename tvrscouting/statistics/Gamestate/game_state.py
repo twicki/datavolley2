@@ -112,6 +112,15 @@ def set_to_direction(user_string, returnvalue):
     return returnvalue, False, user_string
 
 
+def check_compound(user_string, was_compound):
+    if len(user_string) and user_string[0].isnumeric():
+        intval = int(user_string[0])
+        if intval not in [0, 1]:
+            raise TVRSyntaxError()
+        return bool(intval), user_string[1:]
+    return was_compound, user_string
+
+
 def expandString(user_string, was_compound=False):
     returnvalue = "*00h+D000"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
@@ -128,6 +137,7 @@ def expandString(user_string, was_compound=False):
     )
     if not quality_set:
         returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
+    was_compound, user_string = check_compound(user_string, was_compound)
     if len(user_string):
         raise TVRSyntaxError()
     returnvalue = returnvalue + "0" if not was_compound else returnvalue + "1"
