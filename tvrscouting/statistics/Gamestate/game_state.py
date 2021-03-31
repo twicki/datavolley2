@@ -302,6 +302,8 @@ class GameState:
         self.add_logical([action])
 
     def add_string(self, action: str, time_stamp=None):
+        if len(action) == 0:
+            return
         if "sub" in action:
             self.add_action_substitution_from_string(action, time_stamp)
         elif "serve" in action:
