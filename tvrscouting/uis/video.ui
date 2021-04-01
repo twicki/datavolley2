@@ -6,34 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>817</height>
+    <width>1127</width>
+    <height>893</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Video Analysis</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item row="1" column="0">
-    <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,1,1,10,0,0" columnstretch="10,0,1">
-     <item row="5" column="0">
-      <widget class="QSlider" name="horizontalSlider">
-       <property name="maximum">
-        <number>10000</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="5">
-      <widget class="QVideoWidget" name="widget" native="true"/>
-     </item>
-     <item row="0" column="2">
+   <item row="3" column="1">
+    <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,1,2,1,1,8,0,0,0" columnstretch="10,0">
+     <item row="0" column="1">
       <widget class="QLineEdit" name="lineEdit"/>
      </item>
-     <item row="6" column="0">
-      <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,1,2,1,0,1,0,0">
+     <item row="9" column="0">
+      <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,1,2,1,0,1,0">
        <item row="0" column="2">
         <widget class="QPushButton" name="pushButton_2">
          <property name="text">
@@ -101,52 +88,17 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="7">
-        <widget class="QPushButton" name="insert_action">
-         <property name="text">
-          <string>insert action</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
-     <item row="2" column="2">
+     <item row="3" column="1">
+      <widget class="QTableWidget" name="filter_table"/>
+     </item>
+     <item row="2" column="1">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="1">
         <widget class="QPushButton" name="court_filter_button">
          <property name="text">
           <string>Court Filter</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="rally_button">
-         <property name="text">
-          <string>Rally Filter</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QCheckBox" name="action_reel_box">
-         <property name="text">
-          <string>view action reel</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="reset_time_button">
-         <property name="text">
-          <string>Leadup Time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="subaction_filter_button">
-         <property name="text">
-          <string>Subaction Filter</string>
          </property>
         </widget>
        </item>
@@ -157,6 +109,13 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="reset_time_button">
+         <property name="text">
+          <string>Leadup Time</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="1">
         <widget class="QPushButton" name="reset_button">
          <property name="text">
@@ -164,7 +123,21 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="subaction_filter_button">
+         <property name="text">
+          <string>Subaction Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="rally_button">
+         <property name="text">
+          <string>Rally Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
         <widget class="QCheckBox" name="jump_on_select_box">
          <property name="text">
           <string>jump on select</string>
@@ -174,13 +147,51 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="action_reel_box">
+         <property name="text">
+          <string>view action reel</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
-     <item row="4" column="2" rowspan="3">
-      <widget class="QTableWidget" name="action_view"/>
+     <item row="0" column="0" rowspan="8">
+      <widget class="QVideoWidget" name="widget" native="true"/>
      </item>
-     <item row="3" column="2">
-      <widget class="QTableWidget" name="filter_table"/>
+     <item row="8" column="0">
+      <widget class="QSlider" name="horizontalSlider">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="delete_action">
+         <property name="text">
+          <string>Delete Action</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="insert_action">
+         <property name="text">
+          <string>Insert Action</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="1" rowspan="5">
+      <widget class="QTableWidget" name="action_view"/>
      </item>
     </layout>
    </item>

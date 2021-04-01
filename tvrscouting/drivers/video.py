@@ -155,6 +155,20 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.update_action_view_from_game_state()
         self.apply_all_filters()
 
+    def delete_current_action(self):
+        current_action = self.get_current_action_from_highlight()
+        if current_action is None:
+            return
+        deleted_action_index = current_action.action_index
+        new_game_state = GameState()
+        for new_action in self.all_actions:
+            if new_action.action_index != deleted_action_index:
+                new_action.action.time_stamp = new_action.absolute_timestamp
+                new_game_state.add_plain([new_action.action])
+        self.game_state = new_game_state
+        self.update_action_view_from_game_state()
+        self.apply_all_filters()
+
     def save_modified_version(self, item):
         row = item.row()
         col = item.column()
@@ -447,35 +461,49 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         else:
             self.jump_next_action_timer.stop()
 
-    def _qt_setup(self):
-        self.pushButton.clicked.connect(self.open)
-        self.pushButton_2.clicked.connect(self.PlayPause)
-        self.horizontalSlider.sliderMoved.connect(self.set_mediaplayer_from_sliderposition)
-        self.action_view.cellClicked.connect(self.cell_was_clicked)
-        self.action_view.itemSelectionChanged.connect(self.jump_to_current_cell)
-        self.load_button.clicked.disconnect()
-        self.load_button.clicked.connect(self.load_file)
-        self.saveFile_button.clicked.connect(self.save_file)
-        self.reset_time_button.clicked.connect(self.set_leadup_time)
-        self.jump_on_select_box.clicked.connect(self.update_jumping_to_action)
-        self.action_reel_box.clicked.connect(self.update_view_action_reel)
-
-        self.insert_action.clicked.connect(self.insert_action_after)
-
+    def set_keypresses_to_custom_keypresses(self):
         self.pushButton.keyPressEvent = self.keyPressEvent
         self.pushButton_2.keyPressEvent = self.keyPressEvent
-        self.horizontalSlider.keyPressEvent = self.keyPressEvent
-        self.action_view.keyPressEvent = self.keyPressEvent
         self.load_button.keyPressEvent = self.keyPressEvent
         self.saveFile_button.keyPressEvent = self.keyPressEvent
+
+        self.horizontalSlider.keyPressEvent = self.keyPressEvent
+        self.action_view.keyPressEvent = self.keyPressEvent
+        self.filter_table.keyPressEvent = self.keyPressEvent
+
         self.action_filter_button.keyPressEvent = self.keyPressEvent
         self.court_filter_button.keyPressEvent = self.keyPressEvent
         self.rally_button.keyPressEvent = self.keyPressEvent
-        self.reset_button.keyPressEvent = self.keyPressEvent
-        self.load_button.keyPressEvent = self.keyPressEvent
         self.subaction_filter_button.keyPressEvent = self.keyPressEvent
+        self.reset_time_button.keyPressEvent = self.keyPressEvent
+        self.reset_button.keyPressEvent = self.keyPressEvent
+
         self.jump_on_select_box.keyPressEvent = self.keyPressEvent
         self.action_reel_box.keyPressEvent = self.keyPressEvent
+
+        self.delete_action.keyPressEvent = self.keyPressEvent
+        self.insert_action.keyPressEvent = self.keyPressEvent
+
+    def _qt_setup(self):
+        self.pushButton.clicked.connect(self.open)
+        self.pushButton_2.clicked.connect(self.PlayPause)
+        # we need to disconnect from the default load to connect to our custom load
+        self.load_button.clicked.disconnect()
+        self.load_button.clicked.connect(self.load_file)
+        self.saveFile_button.clicked.connect(self.save_file)
+
+        self.horizontalSlider.sliderMoved.connect(self.set_mediaplayer_from_sliderposition)
+        self.action_view.cellClicked.connect(self.cell_was_clicked)
+        self.action_view.itemSelectionChanged.connect(self.jump_to_current_cell)
+
+        self.jump_on_select_box.clicked.connect(self.update_jumping_to_action)
+        self.action_reel_box.clicked.connect(self.update_view_action_reel)
+
+        self.reset_time_button.clicked.connect(self.set_leadup_time)
+        self.insert_action.clicked.connect(self.insert_action_after)
+        self.delete_action.clicked.connect(self.delete_current_action)
+
+        self.set_keypresses_to_custom_keypresses()
 
 
 if __name__ == "__main__":
