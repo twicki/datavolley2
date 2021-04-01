@@ -89,7 +89,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.pushButton.pressed.connect(self.setup_server)
         self.timer = QTimer(self)
-        self.timer.setInterval(200)
+        self.timer.setInterval(20)
         self.timer.timeout.connect(self.fetch_data)
         self.pushButton_2.pressed.connect(self.setup_uis)
         self.s = None
@@ -100,7 +100,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def fetch_data(self):
         try:
-            data, addr = self.s.recvfrom(536870912 * 2 * 2 * 2 * 2)
+            data, addr = self.s.recvfrom(536870912)
+            print("data from: " + str(addr))
             self.data = pickle.loads(data)
             self.update_commentator_view()
         except socket.timeout:

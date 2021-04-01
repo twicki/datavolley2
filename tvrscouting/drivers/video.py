@@ -137,60 +137,83 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         ser = Serializer(self, self.game_state)
         ser.serialize()
 
-    def insert_action_after(self):
-        current_action = self.get_current_action_from_highlight()
-        if current_action is None:
-            current_action = self.displayed_actions[0]
-        changed_action_index = current_action.action_index
+    @contextlib.contextmanager
+    def create_clean_game_state(self):
         new_game_state = GameState()
-        new_action_string = self.lineEdit.text()
-        for new_action in self.all_actions:
-            new_action.action.time_stamp = new_action.absolute_timestamp
-            new_game_state.add_plain([new_action.action])
-            if new_action.action_index == changed_action_index:
-                new_game_state.add_plain_from_string(
-                    new_action_string, new_action.absolute_timestamp
-                )
+        yield new_game_state
         self.game_state = new_game_state
         self.update_action_view_from_game_state()
         self.apply_all_filters()
+
+    def get_current_action_index_or_default(self):
+        current_action = self.get_current_action_from_highlight()
+        if current_action is None:
+            current_action = self.displayed_actions[0]
+        return current_action.action_index
+
+    def insert_action_after(self):
+        row = self.get_current_row_of_selection()
+
+        current_action_index = self.get_current_action_index_or_default()
+        new_action_string = self.lineEdit.text()
+        with self.create_clean_game_state() as new_game_state:
+            for new_action in self.all_actions:
+                new_action.action.time_stamp = new_action.absolute_timestamp
+                new_game_state.add_plain([new_action.action])
+                if new_action.action_index == current_action_index:
+                    new_game_state.add_plain_from_string(
+                        new_action_string, new_action.absolute_timestamp
+                    )
+
+        self.action_view.clearSelection()
+        self.action_view.item(row + 1, 0).setSelected(True)
+        self.center_new_selection()
 
     def delete_current_action(self):
         current_action = self.get_current_action_from_highlight()
         if current_action is None:
             return
+        row = self.get_current_row_of_selection()
+        new_highlight_column = 0
         deleted_action_index = current_action.action_index
-        new_game_state = GameState()
-        for new_action in self.all_actions:
-            if new_action.action_index != deleted_action_index:
-                new_action.action.time_stamp = new_action.absolute_timestamp
-                new_game_state.add_plain([new_action.action])
-        self.game_state = new_game_state
-        self.update_action_view_from_game_state()
-        self.apply_all_filters()
+
+        with self.create_clean_game_state() as new_game_state:
+            for new_action in self.all_actions:
+                if new_action.action_index != deleted_action_index:
+                    new_action.action.time_stamp = new_action.absolute_timestamp
+                    new_game_state.add_plain([new_action.action])
+
+        self.action_view.clearSelection()
+        if self.action_view.item(row, 0):
+            self.action_view.item(row, 0).setSelected(True)
+        else:
+            self.action_view.item(row - 1, 0).setSelected(True)
+        self.center_new_selection()
 
     def save_modified_version(self, item):
-        row = item.row()
-        col = item.column()
-        changed_action_index = self.displayed_actions[row].action_index
-        new_game_state = GameState()
-        for new_action in self.all_actions:
-            if new_action.action_index == changed_action_index:
-                action_str = item.text()
-                new_game_state.add_plain_from_string(action_str, new_action.absolute_timestamp)
-            else:
-                new_action.action.time_stamp = new_action.absolute_timestamp
-                new_game_state.add_plain([new_action.action])
+        changed_action_index = self.displayed_actions[item.row()].action_index
+        highlited_row = item.row()
+        action_str = item.text()
+        with self.create_clean_game_state() as new_game_state:
+            for new_action in self.all_actions:
+                if new_action.action_index == changed_action_index:
+                    new_game_state.add_plain_from_string(action_str, new_action.absolute_timestamp)
+                else:
+                    new_action.action.time_stamp = new_action.absolute_timestamp
+                    new_game_state.add_plain([new_action.action])
 
-        self.game_state = new_game_state
-        self.update_action_view_from_game_state()
-        self.apply_all_filters()
+        self.action_view.clearSelection()
+        self.action_view.item(highlited_row, 0).setSelected(True)
+        self.center_new_selection()
 
     def apply_all_filters(self):
         if self.game_state is None:
             self.load_file()
             if self.game_state is None:
                 return
+        old_highlight_index = self.get_current_action_index_or_default()
+        self.action_view.clearSelection()
+        new_highlight_column = 0
 
         with self.edit_table():
             self.action_view.setRowCount(self.total_nuber_of_actions)
@@ -209,8 +232,15 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(current_action))
                         self.displayed_actions.append(action)
                         i += 1
+                        if action.action_index == old_highlight_index:
+                            new_highlight_column = i
             self.action_view.setRowCount(i)
-        self.action_view.scrollToBottom()
+        # since the table is one-indexed we need to remove 1
+        new_highlight_column = (
+            new_highlight_column - 1 if new_highlight_column > 0 else new_highlight_column
+        )
+        self.action_view.item(new_highlight_column, 0).setSelected(True)
+        self.center_new_selection()
         self.lineEdit.clear()
 
     def cell_was_clicked(self, row, column):
@@ -366,8 +396,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
     def select_next_cell(self):
         row = self.get_current_row_of_selection()
-        self.action_view.clearSelection()
         if row < self.action_view.rowCount() - 1:
+            self.action_view.clearSelection()
             self.action_view.item(row + 1, 0).setSelected(True)
 
     def select_previous_cell(self):

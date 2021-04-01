@@ -15,19 +15,6 @@ from tvrscouting.statistics.Players.players import Team, Player
 from tvrscouting.analysis.filters import *
 
 
-# class ActionWithInfo:
-#     def __init__(
-#         self,
-#         action,
-#         rally,
-#         index=0,
-#     ):
-#         super().__init__()
-#         self.action = action
-#         self.from_rally = rally
-#         self.action_index = index
-
-
 class Basic_Filter:
     def __init__(self):
         super().__init__()
@@ -149,48 +136,8 @@ class Basic_Filter:
                 return True
         return False
 
-    # def set_total_number_of_actions(self):
-    #     self.total_nuber_of_actions = len(self.displayed_actions)
-
-    # @contextlib.contextmanager
-    # def edit_table(self):
-    #     self.action_view.itemChanged.connect(lambda: None)
-    #     self.action_view.itemChanged.disconnect()
-    #     yield
-    #     self.action_view.itemChanged.connect(self.save_modified_version)
-
-    # def save_modified_version(self, item):
-    #     row = item.row()
-    #     col = item.column()
-    #     changed_action_index = self.displayed_actions[row].action_index
-    #     # new_game_state = GameState()
-    #     # for new_action in self.all_actions:
-    #     #     if new_action.action_index == changed_action_index:
-    #     #         action_str = item.text()
-    #     #         new_game_state.add_plain_from_string(
-    #     #             action_str, new_action.absolute_timestamp
-    #     #         )
-    #     #     else:
-    #     #         new_action.action.time_stamp = new_action.absolute_timestamp
-    #     #         new_game_state.add_plain([new_action.action])
-
-    # def fill_action_view(self):
-    #     self.set_total_number_of_actions()
-    #     with self.edit_table():
-    #         self.action_view.setRowCount(self.total_nuber_of_actions)
-    #         self.action_view.setColumnCount(1)
-    #         index = 0
-    #         for action_with_info in self.displayed_actions:
-    #             self.action_view.setItem(
-    #                 0, index, QtWidgets.QTableWidgetItem(str(action_with_info.action))
-    #             )
-    #             index += 1
-    #         self.action_view.setRowCount(index)
-    #         self.action_view.scrollToBottom()
-
     def apply_all_filters(self):
         self.actions = []
-        # self.displayed_actions = []
         self.players = [[], []]
         if self.game_state is None:
             self.load_file()
@@ -210,31 +157,6 @@ class Basic_Filter:
                         current_action = str(action)
                         if self.check_all_action_filters(current_action):
                             self.actions.append(action)
-
-        # index = 0
-        # for action_with_info in self.all_actions:
-        #     if isinstance(action_with_info.action, InitializePlayer):
-        #         p = Player(
-        #             action_with_info.action.number,
-        #             action_with_info.action.position,
-        #             action_with_info.action.name,
-        #         )
-        #         self.players[int(action_with_info.action.team)].append(p)
-        #     if (
-        #         self.check_all_rally_filters(rally)
-        #         and self.check_all_court_filters(rally[1])
-        #         and self.check_all_subaction_filters(rally)
-        #     ):
-        #         if isinstance(action_with_info.action, Gameaction):
-        #             current_action = str(action_with_info.action)
-        #             if self.check_all_action_filters(current_action):
-        #                 self.actions.append(action_with_info.action)
-        #         self.action_view.setItem(
-        #             0, index, QtWidgets.QTableWidgetItem(current_action)
-        #         )
-        #         self.displayed_actions.append(action)
-        #         index += 1
-        # self.fill_action_view()
         self.analyze()
 
     def analyze(self):
