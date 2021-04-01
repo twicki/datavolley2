@@ -102,9 +102,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             data, addr = self.s.recvfrom(536870912 * 2 * 2 * 2 * 2)
             self.data = pickle.loads(data)
-            self.textBrowser.append(
-                "Message from: " + str(addr) + "\n" + "From connected user: "
-            )
             self.update_commentator_view()
         except socket.timeout:
             pass
@@ -121,9 +118,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.secondWindow.update_view_from_results(self.data["results"])
 
     def update_timeline(self):
-        self.ThirdWindow.update_timeline(
-            self.data["timeline"][0], self.data["timeline"][1]
-        )
+        self.ThirdWindow.update_timeline(self.data["timeline"][0], self.data["timeline"][1])
 
     def update_recent_scores_view(self):
         score = self.data["score"]
@@ -656,12 +651,8 @@ class SecondWindow(QtWidgets.QWidget, commentatorUI):
     def update_team_view(self, results):
         for team in range(2):
             self.team_profiles[team]["name"].setText(results[team]["team"]["name"])
-            self.team_profiles[team]["hit"].display(
-                results[team]["team"]["hit"]["kill"]
-            )
-            self.team_profiles[team]["serve"].display(
-                results[team]["team"]["serve"]["kill"]
-            )
+            self.team_profiles[team]["hit"].display(results[team]["team"]["hit"]["kill"])
+            self.team_profiles[team]["serve"].display(results[team]["team"]["serve"]["kill"])
             self.team_profiles[team]["block"].display(results[team]["team"]["block"])
             self.team_profiles[team]["error"].display(results[team]["team"]["error"])
 
@@ -699,15 +690,10 @@ class SecondWindow(QtWidgets.QWidget, commentatorUI):
             processed = True
             for player_view in self.player_profiles[team]:
                 if processed:
-                    candidate_results = self.find_candidate_results_in_team(
-                        results[team]
-                    )
+                    candidate_results = self.find_candidate_results_in_team(results[team])
                     processed = False
 
-                if (
-                    candidate_results
-                    and candidate_results[1]["group"] < player_view.max_group
-                ):
+                if candidate_results and candidate_results[1]["group"] < player_view.max_group:
                     processed = True
                     player_view.update_from_result(candidate_results)
                 else:
@@ -777,18 +763,14 @@ class FourthWindow(QtWidgets.QWidget, fourthUI):
             self.guest_scores[i].show()
             if results["score"][i][0] != results["score"][i + 1][0]:
                 self.home_scores[i].display(results["score"][i + 1][0])
-                self.home_scores[i].setStyleSheet(
-                    """QLCDNumber {background-color: green}"""
-                )
+                self.home_scores[i].setStyleSheet("""QLCDNumber {background-color: green}""")
                 self.guest_scores[i].display(" ")
                 self.guest_scores[i].setStyleSheet(
                     """QLCDNumber {background-color: rgb(114, 159, 207);}"""
                 )
             else:
                 self.guest_scores[i].display(results["score"][i + 1][1])
-                self.guest_scores[i].setStyleSheet(
-                    """QLCDNumber {background-color: green}"""
-                )
+                self.guest_scores[i].setStyleSheet("""QLCDNumber {background-color: green}""")
                 self.home_scores[i].display(" ")
                 self.home_scores[i].setStyleSheet(
                     """QLCDNumber {background-color: rgb(114, 159, 207);}"""

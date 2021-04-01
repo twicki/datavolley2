@@ -95,9 +95,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             self.displayed_actions = []
             for rally in self.game_state.rallies:
                 for action in rally[0]:
-                    self.action_view.setItem(
-                        0, i, QtWidgets.QTableWidgetItem(str(action))
-                    )
+                    self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(str(action)))
                     if initial_time_stamp is None:
                         initial_time_stamp = action.time_stamp
                     if action.time_stamp:
@@ -165,9 +163,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         for new_action in self.all_actions:
             if new_action.action_index == changed_action_index:
                 action_str = item.text()
-                new_game_state.add_plain_from_string(
-                    action_str, new_action.absolute_timestamp
-                )
+                new_game_state.add_plain_from_string(action_str, new_action.absolute_timestamp)
             else:
                 new_action.action.time_stamp = new_action.absolute_timestamp
                 new_game_state.add_plain([new_action.action])
@@ -196,9 +192,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         and self.check_all_subaction_filters(action.from_rally)
                         and self.check_all_action_filters(current_action)
                     ):
-                        self.action_view.setItem(
-                            0, i, QtWidgets.QTableWidgetItem(current_action)
-                        )
+                        self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(current_action))
                         self.displayed_actions.append(action)
                         i += 1
             self.action_view.setRowCount(i)
@@ -247,9 +241,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def OpenFile(self, filename=None):
         """Open a media file in a MediaPlayer"""
         if filename is None:
-            filename = QFileDialog.getOpenFileName(
-                self, "Open File", os.path.expanduser("~")
-            )[0]
+            filename = QFileDialog.getOpenFileName(self, "Open File", os.path.expanduser("~"))[0]
         if not filename:
             return
         # create the media
@@ -322,16 +314,11 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             if action.action == current_action.action:
                 previousActions = False
             if previousActions:
-                if (
-                    action.absolute_timestamp is not None
-                    and action.absolute_timestamp > seconds
-                ):
+                if action.absolute_timestamp is not None and action.absolute_timestamp > seconds:
                     action.absolute_timestamp = seconds
             else:
                 if action.relative_timestamp is not None:
-                    action.absolute_timestamp = (
-                        action.relative_timestamp + delta_to_original
-                    )
+                    action.absolute_timestamp = action.relative_timestamp + delta_to_original
 
     def set_current_event_to_time(self, current_action):
         current_action.absolute_timestamp = self.get_current_second_of_player()
@@ -463,9 +450,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def _qt_setup(self):
         self.pushButton.clicked.connect(self.open)
         self.pushButton_2.clicked.connect(self.PlayPause)
-        self.horizontalSlider.sliderMoved.connect(
-            self.set_mediaplayer_from_sliderposition
-        )
+        self.horizontalSlider.sliderMoved.connect(self.set_mediaplayer_from_sliderposition)
         self.action_view.cellClicked.connect(self.cell_was_clicked)
         self.action_view.itemSelectionChanged.connect(self.jump_to_current_cell)
         self.load_button.clicked.disconnect()

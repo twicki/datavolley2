@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import pickle
 import re
@@ -48,6 +49,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.details = []
         self.time_stamps = []
         self.player_profiles = [[], []]
+        self.remote_server = None
 
         self.qt_setup()
 
@@ -262,6 +264,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.add_input_to_game_state()
         self.update_main_view()
         self.update_commentator_view()
+        self.send_data_to_remote_server()
 
     def display_commentator_windows(self):
         if self.secondWindow is None:
@@ -307,38 +310,45 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.fieldView["field"][1].append(PositionView(self.label_10))
 
         # TODO: remove
-        self.remote_stats.pressed.connect(self.send_data)
+        self.remote_stats.pressed.connect(self.setup_remote_server)
 
-    def send_data(self):
-        host = "0.0.0.0"  # client ip
-        port = 4005
+    def setup_remote_server(self):
+        self.remote_server = self.lineEdit.text()
+        self.lineEdit.clear()
+        self.update()
 
-        server = ("192.168.101.157", 4000)
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.bind((host, port))
-        data = {
-            "results": [
-                self.game_state.collect_stats("*"),
-                self.game_state.collect_stats("/"),
-            ],
-            "timeline": self.game_state.return_timeline(),
-            "score": {
-                "score": self.game_state.return_truncated_scores(),
-                "team_details": [
-                    {
-                        "name": self.game_state.teamnames[0],
-                        "score": self.game_state.score[0],
-                    },
-                    {
-                        "name": self.game_state.teamnames[1],
-                        "score": self.game_state.score[1],
-                    },
+    def send_data_to_remote_server(self):
+        if self.remote_server:
+            host = "0.0.0.0"  # client ip
+            port = 4005
+
+            # server = ("192.168.101.157", 4000)
+            server = (self.remote_server, 4000)
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.bind((host, port))
+            data = {
+                "results": [
+                    self.game_state.collect_stats("*"),
+                    self.game_state.collect_stats("/"),
                 ],
-            },
-        }
-        test = pickle.dumps(data)
-        s.sendto(test, server)
-        s.close()
+                "timeline": self.game_state.return_timeline(),
+                "score": {
+                    "score": self.game_state.return_truncated_scores(),
+                    "team_details": [
+                        {
+                            "name": self.game_state.teamnames[0],
+                            "score": self.game_state.score[0],
+                        },
+                        {
+                            "name": self.game_state.teamnames[1],
+                            "score": self.game_state.score[1],
+                        },
+                    ],
+                },
+            }
+            test = pickle.dumps(data)
+            s.sendto(test, server)
+            s.close()
 
     def get_times(self):
         if len(self.lineEdit.text()):
