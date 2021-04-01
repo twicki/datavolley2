@@ -139,6 +139,24 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         ser = Serializer(self, self.game_state)
         ser.serialize()
 
+    def insert_action_after(self):
+        current_action = self.get_current_action_from_highlight()
+        if current_action is None:
+            current_action = self.displayed_actions[0]
+        changed_action_index = current_action.action_index
+        new_game_state = GameState()
+        new_action_string = self.lineEdit.text()
+        for new_action in self.all_actions:
+            new_action.action.time_stamp = new_action.absolute_timestamp
+            new_game_state.add_plain([new_action.action])
+            if new_action.action_index == changed_action_index:
+                new_game_state.add_plain_from_string(
+                    new_action_string, new_action.absolute_timestamp
+                )
+        self.game_state = new_game_state
+        self.update_action_view_from_game_state()
+        self.apply_all_filters()
+
     def save_modified_version(self, item):
         row = item.row()
         col = item.column()
@@ -456,6 +474,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.reset_time_button.clicked.connect(self.set_leadup_time)
         self.jump_on_select_box.clicked.connect(self.update_jumping_to_action)
         self.action_reel_box.clicked.connect(self.update_view_action_reel)
+
+        self.insert_action.clicked.connect(self.insert_action_after)
 
         self.pushButton.keyPressEvent = self.keyPressEvent
         self.pushButton_2.keyPressEvent = self.keyPressEvent
