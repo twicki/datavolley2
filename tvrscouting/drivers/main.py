@@ -36,7 +36,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        ICON_PATH = os.path.join(os.path.dirname(__file__), "icon/")
+        ICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon/")
         icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
         self.setWindowIcon(icon)
         self.game_state = GameState()
@@ -112,28 +112,44 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
         self.update()
 
-    def highlight_errors(self):
+    def reset_highlighting(self):
+        cursor = QtGui.QTextCursor(self.textEdit.document())
+        formatting = QtGui.QTextCharFormat()
+        color = QtGui.QColor("white")
+        formatting.setBackground(color)
+        cursor.setPosition(0, QtGui.QTextCursor.MoveAnchor)
+        cursor.setPosition(len(self.fullstring), QtGui.QTextCursor.KeepAnchor)
+        cursor.setCharFormat(formatting)
+
+    def find_illegal_positions_from_strings(self):
         fulltext = self.textEdit.toPlainText()
         positions = []
         for illegal_string in self.illegal:
-            # TODO: clean up
             output_string = ""
             for c in illegal_string:
                 if c == "*":
-                    output_string = output_string + "\*"
+                    output_string = output_string + "\\*"
                 else:
                     output_string = output_string + c
             for m in re.finditer(output_string, fulltext):
                 positions.append((m.start(), m.end()))
+        return positions
+
+    def highlight_error_positions(self, positions):
         cursor = QtGui.QTextCursor(self.textEdit.document())
         formatting = QtGui.QTextCharFormat()
-        color = QtGui.QColor("red")
-        formatting.setBackground(color)
+        highlight_color = QtGui.QColor("red")
+        formatting.setBackground(highlight_color)
         for position in positions:
             cursor.setPosition(position[0], QtGui.QTextCursor.MoveAnchor)
             cursor.setPosition(position[1], QtGui.QTextCursor.KeepAnchor)
             cursor.setCharFormat(formatting)
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
+
+    def highlight_errors(self):
+        self.reset_highlighting()
+        positions = self.find_illegal_positions_from_strings()
+        self.highlight_error_positions(positions)
 
     def add_action_to_game_action(self, command, action_time=None):
         try:
@@ -145,13 +161,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         text = self.lineEdit.text()
         self.fullstring = self.fullstring + text + "\n"
         self.textEdit.setText(self.fullstring)
-        cursor = QtGui.QTextCursor(self.textEdit.document())
-        formatting = QtGui.QTextCharFormat()
-        color = QtGui.QColor("white")
-        formatting.setBackground(color)
-        cursor.setPosition(0, QtGui.QTextCursor.MoveAnchor)
-        cursor.setPosition(len(self.fullstring), QtGui.QTextCursor.KeepAnchor)
-        cursor.setCharFormat(formatting)
         self.lineEdit.clear()
 
     def add_input_to_game_state(self):
@@ -217,6 +226,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.action_view.scrollToBottom()
         self.action_view.itemChanged.connect(self.log_change)
 
+    def update_buttons(self):
+        if self.remote_server:
+            self.remote_on.setChecked(True)
+        else:
+            self.remote_on.setChecked(True)
+
     def update_main_view(self):
         self.update_full_text_view()
         self.highlight_errors()
@@ -224,6 +239,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.display_serving_teams()
         self.display_players_on_court()
         self.display_detailed_actions()
+        self.update_buttons()
 
     def update_player_stats(self):
         results = [
@@ -278,6 +294,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             self.FourthWindow = RecentScores()
         self.FourthWindow.show()
 
+    def turn_on_or_off_remote(self):
+        remote = self.remote_on.isChecked()
+
+        if remote and self.remote_server == None:
+            self.setup_remote_server()
+        if not remote:
+            self.remote_server = None
+
     def qt_setup(self):
         self.pushButton.clicked.connect(self.display_commentator_windows)
         self.pushButton_2.clicked.connect(self.save_and_reset)
@@ -286,6 +310,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.lineEdit.textChanged.connect(self.get_times)
         self.saveFile.clicked.connect(self.save_file)
         self.loadFile.clicked.connect(self.load_file)
+        self.remote_stats.pressed.connect(self.setup_remote_server)
+        self.remote_on.clicked.connect(self.turn_on_or_off_remote)
+
         self.checkBox_2.setEnabled(False)
         self.checkBox.setEnabled(False)
 
@@ -309,10 +336,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.fieldView["field"][1].append(PositionView(self.label_11))
         self.fieldView["field"][1].append(PositionView(self.label_10))
 
-        # TODO: remove
-        self.remote_stats.pressed.connect(self.setup_remote_server)
-
     def setup_remote_server(self):
+        # TODO: don't read from lineEdit but have a popup
         self.remote_server = self.lineEdit.text()
         self.lineEdit.clear()
         self.update()

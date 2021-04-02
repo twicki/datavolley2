@@ -27,7 +27,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
     def __init__(self, game_state=None):
         super().__init__()
         Basic_Filter.__init__(self)
-        ICON_PATH = os.path.join(os.path.dirname(__file__), "icon/")
+        ICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon/")
         icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
         self.setWindowIcon(icon)
         self.game_state = None
@@ -63,9 +63,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                     name = player.Name
                     break
             sorted_leaders.append([name, amounts["total"], amounts["perfect"]])
-        sorted_leaders = sorted(
-            sorted_leaders, key=lambda action: action[1], reverse=True
-        )
+        sorted_leaders = sorted(sorted_leaders, key=lambda action: action[1], reverse=True)
         for player in self.player_widgets:
             player.bar.hide()
             player.name.hide()

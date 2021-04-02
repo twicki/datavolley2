@@ -87,6 +87,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        ICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon/")
+        icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
+        self.setWindowIcon(icon)
         self.pushButton.pressed.connect(self.setup_server)
         self.timer = QTimer(self)
         self.timer.setInterval(20)

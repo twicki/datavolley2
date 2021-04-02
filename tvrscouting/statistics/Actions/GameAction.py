@@ -43,12 +43,13 @@ class Quality(Enum):
 
 
 class Action(Enum):
-    Setting = (1, "e")
+    Set = (1, "e")
     Hit = (2, "h")
     Block = (3, "b")
     Serve = (4, "s")
     Reception = (5, "r")
     Defense = (6, "d")
+    Freeball = (7, "f")
 
     @classmethod
     def from_string(cls, s):
