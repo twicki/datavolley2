@@ -18,6 +18,8 @@ from tvrscouting.statistics.Players.players import Team
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
 
+from tvrscouting.uis.comments import Ui_Form as Comment_UI
+
 
 class PositionView:
     def __init__(self, name_label):
@@ -32,6 +34,12 @@ class TeamView:
         self.point_score = point_score
 
 
+class CommentView(QtWidgets.QWidget, Comment_UI):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def __init__(self):
         super().__init__()
@@ -44,6 +52,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.secondWindow = None
         self.ThirdWindow = None
         self.FourthWindow = None
+        self.CommentsWindow = None
         self.illegal = []
 
         self.details = []
@@ -229,8 +238,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def update_buttons(self):
         if self.remote_server:
             self.remote_on.setChecked(True)
+            if self.CommentsWindow is None:
+                self.CommentsWindow = CommentView()
+            self.CommentsWindow.show()
         else:
             self.remote_on.setChecked(True)
+            if self.CommentsWindow is not None:
+                self.CommentsWindow.hide()
 
     def update_main_view(self):
         self.update_full_text_view()
@@ -370,7 +384,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
                         },
                     ],
                 },
+                "comments": "",
             }
+            if self.CommentsWindow:
+                comments = self.CommentsWindow.text_box.toPlainText()
+                data["comments"] = comments
             test = pickle.dumps(data)
             s.sendto(test, server)
             s.close()

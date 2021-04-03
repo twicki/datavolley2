@@ -76,11 +76,7 @@ class StaticWriter:
         if len(start_times) != len(end_times):
             end_times.append(self.gamestate.rallies[-1][0][-1].time_stamp)
         last = self.gamestate.score
-        if (
-            last[0] != totalscore
-            and last[1] != totalscore
-            and (last[0] != 0 and last[1] != 0)
-        ):
+        if last[0] != totalscore and last[1] != totalscore and (last[0] != 0 and last[1] != 0):
             setnumber = self.gamestate.set_score[0] + self.gamestate.set_score[1] + 1
             partialscores[setnumber - 1]["finalscore"] = last
 
@@ -106,12 +102,7 @@ class StaticWriter:
         }
         self.scores["setresults"] = []
         for i in range(len(partialscores)):
-            if (
-                len(start_times) > i
-                and len(end_times) > i
-                and start_times[i]
-                and end_times[i]
-            ):
+            if len(start_times) > i and len(end_times) > i and start_times[i] and end_times[i]:
                 time = int((end_times[i] - start_times[i]) / 60.0)
                 total_time += time
             else:
@@ -216,9 +207,7 @@ class StaticWriter:
         ]:
             for player in self.gamestate.players[int(team)]:
 
-                self.playerstats[name].append(
-                    self.collect_individual_statistics(team, player)
-                )
+                self.playerstats[name].append(self.collect_individual_statistics(team, player))
             for playerstat in self.playerstats[name]:
                 if playerstat["Blocks"] == 0:
                     playerstat["Blocks"] = "."
@@ -255,9 +244,9 @@ class StaticWriter:
                             + ("@" * 2 * (5 - offset))
                         )
                         rallies = court_filter(filter_string, self.gamestate.rallies)
-                        points = self.collect_stats_from_number(team, "@@", rallies)[
-                            "Points"
-                        ]["Total"]
+                        points = self.collect_stats_from_number(team, "@@", rallies)["Points"][
+                            "Total"
+                        ]
                         opponent_points = self.collect_stats_from_number(
                             Team.inverse(team), "@@", rallies
                         )["Points"]["Total"]
@@ -298,18 +287,26 @@ class StaticWriter:
                 "positive": {},
                 "negative": {},
             }
-            rece_rallies = ralley_filter_from_string(
-                "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
-            )
+            # rece_rallies = ralley_filter_from_string(
+            #     "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
+            # )
+            rece_rallies = []
+            for rally in self.gamestate.rallies:
+                if len(action_filter_from_string(str(Team.inverse(team)) + "@@s", [rally])) > 0:
+                    rece_rallies.append(rally)
+
             positive_rallies = []
             negative_rallies = []
             for ralley in rece_rallies:
                 has_positive = len(
-                    action_filter_from_string("@@@r+@@@@", [ralley])
-                ) + len(action_filter_from_string("@@@rp@@@@", [ralley]))
+                    action_filter_from_string(str(team) + "@@r+@@@@", [ralley])
+                ) + len(action_filter_from_string(str(team) + "@@rp@@@@", [ralley]))
+                has_negative = len(
+                    action_filter_from_string(str(team) + "@@r-@@@@", [ralley])
+                ) + len(action_filter_from_string(str(team) + "@@ro@@@@", [ralley]))
                 if has_positive > 0:
                     positive_rallies.append(ralley)
-                else:
+                elif has_negative > 0:
                     negative_rallies.append(ralley)
             total_k1 = 0
             error_k1 = 0
@@ -326,41 +323,29 @@ class StaticWriter:
                         current_action = str(action)
                         if not k1_found:
                             if compare_action_to_string(
-                                current_action, str(team) + "@@h@"
+                                current_action, str(Team.inverse(team)) + "@@h@"
                             ):
+                                k1_found = True
+                            if compare_action_to_string(current_action, str(team) + "@@h@"):
                                 total_k1 += 1
                                 k1_found = True
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h="
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h="):
                                 error_k1 += 1
                                 k1_found = True
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@ho"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@ho"):
                                 blocked_k1 += 1
                                 k1_found = True
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h#"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h#"):
                                 points_k1 += 1
                                 k1_found = True
                         else:
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h@"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h@"):
                                 total_k2 += 1
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h="
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h="):
                                 error_k2 += 1
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@ho"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@ho"):
                                 blocked_k2 += 1
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h#"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h#"):
                                 points_k2 += 1
 
             self.detailed_infos[name]["K1_stats"]["positive"]["Total"] = total_k1
@@ -381,47 +366,36 @@ class StaticWriter:
                         current_action = str(action)
                         if not k1_found:
                             if compare_action_to_string(
-                                current_action, str(team) + "@@h@"
+                                current_action, str(Team.inverse(team)) + "@@h@"
                             ):
+                                k1_found = True
+                            if compare_action_to_string(current_action, str(team) + "@@h@"):
                                 total_k1 += 1
                                 k1_found = True
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h="
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h="):
                                 error_k1 += 1
                                 k1_found = True
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@ho"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@ho"):
                                 blocked_k1 += 1
                                 k1_found = True
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h#"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h#"):
                                 points_k1 += 1
                                 k1_found = True
                         else:
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h@"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h@"):
                                 total_k2 += 1
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h="
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h="):
                                 error_k2 += 1
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@ho"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@ho"):
                                 blocked_k2 += 1
-                            if compare_action_to_string(
-                                current_action, str(team) + "@@h#"
-                            ):
+                            if compare_action_to_string(current_action, str(team) + "@@h#"):
                                 points_k2 += 1
-            serve_rallies = ralley_filter_from_string(
-                "@@@@@@@@@@@" + str(team), self.gamestate.rallies
-            )
-            for ralley in serve_rallies:
-                for action in ralley[0]:
+            serve_rallies = []
+            for rally in self.gamestate.rallies:
+                if len(action_filter_from_string(str(team) + "@@s", [rally])) > 0:
+                    serve_rallies.append(rally)
+            for rally in serve_rallies:
+                for action in rally[0]:
                     current_action = str(action)
                     if isinstance(action, Gameaction):
                         if compare_action_to_string(current_action, str(team) + "@@h@"):
@@ -447,28 +421,18 @@ class StaticWriter:
                 "Total": total_k2,
             }
 
-    def collect_stats_from_number(
-        self, team: Team, player_number: str, rallies=None
-    ) -> Dict:
+    def collect_stats_from_number(self, team: Team, player_number: str, rallies=None) -> Dict:
         rallies = self.gamestate.rallies if rallies is None else rallies
         fulldata = {}
         fulldata["Attack"] = {}
         filterstring = str(team) + player_number + "h" + "@@@@@"
-        fulldata["Attack"]["Total"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Attack"]["Total"] = len(action_filter_from_string(filterstring, rallies))
         filterstring = str(team) + player_number + "h" + "#@@@@"
-        fulldata["Attack"]["Points"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Attack"]["Points"] = len(action_filter_from_string(filterstring, rallies))
         filterstring = str(team) + player_number + "h" + "=@@@@"
-        fulldata["Attack"]["Error"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Attack"]["Error"] = len(action_filter_from_string(filterstring, rallies))
         filterstring = str(team) + player_number + "h" + "o@@@@"
-        fulldata["Attack"]["Blocked"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Attack"]["Blocked"] = len(action_filter_from_string(filterstring, rallies))
         fulldata["Attack"]["Percentage"] = int(
             100
             * (
@@ -494,9 +458,7 @@ class StaticWriter:
             100 * (positive / total_receptions if total_receptions > 0 else 0)
         )
         filterstring = str(team) + player_number + "r" + "o"
-        fulldata["Reception"]["Error"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Reception"]["Error"] = len(action_filter_from_string(filterstring, rallies))
         filterstring = str(team) + player_number + "r" + "p"
         fulldata["Reception"]["Perfect"] = int(
             100
@@ -509,17 +471,11 @@ class StaticWriter:
 
         fulldata["Serve"] = {}
         filterstring = str(team) + player_number + "s" + "@"
-        fulldata["Serve"]["Total"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Serve"]["Total"] = len(action_filter_from_string(filterstring, rallies))
         filterstring = str(team) + player_number + "s" + "="
-        fulldata["Serve"]["Error"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Serve"]["Error"] = len(action_filter_from_string(filterstring, rallies))
         filterstring = str(team) + player_number + "s" + "#"
-        fulldata["Serve"]["Points"] = len(
-            action_filter_from_string(filterstring, rallies)
-        )
+        fulldata["Serve"]["Points"] = len(action_filter_from_string(filterstring, rallies))
 
         fulldata["Points"] = {}
         filterstring = str(team) + player_number + "@" + "#"
@@ -531,13 +487,9 @@ class StaticWriter:
         total_errors += len(action_filter_from_string(filterstring, rallies))
         fulldata["Points"]["Plus_minus"] = total_points - total_errors
 
-        break_rallies = ralley_filter_from_string(
-            "@@@@@@@@@@@" + str(team), self.gamestate.rallies
-        )
+        break_rallies = ralley_filter_from_string("@@@@@@@@@@@" + str(team), self.gamestate.rallies)
         filterstring = str(team) + player_number + "@#"
-        fulldata["Points"]["BP"] = len(
-            action_filter_from_string(filterstring, break_rallies)
-        )
+        fulldata["Points"]["BP"] = len(action_filter_from_string(filterstring, break_rallies))
         return fulldata
 
     def compute_vote(self, team: Team, player_number: Player, fulldata: Dict) -> float:
@@ -545,22 +497,14 @@ class StaticWriter:
         votes = 0
         vote = 0
         filterstring = str(team) + "@@" + "s" + "@"
-        total_serves = len(
-            action_filter_from_string(filterstring, self.gamestate.rallies)
-        )
+        total_serves = len(action_filter_from_string(filterstring, self.gamestate.rallies))
         if fulldata["Serve"]["Total"] / total_serves > 0.05:
             filterstring = str(team) + player_number + "s" + "p"
-            serve_overs = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            serve_overs = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "s" + "+"
-            serve_plus = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            serve_plus = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "s" + "-"
-            serve_minus = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            serve_minus = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             serve_vote = (
                 fulldata["Serve"]["Points"] * 10
                 + serve_overs * 8
@@ -571,50 +515,32 @@ class StaticWriter:
             votes += 1
 
         filterstring = str(team) + "@@" + "r" + "@"
-        total_receptions = len(
-            action_filter_from_string(filterstring, self.gamestate.rallies)
-        )
+        total_receptions = len(action_filter_from_string(filterstring, self.gamestate.rallies))
         if fulldata["Reception"]["Total"] / total_serves > 0.07:
             filterstring = str(team) + player_number + "r" + "p"
-            perfect = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            perfect = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "r" + "+"
-            positive = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            positive = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "r" + "-"
-            negative = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            negative = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "r" + "o"
-            errors = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
-            rece_vote = (
-                perfect * 10 + positive * 7 + negative * -1 + errors * -3
-            ) / fulldata["Reception"]["Total"]
+            errors = len(action_filter_from_string(filterstring, self.gamestate.rallies))
+            rece_vote = (perfect * 10 + positive * 7 + negative * -1 + errors * -3) / fulldata[
+                "Reception"
+            ]["Total"]
             vote += rece_vote if rece_vote > 5.5 else 5.5
             votes += 1
 
         filterstring = str(team) + "@@" + "h" + "@"
-        total_hits = len(
-            action_filter_from_string(filterstring, self.gamestate.rallies)
-        )
+        total_hits = len(action_filter_from_string(filterstring, self.gamestate.rallies))
         if fulldata["Attack"]["Total"] / total_hits > 0.07:
             filterstring = str(team) + player_number + "h" + "#"
             kills = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "r" + "+"
-            positive = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
+            positive = len(action_filter_from_string(filterstring, self.gamestate.rallies))
             filterstring = str(team) + player_number + "r" + "-"
-            negative = len(
-                action_filter_from_string(filterstring, self.gamestate.rallies)
-            )
-            hit_vote = (kills * 10 + positive * 5 + negative * 5) / fulldata["Attack"][
-                "Total"
-            ]
+            negative = len(action_filter_from_string(filterstring, self.gamestate.rallies))
+            hit_vote = (kills * 10 + positive * 5 + negative * 5) / fulldata["Attack"]["Total"]
             vote += hit_vote if hit_vote > 5.5 else 5.5
             votes += 1
 

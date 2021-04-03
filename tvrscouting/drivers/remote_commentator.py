@@ -110,7 +110,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except socket.timeout:
             pass
 
+    def update_notes(self):
+        self.textBrowser.setText(self.data["comments"])
+
     def update_commentator_view(self):
+        self.update_notes()
         if self.secondWindow is not None:
             self.update_player_stats()
         if self.ThirdWindow:
