@@ -1,0 +1,1679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>985</width>
+    <height>596</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CommentatorView</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_27" rowstretch="5" columnstretch="5,0">
+   <item row="0" column="1">
+    <layout class="QGridLayout" name="gridLayout_16">
+     <item row="5" column="1">
+      <widget class="QLCDNumber" name="home_error"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLCDNumber" name="home_hits">
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="l_home_serve">
+       <property name="text">
+        <string>Serve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLCDNumber" name="home_block"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="l_home_error">
+       <property name="text">
+        <string>Error</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="l_home_block">
+       <property name="text">
+        <string>Block</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLCDNumber" name="home_serve"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="l_home_hits">
+       <property name="text">
+        <string>Hits</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <layout class="QGridLayout" name="gridLayout_29">
+       <item row="0" column="0">
+        <widget class="QLabel" name="l_team_home">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0">
+     <item row="1" column="3">
+      <layout class="QGridLayout" name="gridLayout_12" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_11">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_11">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_11">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_11">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_11">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_11">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_11">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_11">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_11">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_11">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_11">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_11">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_11">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="1">
+      <layout class="QGridLayout" name="gridLayout_7" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_6">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_6">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_6">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_6">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_6">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_6">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_6">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_6">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_6">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_6">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_6">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_6">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_6">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_4">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_4">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_4">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_4">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_4">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_4">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_4">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_4">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_4">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_4">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_4">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_4">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_4">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="2">
+      <layout class="QGridLayout" name="gridLayout_10" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_9">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_9">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_9">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_9">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_9">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_9">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_9">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_9">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_9">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_9">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_9">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_9">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_9">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="2">
+      <layout class="QGridLayout" name="gridLayout_8" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_7">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_7">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_7">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_7">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_7">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_7">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_7">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_7">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_7">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_7">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_7">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_7">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_7">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="2">
+      <layout class="QGridLayout" name="gridLayout_9" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_8">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_8">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_8">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_8">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_8">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_8">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_8">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_8">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_8">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_8">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_8">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_8">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_8">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="0">
+      <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_3">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_3">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_3">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_3">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_3">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_3">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_3">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_3">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="3">
+      <layout class="QGridLayout" name="gridLayout_11" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_10">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_10">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_10">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_10">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_10">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_10">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_10">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_10">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_10">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_10">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_10">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_10">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_10">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="1">
+      <layout class="QGridLayout" name="gridLayout_6" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_5">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_5">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_5">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_5">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_5">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_5">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_5">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_5">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_2">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_2">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_2">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_2">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_2">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_2">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_2">
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_2">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="3">
+      <layout class="QGridLayout" name="gridLayout_12a" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1">
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_block_12">
+         <property name="text">
+          <string>Block</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="l_rece_12">
+         <property name="text">
+          <string>Rece</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="hit_pct_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_hits_12">
+         <property name="text">
+          <string>Hits</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_serve_12">
+         <property name="text">
+          <string>Serve</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="l_error_12">
+         <property name="text">
+          <string>Error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLCDNumber" name="rece_pct_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="hit_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="serve_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="block_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLCDNumber" name="error_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLCDNumber" name="rece_12">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(85, 87, 83);</string>
+         </property>
+         <property name="digitCount">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="player_name_12">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
