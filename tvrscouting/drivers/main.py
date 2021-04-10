@@ -72,7 +72,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.game_state = gamestate
         self.fullstring = ""
         for rally in self.game_state.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 if not action.auto_generated:
                     self.fullstring += str(action) + " "
             if self.fullstring[-1] != "\n":
@@ -88,7 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.game_state = ser.deserialize()
         self.fullstring = ""
         for rally in self.game_state.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 if not action.auto_generated:
                     self.fullstring += str(action) + " "
             if self.fullstring[-1] != "\n":
@@ -103,21 +103,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
+
         s = userdata.split()
         oldstate = self.game_state
         self.game_state = GameState()
         self.fullstring = userdata
-        self.illegal.clear()
 
-        for command in s:
-            try:
-                self.game_state.add_string(command)
-            except TVRSyntaxError:
-                self.illegal.append(command)
+        self.illegal.clear()
+        self.time_stamps.clear()
+
+        rallies = userdata.split("\n")
+        for rally in rallies:
+            actions = rally.split()
+            self.add_stings_to_game_state(actions)
 
         self.game_state.fix_time_stamps(oldstate)
+
+        if self.fullstring[-1] == "\n":
+            self.fullstring = self.fullstring[:-1]
         self.textEdit.setText(self.fullstring)
-        self.lineEdit.clear()
         self.textEdit.moveCursor(QtGui.QTextCursor.End)
         self.update()
 
@@ -172,20 +176,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.textEdit.setText(self.fullstring)
         self.lineEdit.clear()
 
+    def add_stings_to_game_state(self, inputs):
+        if len(self.time_stamps) == len(inputs):
+            for command, action_time in zip(inputs, self.time_stamps):
+                self.add_action_to_game_action(command, action_time)
+        elif len(self.time_stamps):
+            for command in inputs:
+                self.add_action_to_game_action(command, self.time_stamps[0])
+        else:
+            for command in inputs:
+                self.add_action_to_game_action(command)
+        self.game_state.flush_actions()
+
     def add_input_to_game_state(self):
         self.time_stamps.append(time.time())
         text = self.lineEdit.text()
         actions = text.split(" ")
-        if len(self.time_stamps) == len(actions):
-            for command, action_time in zip(actions, self.time_stamps):
-                self.add_action_to_game_action(command, action_time)
-        elif len(self.time_stamps):
-            for command in actions:
-                self.add_action_to_game_action(command, self.time_stamps[0])
-        else:
-            for command in actions:
-                self.add_action_to_game_action(command)
-
+        self.add_stings_to_game_state(actions)
         self.time_stamps.clear()
 
     def display_team_info(self):
@@ -228,7 +235,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.action_view.setColumnCount(1)
         i = 0
         for rally in self.game_state.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 self.action_view.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
                 i += 1
         self.action_view.setRowCount(i)
@@ -242,7 +249,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
                 self.CommentsWindow = CommentView()
             self.CommentsWindow.show()
         else:
-            self.remote_on.setChecked(True)
+            self.remote_on.setChecked(False)
             if self.CommentsWindow is not None:
                 self.CommentsWindow.hide()
 
@@ -315,6 +322,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             self.setup_remote_server()
         if not remote:
             self.remote_server = None
+        self.update_buttons()
 
     def qt_setup(self):
         self.pushButton.clicked.connect(self.display_commentator_windows)

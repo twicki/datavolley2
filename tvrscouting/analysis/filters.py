@@ -41,28 +41,28 @@ def compare_court_to_string(court, string):
     return True
 
 
-def compare_ralley_to_string(string, ralley):
+def compare_rally_to_string(string, rally):
     """compares the rally to the given input string
     the string is formatted [2-Digit-Number ScoreHMin][2-Digit-Number ScoreHMax][2-Digit-Number ScoreGMin][2-Digit-Number ScoreGMax][SetScoreH][SetScoreG][SetScoreTotal][HomeServe]
     """
     # scores
-    if string[0] != "@" and int(string[0:2]) > ralley[2][0]:
+    if string[0] != "@" and int(string[0:2]) > rally.score[0]:
         return False
-    if string[2] != "@" and int(string[2:4]) < ralley[2][0]:
+    if string[2] != "@" and int(string[2:4]) < rally.score[0]:
         return False
-    if string[4] != "@" and int(string[4:6]) > ralley[2][1]:
+    if string[4] != "@" and int(string[4:6]) > rally.score[1]:
         return False
-    if string[6] != "@" and int(string[6:8]) < ralley[2][1]:
+    if string[6] != "@" and int(string[6:8]) < rally.score[1]:
         return False
     # sets:
-    if string[8] != "@" and int(string[8]) != ralley[3][0]:
+    if string[8] != "@" and int(string[8]) != rally.set_score[0]:
         return False
-    if string[9] != "@" and int(string[9]) != ralley[3][1]:
+    if string[9] != "@" and int(string[9]) != rally.set_score[1]:
         return False
-    if string[10] != "@" and int(string[10]) != ralley[3][1] + ralley[3][0]:
+    if string[10] != "@" and int(string[10]) != rally.set_score[1] + rally.set_score[0]:
         return False
     # serving
-    if string[11] != "@" and string[11] != str(ralley[4]):
+    if string[11] != "@" and string[11] != str(rally.last_serve):
         return False
     return True
 
@@ -71,7 +71,7 @@ def action_filter_from_string(filter_string: str, rallies):
     """ filters actions form a set of rallies"""
     specific_actions = []
     for rally in rallies:
-        for action in rally[0]:
+        for action in rally.actions:
             if isinstance(action, Gameaction):
                 current_action = str(action)
                 if compare_action_to_string(current_action, filter_string):
@@ -80,12 +80,12 @@ def action_filter_from_string(filter_string: str, rallies):
     return specific_actions
 
 
-def ralley_filter_from_string(filter_string: str, rallies) -> List:
+def rally_filter_from_string(filter_string: str, rallies) -> List:
     """ filters a subset of rallies form a set of rallies based on the score"""
     specific_rallies = []
-    for ralley in rallies:
-        if compare_ralley_to_string(filter_string, ralley):
-            specific_rallies.append(ralley)
+    for rally in rallies:
+        if compare_rally_to_string(filter_string, rally):
+            specific_rallies.append(rally)
     return specific_rallies
 
 
@@ -93,7 +93,7 @@ def court_filter(filter_string: str, rallies) -> List[Any]:
     """ filters a subset of rallies form a set of rallies based on the court"""
     specific_rallies = []
     for rally in rallies:
-        if compare_court_to_string(rally[1], filter_string):
+        if compare_court_to_string(rally.court, filter_string):
             specific_rallies.append(rally)
     return specific_rallies
 
@@ -101,7 +101,7 @@ def court_filter(filter_string: str, rallies) -> List[Any]:
 def rally_filter_from_action_string(filter_string: str, rally) -> List:
     """ filters rallies based on an action that needs to be in that rally"""
     specific_rallies = []
-    for action in rally[0]:
+    for action in rally.actions:
         if isinstance(action, Gameaction):
             current_action = str(action)
             if compare_action_to_string(current_action, filter_string):

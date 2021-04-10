@@ -13,9 +13,10 @@ from tvrscouting.statistics.Actions.GameAction import (
     is_scoring,
     Action,
     Quality,
+    SetterCall,
 )
 import tvrscouting.statistics.Actions.SpecialAction as SpecialActions
-from tvrscouting.statistics.Players.players import Player
+from tvrscouting.statistics.Players.players import Player, Team
 from tvrscouting.analysis.filters import *
 
 
@@ -129,12 +130,8 @@ def expandString(user_string, was_compound=False):
     returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
 
     returnvalue, user_string = set_combination(user_string, returnvalue)
-    returnvalue, user_string, from_direction_set = set_from_direction(
-        user_string, returnvalue
-    )
-    returnvalue, to_directon_set, user_string = set_to_direction(
-        user_string, returnvalue
-    )
+    returnvalue, user_string, from_direction_set = set_from_direction(user_string, returnvalue)
+    returnvalue, to_directon_set, user_string = set_to_direction(user_string, returnvalue)
     if not quality_set:
         returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
     was_compound, user_string = check_compound(user_string, was_compound)
@@ -173,31 +170,15 @@ def correct_strings(
 
     ## correct the action:
     if not action2:
-        s2 = (
-            s2[:3]
-            + str(actions.Action.inverse(actions.Action.from_string(s1[3])))
-            + s2[4:]
-        )
+        s2 = s2[:3] + str(actions.Action.inverse(actions.Action.from_string(s1[3]))) + s2[4:]
     if not action and action2:
-        s1 = (
-            s1[:3]
-            + str(actions.Action.inverse(actions.Action.from_string(s2[3])))
-            + s1[4:]
-        )
+        s1 = s1[:3] + str(actions.Action.inverse(actions.Action.from_string(s2[3]))) + s1[4:]
 
     ## correct the quality
     if not quality2:
-        s2 = (
-            s2[:4]
-            + str(actions.Quality.inverse(actions.Quality.from_string(s1[4])))
-            + s2[5:]
-        )
+        s2 = s2[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s1[4]))) + s2[5:]
     if not quality and quality2:
-        s1 = (
-            s1[:4]
-            + str(actions.Quality.inverse(actions.Quality.from_string(s2[4])))
-            + s1[5:]
-        )
+        s1 = s1[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s2[4]))) + s1[5:]
 
     ## correct the from and to position:
     if not from_set2:
@@ -251,16 +232,49 @@ def split_string(input):
     return s1, s2
 
 
-class GameState:
-    score = [0, 0]
-    set_score = [0, 0]
-    rallies = []
-    court = None
+class Rally:
+    def __init__(self) -> None:
+        self.actions = []
+        self.court = None
+        self.score = None
+        self.set_score = None
+        self.last_serve = None
+        self.setter_call = None
 
-    _current_actions = []
-    _last_serve = None
-    teamnames = [None, None]
-    players = [[], []]
+    def correct_setter_call_from_reception(self):
+        for action in self.actions:
+            if isinstance(action, Gameaction):
+                action_string = str(action)
+                if compare_action_to_string(action_string, "@@@r"):
+                    self.setter_call.team = action.team
+                    return
+
+    def correct_setter_call_from_serve(self):
+        for action in self.actions:
+            if isinstance(action, Gameaction):
+                action_string = str(action)
+                if compare_action_to_string(action_string, "@@@s"):
+                    self.setter_call.team = Team.inverse(action.team)
+                    return
+
+    def correct_setter_call(self):
+        if self.setter_call:
+            if self.setter_call.team is None:
+                self.correct_setter_call_from_reception()
+            if self.setter_call.team is None:
+                self.correct_setter_call_from_serve()
+
+
+class GameState:
+    # score = [0, 0]
+    # set_score = [0, 0]
+    # rallies = []
+    # court = None
+
+    # _current_actions = []
+    # _last_serve = None
+    # teamnames = [None, None]
+    # players = [[], []]
 
     def __init__(self) -> None:
         self.score = [0, 0]
@@ -269,12 +283,15 @@ class GameState:
         self.court = Court()
 
         self._current_actions = []
+        self.scoring_team = None
+        self.set_ended = False
+        self._setter_call = None
+
         self._last_serve = None
         self.teamnames = [None, None]
         self.players = [[], []]
 
         self.details = []
-        self.required_flush = False
 
     def add_action_substitution_from_string(self, action: str, time_stamp=None) -> None:
         """add a substitiution action from a string formatted [Team]sub![Number]![Position]"""
@@ -287,18 +304,14 @@ class GameState:
         )
         self.add_logical([action])
 
-    def add_action_set_serving_team_from_string(
-        self, action: str, time_stamp=None
-    ) -> None:
+    def add_action_set_serving_team_from_string(self, action: str, time_stamp=None) -> None:
         """add a SetServingTeam action from a string formatted [Team]serve"""
         split_string = action.split("!")
         autogen = False
         if len(split_string) > 1:
             autogen = ast.literal_eval(split_string[1])
         team = split_string[0][0]
-        action = SpecialActions.SetServingTeam(
-            actions.Team.from_string(team), time_stamp, autogen
-        )
+        action = SpecialActions.SetServingTeam(actions.Team.from_string(team), time_stamp, autogen)
         self.add_logical([action])
 
     def add_string(self, action: str, time_stamp=None):
@@ -323,15 +336,17 @@ class GameState:
             l = action.split("!")
             team = l[0][0]
             direction = True if int(l[1]) > 0 else False
-            action = SpecialActions.Rotation(
-                actions.Team.from_string(team), direction, time_stamp
-            )
+            action = SpecialActions.Rotation(actions.Team.from_string(team), direction, time_stamp)
             self.add_logical([action])
         elif "team" in action:
             action = SpecialActions.InitializeTeamName(action, time_stamp)
             self.add_logical([action], time_stamp)
         elif "player" in action:
             action = SpecialActions.InitializePlayer(action, time_stamp)
+            self.add_logical([action], time_stamp)
+        elif "K" in action:
+            action = SetterCall.from_string(action, time_stamp)
+            self._setter_call = action
             self.add_logical([action], time_stamp)
         else:
             str1, str2 = split_string(action)
@@ -468,115 +483,85 @@ class GameState:
             elif isinstance(action, SpecialActions.InitializeTeamName):
                 self.teamnames[int(action.team)] = action.name
                 self.flush_actions()
+            elif isinstance(action, SetterCall):
+                pass
             else:
                 who, was_score = is_scoring(action)
                 if was_score:
-                    # flush the current action before housekeeping
-                    if action.was_compound:
-                        self.required_flush = True
-                        self.who_flushes = who
-                    else:
-                        self.flush_actions()
-                        index = int(who)
-                        self._current_actions.append(
-                            actions.Point(
-                                who, time_stamp=time_stamp, auto_generated=True
-                            )
-                        )
+                    self.scoring_team = who
+                    self.scoring_time_stamp = time_stamp
 
-                        # housekeeping: serve
-                        if who is not self._last_serve:
-                            self._current_actions.append(
-                                actions.Rotation(
-                                    who, time_stamp=time_stamp, auto_generated=True
-                                )
-                            )
-                            self._current_actions.append(
-                                actions.SetServingTeam(
-                                    who, time_stamp=time_stamp, auto_generated=True
-                                )
-                            )
-                            self.court.rotate(index)
-                        self._last_serve = who
-                        self.flush_actions()
-                        # housekeeping: scoring
-                        opponent = int(actions.Team.inverse(who))
-                        self.score[index] += 1
-                        if (
-                            self.score[index] >= self.max_points_in_set()
-                            and self.score[index] - 2 >= self.score[opponent]
-                        ):
-                            self._current_actions.append(
-                                actions.Endset(
-                                    who, time_stamp=time_stamp, auto_generated=True
-                                )
-                            )
-                            self.flush_actions()
-                            self.set_score[index] += 1
-                            self.score[0] = 0
-                            self.score[1] = 0
-                            self.court.fields[0] = Field()
-                            self.court.fields[1] = Field()
-                elif self.required_flush:
-                    who = self.who_flushes
-                    # TODO: refactor this out
-                    self.required_flush = False
-                    self.flush_actions()
-                    index = int(who)
-                    self._current_actions.append(
-                        actions.Point(who, time_stamp=time_stamp, auto_generated=True)
-                    )
-                    # housekeeping: serve
-                    if who is not self._last_serve:
-                        self._current_actions.append(
-                            actions.Rotation(
-                                who, time_stamp=time_stamp, auto_generated=True
-                            )
-                        )
-                        self._current_actions.append(
-                            actions.SetServingTeam(
-                                who, time_stamp=time_stamp, auto_generated=True
-                            )
-                        )
-                        self.court.rotate(index)
-                    self._last_serve = who
-                    self.flush_actions()
-                    # housekeeping: scoring
-                    opponent = int(actions.Team.inverse(who))
-                    self.score[index] += 1
-                    if (
-                        self.score[index] >= self.max_points_in_set()
-                        and self.score[index] - 2 >= self.score[opponent]
-                    ):
-                        self._current_actions.append(
-                            actions.Endset(
-                                who, time_stamp=time_stamp, auto_generated=True
-                            )
-                        )
-                        self.flush_actions()
-                        self.set_score[index] += 1
-                        self.score[0] = 0
-                        self.score[1] = 0
-                        self.court.fields[0] = Field()
-                        self.court.fields[1] = Field()
-                # elif not action.was_compound and self.required_flush:
-                #     raise TVRSyntaxError()
+    def housekeeping_from_scoring_team(self, scoring_team):
+        team = int(scoring_team)
+        opponent = int(actions.Team.inverse(scoring_team))
+        self._current_actions.append(
+            actions.Point(scoring_team, time_stamp=self.scoring_time_stamp, auto_generated=True)
+        )
+        if scoring_team is not self._last_serve:
+            self._current_actions.append(
+                actions.Rotation(
+                    scoring_team, time_stamp=self.scoring_time_stamp, auto_generated=True
+                )
+            )
+            self._current_actions.append(
+                actions.SetServingTeam(
+                    scoring_team, time_stamp=self.scoring_time_stamp, auto_generated=True
+                )
+            )
+            self.court.rotate(team)
+        self._last_serve = scoring_team
+        self.score[team] += 1
+        if (
+            self.score[team] >= self.max_points_in_set()
+            and self.score[team] - 2 >= self.score[opponent]
+        ):
+            self.set_ended = True
+        else:
+            self.scoring_time_stamp = None
+            self.scoring_team = None
+
+    def end_set_from_scoring_team(self, scoring_team):
+        team = int(scoring_team)
+        self._current_actions.append(
+            actions.Endset(scoring_team, time_stamp=self.scoring_time_stamp, auto_generated=True)
+        )
+        self.set_score[team] += 1
+        self.score[0] = 0
+        self.score[1] = 0
+        self.court.fields[0] = Field()
+        self.court.fields[1] = Field()
+        self.set_ended = False
+        self.scoring_time_stamp = None
+        self.scoring_team = None
 
     def flush_actions(self):
-        c = Court()
-        c.fields[0].players = list.copy(self.court.fields[0].players)
-        c.fields[1].players = list.copy(self.court.fields[1].players)
-
-        self.rallies.append(
-            (
-                list.copy(self._current_actions),
-                copy.deepcopy(self.court),
-                copy.deepcopy(self.score),
-                copy.deepcopy(self.set_score),
-                copy.deepcopy(str(self._last_serve)),
-            )
-        )
-        self._current_actions.clear()
+        if len(self._current_actions):
+            current_rally = Rally()
+            current_rally.court = copy.deepcopy(self.court)
+            current_rally.score = copy.deepcopy(self.score)
+            current_rally.set_score = copy.deepcopy(self.set_score)
+            current_rally.last_serve = copy.deepcopy(self._last_serve)
+            # we need to copy in the state first before we do housekeeping as we update the score
+            if self.scoring_team:
+                self.housekeeping_from_scoring_team(self.scoring_team)
+            # we ned to copy in the actions after housekeeping in case point-actions happened
+            current_rally.actions = list.copy(self._current_actions)
+            current_rally.setter_call = self._setter_call
+            current_rally.correct_setter_call()
+            self.rallies.append(current_rally)
+            self._current_actions.clear()
+            if self.set_ended:
+                endset_rally = Rally()
+                endset_rally.court = copy.deepcopy(self.court)
+                endset_rally.score = copy.deepcopy(self.score)
+                endset_rally.set_score = copy.deepcopy(self.set_score)
+                endset_rally.last_serve = copy.deepcopy(self._last_serve)
+                # we need to copy in the state first before we do housekeeping as we update the score
+                self.end_set_from_scoring_team(self.scoring_team)
+                # we ned to copy in the actions after housekeeping in case point-actions happened
+                endset_rally.actions = list.copy(self._current_actions)
+                self.rallies.append(endset_rally)
+                self._current_actions.clear()
 
     def max_points_in_set(self):
         if self.set_score[0] + self.set_score[1] < 4:
@@ -593,9 +578,9 @@ class GameState:
         else:
             activeset = self.set_score[0] + self.set_score[1]
         for rally in self.rallies:
-            if rally[3][0] + rally[3][1] == activeset:
-                total = rally[2][0] + rally[2][1]
-                delta = rally[2][0] - rally[2][1]
+            if rally.set_score[0] + rally.set_score[1] == activeset:
+                total = rally.score[0] + rally.score[1]
+                delta = rally.score[0] - rally.score[1]
                 if len(totals) < 1 or totals[-1] is not total:
                     totals.append(total)
                     deltas.append(delta)
@@ -612,8 +597,8 @@ class GameState:
         else:
             activeset = self.set_score[0] + self.set_score[1]
         for rally in self.rallies:
-            if rally[3][0] + rally[3][1] == activeset:
-                score = [rally[2][0], rally[2][1]]
+            if rally.set_score[0] + rally.set_score[1] == activeset:
+                score = [rally.score[0], rally.score[1]]
                 if len(scores) < 1 or scores[-1] != score:
                     scores.append(score)
         if self.score[0] + self.score[1] != 0:
@@ -651,15 +636,13 @@ class GameState:
             playerstats[player.Number]["block"] = 0
         for player in allplayers:
             for rally in self.rallies:
-                for action in rally[0]:
+                for action in rally.actions:
                     if isinstance(action, Gameaction):
                         # is is the right player on the right team
                         if action.team == team:
                             if action.player == player.Number:
                                 playerstats[player.Number]["played"] = True
-                                playerstats[player.Number]["group"] = int(
-                                    player.Position
-                                )
+                                playerstats[player.Number]["group"] = int(player.Position)
                                 # serve statistics
                                 if action.action == Action.Serve:
                                     playerstats[player.Number]["serve"]["total"] += 1
@@ -700,9 +683,7 @@ class GameState:
             del playerstats[numbers]
 
         playerstats["team"] = {}
-        playerstats["team"]["name"] = (
-            self.teamnames[int(team)] if self.teamnames[int(team)] else ""
-        )
+        playerstats["team"]["name"] = self.teamnames[int(team)] if self.teamnames[int(team)] else ""
         playerstats["team"]["group"] = 7
         playerstats["team"]["serve"] = {}
         playerstats["team"]["serve"]["kill"] = 0
@@ -712,7 +693,7 @@ class GameState:
         playerstats["team"]["error"] = 0
         playerstats["team"]["block"] = 0
         for rally in self.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 if isinstance(action, Gameaction):
                     # is is the right player on the right team
                     if action.team == team:
@@ -747,30 +728,28 @@ class GameState:
     def fix_time_stamps(self, old_game_state) -> None:
         for rally in self.rallies:
             filter_string = (
-                "%02d" % (rally[2][0])
-                + "%02d" % (rally[2][0] + 1)
-                + "%02d" % (rally[2][1])
-                + "%02d" % (rally[2][1] + 1)
-                + str(rally[3][0])
-                + str(rally[3][1])
+                "%02d" % (rally.score[0])
+                + "%02d" % (rally.score[0] + 1)
+                + "%02d" % (rally.score[1])
+                + "%02d" % (rally.score[1] + 1)
+                + str(rally.set_score[0])
+                + str(rally.set_score[1])
                 + "@"
                 + "@"
             )
-            old_rallies = ralley_filter_from_string(
-                filter_string, old_game_state.rallies
-            )
-            for new_action in rally[0]:
+            old_rallies = rally_filter_from_string(filter_string, old_game_state.rallies)
+            for new_action in rally.actions:
                 if isinstance(new_action, Gameaction):
                     for rally in old_rallies:
                         if not new_action.time_stamp:
-                            for old_action in rally[0]:
+                            for old_action in rally.actions:
                                 if isinstance(old_action, Gameaction):
                                     if str(old_action) == str(new_action):
                                         new_action.time_stamp = old_action.time_stamp
                                         break
         last_time_stamp = None
         for rally in self.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 if action.time_stamp and last_time_stamp:
                     if action.time_stamp < last_time_stamp:
                         action.time_stamp = last_time_stamp

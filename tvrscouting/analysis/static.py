@@ -45,36 +45,36 @@ class StaticWriter:
         intermediates = [8, 16, 21]
         intermediate = intermediates[0]
         for rally in self.gamestate.rallies:
-            setnumber = rally[3][0] + rally[3][1] + 1
+            setnumber = rally.set_score[0] + rally.set_score[1] + 1
             if len(partialscores) < setnumber:
                 partialscores.append({"finalscore": [], "mid_results": []})
                 if setnumber == 5:
                     intermediates = [5, 10, 12]
                     intermediate = intermediates[0]
             if len(start_times) < setnumber:
-                for action in rally[0]:
+                for action in rally.actions:
                     if action.time_stamp:
                         if isinstance(action, Gameaction):
                             start_times.append(action.time_stamp)
                             break
             if len(end_times) < setnumber:
-                for action in rally[0]:
+                for action in rally.actions:
                     if isinstance(action, Endset):
                         end_times.append(action.time_stamp)
                         break
 
-            if rally[2][0] == intermediate or rally[2][1] == intermediate:
-                partialscores[setnumber - 1]["mid_results"].append(rally[2])
+            if rally.score[0] == intermediate or rally.score[1] == intermediate:
+                partialscores[setnumber - 1]["mid_results"].append(rally.score)
                 try:
                     intermediate = intermediates[intermediates.index(intermediate) + 1]
                 except IndexError:
                     intermediate = intermediates[0]
             # TODO: rename
-            totalscore = 25 if rally[3][0] + rally[3][1] < 4 else 15
-            if rally[2][0] == totalscore or rally[2][1] == totalscore:
-                partialscores[setnumber - 1]["finalscore"] = rally[2]
+            totalscore = 25 if rally.set_score[0] + rally.set_score[1] < 4 else 15
+            if rally.score[0] == totalscore or rally.score[1] == totalscore:
+                partialscores[setnumber - 1]["finalscore"] = rally.score
         if len(start_times) != len(end_times):
-            end_times.append(self.gamestate.rallies[-1][0][-1].time_stamp)
+            end_times.append(self.gamestate.rallies[-1].actions[-1].time_stamp)
         last = self.gamestate.score
         if last[0] != totalscore and last[1] != totalscore and (last[0] != 0 and last[1] != 0):
             setnumber = self.gamestate.set_score[0] + self.gamestate.set_score[1] + 1
@@ -170,10 +170,8 @@ class StaticWriter:
             number_of_sets += 1
         for i in range(number_of_sets):
 
-            ralley_filter_string = "@@@@@@@@@@" + str(i) + "@"
-            current_rallies = ralley_filter_from_string(
-                ralley_filter_string, self.gamestate.rallies
-            )
+            rally_filter_string = "@@@@@@@@@@" + str(i) + "@"
+            current_rallies = rally_filter_from_string(rally_filter_string, self.gamestate.rallies)
             setstat_home = self.collect_stats_from_number(
                 Team.from_string("*"), "@@", current_rallies
             )
@@ -258,7 +256,7 @@ class StaticWriter:
                     (plus_minus[position], position)
                 )
             # Number of sideout points
-            rece_rallies = ralley_filter_from_string(
+            rece_rallies = rally_filter_from_string(
                 "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
             )
             filterstring = str(team) + "@@@" + "#"
@@ -271,7 +269,7 @@ class StaticWriter:
             )
 
             # Number of break points
-            serve_rallies = ralley_filter_from_string(
+            serve_rallies = rally_filter_from_string(
                 "@@@@@@@@@@@" + str(team), self.gamestate.rallies
             )
             filterstring = str(team) + "@@@" + "#"
@@ -287,7 +285,7 @@ class StaticWriter:
                 "positive": {},
                 "negative": {},
             }
-            # rece_rallies = ralley_filter_from_string(
+            # rece_rallies = rally_filter_from_string(
             #     "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
             # )
             rece_rallies = []
@@ -297,17 +295,17 @@ class StaticWriter:
 
             positive_rallies = []
             negative_rallies = []
-            for ralley in rece_rallies:
+            for rally in rece_rallies:
                 has_positive = len(
-                    action_filter_from_string(str(team) + "@@r+@@@@", [ralley])
-                ) + len(action_filter_from_string(str(team) + "@@rp@@@@", [ralley]))
+                    action_filter_from_string(str(team) + "@@r+@@@@", [rally])
+                ) + len(action_filter_from_string(str(team) + "@@rp@@@@", [rally]))
                 has_negative = len(
-                    action_filter_from_string(str(team) + "@@r-@@@@", [ralley])
-                ) + len(action_filter_from_string(str(team) + "@@ro@@@@", [ralley]))
+                    action_filter_from_string(str(team) + "@@r-@@@@", [rally])
+                ) + len(action_filter_from_string(str(team) + "@@ro@@@@", [rally]))
                 if has_positive > 0:
-                    positive_rallies.append(ralley)
+                    positive_rallies.append(rally)
                 elif has_negative > 0:
-                    negative_rallies.append(ralley)
+                    negative_rallies.append(rally)
             total_k1 = 0
             error_k1 = 0
             blocked_k1 = 0
@@ -316,9 +314,9 @@ class StaticWriter:
             error_k2 = 0
             blocked_k2 = 0
             points_k2 = 0
-            for ralley in positive_rallies:
+            for rally in positive_rallies:
                 k1_found = False
-                for action in ralley[0]:
+                for action in rally.actions:
                     if isinstance(action, Gameaction):
                         current_action = str(action)
                         if not k1_found:
@@ -359,9 +357,9 @@ class StaticWriter:
             error_k1 = 0
             blocked_k1 = 0
             points_k1 = 0
-            for ralley in negative_rallies:
+            for rally in negative_rallies:
                 k1_found = False
-                for action in ralley[0]:
+                for action in rally.actions:
                     if isinstance(action, Gameaction):
                         current_action = str(action)
                         if not k1_found:
@@ -395,7 +393,7 @@ class StaticWriter:
                 if len(action_filter_from_string(str(team) + "@@s", [rally])) > 0:
                     serve_rallies.append(rally)
             for rally in serve_rallies:
-                for action in rally[0]:
+                for action in rally.actions:
                     current_action = str(action)
                     if isinstance(action, Gameaction):
                         if compare_action_to_string(current_action, str(team) + "@@h@"):
@@ -487,7 +485,7 @@ class StaticWriter:
         total_errors += len(action_filter_from_string(filterstring, rallies))
         fulldata["Points"]["Plus_minus"] = total_points - total_errors
 
-        break_rallies = ralley_filter_from_string("@@@@@@@@@@@" + str(team), self.gamestate.rallies)
+        break_rallies = rally_filter_from_string("@@@@@@@@@@@" + str(team), self.gamestate.rallies)
         filterstring = str(team) + player_number + "@#"
         fulldata["Points"]["BP"] = len(action_filter_from_string(filterstring, break_rallies))
         return fulldata
@@ -574,17 +572,17 @@ class StaticWriter:
             fulldata["Role"] = "L"
         fulldata["Starts"] = [0, 0, 0, 0, 0]
         for rally in self.gamestate.rallies:
-            setnumber = rally[3][0] + rally[3][1]
+            setnumber = rally.set_score[0] + rally.set_score[1]
             if player.Position == Player.PlayerPosition.Libera:
-                for action in rally[0]:
+                for action in rally.actions:
                     if isinstance(action, Gameaction):
                         if action.player == player.Number and action.team == team:
                             fulldata["Starts"][setnumber] = -1
                             continue
             else:
                 for i in range(6):
-                    if player.Number == rally[1].fields[int(team)].players[i].Number:
-                        if rally[2][0] + rally[2][1] == 0:
+                    if player.Number == rally.court.fields[int(team)].players[i].Number:
+                        if rally.score[0] + rally.score[1] == 0:
                             fulldata["Starts"][setnumber] = i + 1
                         elif fulldata["Starts"][setnumber] == 0:
                             fulldata["Starts"][setnumber] = -1

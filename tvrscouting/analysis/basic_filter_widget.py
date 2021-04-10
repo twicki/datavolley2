@@ -114,7 +114,7 @@ class Basic_Filter:
 
     def check_all_rally_filters(self, rally):
         for rally_filter in self.rally_filters:
-            if compare_ralley_to_string(rally_filter, rally):
+            if compare_rally_to_string(rally_filter, rally):
                 return True
         return False
 
@@ -144,13 +144,13 @@ class Basic_Filter:
             if self.game_state is None:
                 return
         for rally in self.game_state.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 if isinstance(action, InitializePlayer):
                     p = Player(action.number, action.position, action.name)
                     self.players[int(action.team)].append(p)
                 if (
                     self.check_all_rally_filters(rally)
-                    and self.check_all_court_filters(rally[1])
+                    and self.check_all_court_filters(rally.court)
                     and self.check_all_subaction_filters(rally)
                 ):
                     if isinstance(action, Gameaction):

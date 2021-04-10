@@ -74,7 +74,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def set_total_number_of_actions(self):
         self.total_nuber_of_actions = 0
         for rally in self.game_state.rallies:
-            for action in rally[0]:
+            for action in rally.actions:
                 self.total_nuber_of_actions += 1
 
     @contextlib.contextmanager
@@ -94,10 +94,13 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             self.all_actions = []
             self.displayed_actions = []
             for rally in self.game_state.rallies:
-                for action in rally[0]:
+                for action in rally.actions:
                     self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(str(action)))
                     if initial_time_stamp is None:
-                        initial_time_stamp = action.time_stamp
+                        if action.time_stamp is not None:
+                            initial_time_stamp = (
+                                action.time_stamp if action.time_stamp > 5000 else 0
+                            )
                     if action.time_stamp:
                         relative_time_stamp = action.time_stamp - initial_time_stamp
                     else:
@@ -225,7 +228,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                     current_action = str(action.action)
                     if (
                         self.check_all_rally_filters(action.from_rally)
-                        and self.check_all_court_filters(action.from_rally[1])
+                        and self.check_all_court_filters(action.from_rally.court)
                         and self.check_all_subaction_filters(action.from_rally)
                         and self.check_all_action_filters(current_action)
                     ):
@@ -439,6 +442,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             self.center_new_selection()
         elif e.key() == QtCore.Qt.Key_Space:
             self.PlayPause()
+        elif e.key() == QtCore.Qt.Key_Period:
+            self.advance_frames(1)
+        elif e.key() == QtCore.Qt.Key_Comma:
+            self.advance_frames(-1)
 
     def set_position_from_time(self, time):
         if self.total_time:
@@ -453,6 +460,14 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
     def scroll_from_current_position(self, time):
         new_time = self.get_current_second_of_player() + time
+        self.set_position_from_time(new_time)
+
+    def seconds_per_frame(self):
+        """Seconds per frame"""
+        return 1 / (self.mediaplayer.get_fps() or 25)
+
+    def advance_frames(self, number):
+        new_time = self.get_current_second_of_player() + (self.seconds_per_frame() * number)
         self.set_position_from_time(new_time)
 
     def _media_player_setup(self):

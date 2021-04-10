@@ -103,6 +103,32 @@ class Combination(Enum):
         return self.value[0]
 
 
+class SetterCall(AbstractAction):
+    def __init__(self, time_stamp=None):
+        super().__init__(time_stamp)
+        self.team = Team.Home
+        self.combination = "K1"
+        self.set_to = "A"  # oneof [F,C,B,P,S] // here [A,M,D,P,S]
+
+    def __str__(self):
+        return str(self.team) + str(self.combination) + str(self.set_to)
+
+    @classmethod
+    def from_string(cls, s, time_stamp=None):
+        new = cls(time_stamp)
+        if s[0] in ["*", "/"]:
+            new.team = Team.from_string(s[0])
+            new.combination = s[1:3]
+            if len(s) > 3:
+                new.set_to = s[3]
+        else:
+            new.team = None
+            new.combination = s[0:2]
+            if len(s) > 2:
+                new.set_to = s[2]
+        return new
+
+
 class Gameaction(AbstractAction):
     team = None
     player = None
