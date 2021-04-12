@@ -8,7 +8,7 @@ import time
 
 from PyQt5 import QtGui, QtWidgets
 
-from tvrscouting.analysis.playerview import DetailedPlayerStatistics
+from tvrscouting.analysis.playerview import TeamViews
 from tvrscouting.analysis.point_graph import PointGraph
 from tvrscouting.analysis.recent_scores_view import RecentScores
 from tvrscouting.analysis.static import StaticWriter
@@ -142,6 +142,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             for c in illegal_string:
                 if c == "*":
                     output_string = output_string + "\\*"
+                elif c == "+":
+                    output_string = output_string + "\\+"
                 else:
                     output_string = output_string + c
             for m in re.finditer(output_string, fulltext):
@@ -305,8 +307,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
     def display_commentator_windows(self):
         if self.secondWindow is None:
-            self.secondWindow = DetailedPlayerStatistics()
-            s = DetailedPlayerStatistics()
+            self.secondWindow = TeamViews()
         self.secondWindow.show()
         if self.ThirdWindow is None:
             self.ThirdWindow = PointGraph()

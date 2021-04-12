@@ -71,12 +71,15 @@ class StaticWriter:
                     intermediate = intermediates[0]
             # TODO: rename
             totalscore = 25 if rally.set_score[0] + rally.set_score[1] < 4 else 15
-            if rally.score[0] == totalscore or rally.score[1] == totalscore:
+            if (rally.score[0] >= totalscore and rally.score[0] > rally.score[1] + 1) or (
+                rally.score[1] >= totalscore and rally.score[1] > rally.score[0] + 1
+            ):
+                totalscore = max(rally.score)
                 partialscores[setnumber - 1]["finalscore"] = rally.score
         if len(start_times) != len(end_times):
             end_times.append(self.gamestate.rallies[-1].actions[-1].time_stamp)
         last = self.gamestate.score
-        if last[0] != totalscore and last[1] != totalscore and (last[0] != 0 and last[1] != 0):
+        if last[0] != totalscore and last[1] != totalscore and (last[0] != 0 or last[1] != 0):
             setnumber = self.gamestate.set_score[0] + self.gamestate.set_score[1] + 1
             partialscores[setnumber - 1]["finalscore"] = last
 
@@ -242,16 +245,22 @@ class StaticWriter:
                             + ("@" * 2 * (5 - offset))
                         )
                         rallies = court_filter(filter_string, self.gamestate.rallies)
-                        points = self.collect_stats_from_number(team, "@@", rallies)["Points"][
-                            "Total"
-                        ]
-                        opponent_points = self.collect_stats_from_number(
+                        team_stats_in_rotation = self.collect_stats_from_number(team, "@@", rallies)
+                        points = team_stats_in_rotation["Points"]["Total"]
+                        errors = team_stats_in_rotation["Points"]["Errors"]
+                        opponent_stats_in_rotation = self.collect_stats_from_number(
                             Team.inverse(team), "@@", rallies
-                        )["Points"]["Total"]
+                        )
+                        opponent_points = opponent_stats_in_rotation["Points"]["Total"]
+                        opponent_errors = opponent_stats_in_rotation["Points"]["Errors"]
                         if position in plus_minus:
-                            plus_minus[position] += points - opponent_points
+                            plus_minus[position] += (points + opponent_errors) - (
+                                opponent_points + errors
+                            )
                         else:
-                            plus_minus[position] = points - opponent_points
+                            plus_minus[position] = (points + opponent_errors) - (
+                                opponent_points + errors
+                            )
                 self.detailed_infos[name]["plus_minus_rotations"].append(
                     (plus_minus[position], position)
                 )
@@ -481,6 +490,7 @@ class StaticWriter:
         fulldata["Points"]["Total"] = total_points
         filterstring = str(team) + player_number + "@" + "="
         total_errors = len(action_filter_from_string(filterstring, rallies))
+        fulldata["Points"]["Errors"] = total_errors
         filterstring = str(team) + player_number + "@" + "o"
         total_errors += len(action_filter_from_string(filterstring, rallies))
         fulldata["Points"]["Plus_minus"] = total_points - total_errors

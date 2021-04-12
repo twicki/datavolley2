@@ -113,15 +113,6 @@ def set_to_direction(user_string, returnvalue):
     return returnvalue, False, user_string
 
 
-def check_compound(user_string, was_compound):
-    if len(user_string) and user_string[0].isnumeric():
-        intval = int(user_string[0])
-        if intval not in [0, 1]:
-            raise TVRSyntaxError()
-        return bool(intval), user_string[1:]
-    return was_compound, user_string
-
-
 def expandString(user_string, was_compound=False):
     returnvalue = "*00h+D000"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
@@ -134,10 +125,8 @@ def expandString(user_string, was_compound=False):
     returnvalue, to_directon_set, user_string = set_to_direction(user_string, returnvalue)
     if not quality_set:
         returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
-    was_compound, user_string = check_compound(user_string, was_compound)
     if len(user_string):
         raise TVRSyntaxError()
-    returnvalue = returnvalue + "0" if not was_compound else returnvalue + "1"
     return (
         returnvalue,
         team_set,
@@ -203,7 +192,7 @@ def split_string(input):
             quality_set,
             from_direction_set,
             to_directon_set,
-        ) = expandString(strings[0], True)
+        ) = expandString(strings[0])
         (
             s2,
             team_set_2,
@@ -211,7 +200,7 @@ def split_string(input):
             quality_set_2,
             from_direction_set_2,
             to_directon_set_2,
-        ) = expandString(strings[1], False)
+        ) = expandString(strings[1])
         s1, s2 = correct_strings(
             s1,
             team_set,
@@ -227,7 +216,7 @@ def split_string(input):
             to_directon_set_2,
         )
     else:
-        s1, _, _, _, _, _ = expandString(strings[0], False)
+        s1, _, _, _, _, _ = expandString(strings[0])
         s2 = None
     return s1, s2
 
@@ -549,6 +538,7 @@ class GameState:
             current_rally.setter_call = self._setter_call
             current_rally.correct_setter_call()
             self.rallies.append(current_rally)
+            self._setter_call = None
             self._current_actions.clear()
             if self.set_ended:
                 endset_rally = Rally()

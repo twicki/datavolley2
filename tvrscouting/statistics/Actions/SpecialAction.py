@@ -20,39 +20,27 @@ class Substitute(AbstractAction):
         self.position_in = position_in
 
     def __str__(self):
-        return (
-            str(self.team_) + "sub!" + str(self.player_in) + "!" + str(self.position_in)
-        )
+        return str(self.team_) + "sub!" + str(self.player_in) + "!" + str(self.position_in)
 
 
 class Rotation(AbstractAction):
     team_: Team
     positive: bool
 
-    def __init__(
-        self, team: Team, direction: bool = True, time_stamp=None, auto_generated=False
-    ):
+    def __init__(self, team: Team, direction: bool = True, time_stamp=None, auto_generated=False):
         super().__init__(time_stamp, auto_generated)
         self.team_ = team
         self.positive = direction
 
     def __str__(self):
-        return (
-            str(self.team_)
-            + "rota!"
-            + str(int(self.positive))
-            + "!"
-            + str(self.auto_generated)
-        )
+        return str(self.team_) + "rota!" + str(int(self.positive)) + "!" + str(self.auto_generated)
 
 
 class Point(AbstractAction):
     team_: Team
     value: int
 
-    def __init__(
-        self, team: Team, value: int = 1, time_stamp=None, auto_generated=False
-    ):
+    def __init__(self, team: Team, value: int = 1, time_stamp=None, auto_generated=False):
         super().__init__(time_stamp, auto_generated)
         self.team_ = team
         self.value = value
@@ -81,6 +69,18 @@ class SetServingTeam(AbstractAction):
 
     def __str__(self):
         return str(self.team_) + "serve" + "!" + str(self.auto_generated)
+
+
+class SetSetter(AbstractAction):
+    team_: Team
+
+    def __init__(self, team: Team, setter_number: int = 1, time_stamp=None, auto_generated=False):
+        super().__init__(time_stamp, auto_generated)
+        self.team_ = team
+        self.setter_number = setter_number
+
+    def __str__(self):
+        return str(self.team_) + "setter" + "!" + setter_number + "!" + str(self.auto_generated)
 
 
 class InitializePlayer(AbstractAction):
