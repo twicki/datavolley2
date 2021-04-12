@@ -233,37 +233,24 @@ class StaticWriter:
             (Team.from_string("/"), "guest"),
         ]:
             self.detailed_infos[name]["plus_minus_rotations"] = []
-            for position in [1, 2, 3, 4, 5, 6]:
-                plus_minus = {}
-                for player in self.gamestate.players[int(team)]:
-                    if player.Position == Player.PlayerPosition.Setter:
-                        offset = position - 1
-                        filter_string = (
-                            str(team)
-                            + ("@" * 2 * offset)
-                            + "%02d" % player.Number
-                            + ("@" * 2 * (5 - offset))
-                        )
-                        rallies = court_filter(filter_string, self.gamestate.rallies)
-                        team_stats_in_rotation = self.collect_stats_from_number(team, "@@", rallies)
-                        points = team_stats_in_rotation["Points"]["Total"]
-                        errors = team_stats_in_rotation["Points"]["Errors"]
-                        opponent_stats_in_rotation = self.collect_stats_from_number(
-                            Team.inverse(team), "@@", rallies
-                        )
-                        opponent_points = opponent_stats_in_rotation["Points"]["Total"]
-                        opponent_errors = opponent_stats_in_rotation["Points"]["Errors"]
-                        if position in plus_minus:
-                            plus_minus[position] += (points + opponent_errors) - (
-                                opponent_points + errors
-                            )
-                        else:
-                            plus_minus[position] = (points + opponent_errors) - (
-                                opponent_points + errors
-                            )
-                self.detailed_infos[name]["plus_minus_rotations"].append(
-                    (plus_minus[position], position)
-                )
+            plus_minus_rotations = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+            for rally in self.gamestate.rallies:
+                setter_position = rally.court.fields[int(team)].get_setter_position()
+                if setter_position > 0:
+                    team_stats_in_rotation = self.collect_stats_from_number(team, "@@", [rally])
+                    points = team_stats_in_rotation["Points"]["Total"]
+                    errors = team_stats_in_rotation["Points"]["Errors"]
+                    opponent_stats_in_rotation = self.collect_stats_from_number(
+                        Team.inverse(team), "@@", [rally]
+                    )
+                    opponent_points = opponent_stats_in_rotation["Points"]["Total"]
+                    opponent_errors = opponent_stats_in_rotation["Points"]["Errors"]
+                    plus_minus_rotations[setter_position] += (points + opponent_errors) - (
+                        opponent_points + errors
+                    )
+            for k, v in plus_minus_rotations.items():
+                self.detailed_infos[name]["plus_minus_rotations"].append((v, k))
+
             # Number of sideout points
             rece_rallies = rally_filter_from_string(
                 "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies

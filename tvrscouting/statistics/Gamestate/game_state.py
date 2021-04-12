@@ -30,8 +30,16 @@ def truncate_list(in_list, size=11):
 class Field:
     def __init__(self) -> None:
         self.players = []
-        for i in range(6):
+        self.setter = None
+        for _ in range(6):
             self.players.append(Player(0))
+
+    def get_setter_position(self):
+        if self.setter:
+            for index, player in enumerate(self.players):
+                if player.Number == self.setter:
+                    return index + 1
+        return 0
 
 
 class Court:
@@ -278,6 +286,7 @@ class GameState:
 
         self._last_serve = None
         self.teamnames = [None, None]
+        self.setters = [None, None]
         self.players = [[], []]
 
         self.details = []
@@ -332,6 +341,14 @@ class GameState:
             self.add_logical([action], time_stamp)
         elif "player" in action:
             action = SpecialActions.InitializePlayer(action, time_stamp)
+            self.add_logical([action], time_stamp)
+        elif "setter" in action:
+            l = action.split("!")
+            team = l[0][0]
+            setter_number = int(l[1])
+            action = SpecialActions.SetSetter(
+                actions.Team.from_string(team), setter_number, time_stamp
+            )
             self.add_logical([action], time_stamp)
         elif "K" in action:
             action = SetterCall.from_string(action, time_stamp)
@@ -391,12 +408,25 @@ class GameState:
         elif "player" in action:
             action = SpecialActions.InitializePlayer(action, time_stamp)
             self.add_logical([action])
+        elif "setter" in action:
+            l = action.split("!")
+            team = l[0][0]
+            setter_number = int(l[1])
+            action = SpecialActions.SetSetter(
+                actions.Team.from_string(team), setter_number, time_stamp
+            )
+            self.add_logical([action], time_stamp)
+        elif "K" in action:
+            action = SetterCall.from_string(action, time_stamp)
+            self._setter_call = action
+            self.add_logical([action], time_stamp)
         else:
             self.add_plain([Gameaction.from_string(action, time_stamp)])
 
     def add_plain(self, action_list, time_stamp=None):
         for action in action_list:
             self._current_actions.append(action)
+        self.scoring_team = None
         for action in action_list:
             ## todo: this is copied form below, refactor!
             if isinstance(action, SpecialActions.Substitute):
@@ -431,9 +461,7 @@ class GameState:
                 self.teamnames[int(action.team)] = action.name
                 self.flush_actions()
             elif isinstance(action, Gameaction):
-                _, was_score = is_scoring(action)
-                if was_score:
-                    self.flush_actions()
+                pass
             else:
                 self.flush_actions()
 
@@ -474,6 +502,8 @@ class GameState:
                 self.flush_actions()
             elif isinstance(action, SetterCall):
                 pass
+            elif isinstance(action, SpecialActions.SetSetter):
+                self.court.fields[int(action.team_)].setter = action.setter_number
             else:
                 who, was_score = is_scoring(action)
                 if was_score:

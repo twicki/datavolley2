@@ -80,7 +80,14 @@ class SetSetter(AbstractAction):
         self.setter_number = setter_number
 
     def __str__(self):
-        return str(self.team_) + "setter" + "!" + setter_number + "!" + str(self.auto_generated)
+        return (
+            str(self.team_)
+            + "setter"
+            + "!"
+            + str(self.setter_number)
+            + "!"
+            + str(self.auto_generated)
+        )
 
 
 class InitializePlayer(AbstractAction):

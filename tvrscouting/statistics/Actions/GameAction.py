@@ -157,9 +157,10 @@ class Gameaction(AbstractAction):
             + str(self.combination)
             + str(self.direction[0])
             + str(self.direction[1])
-            + self.action_type
-            + str(self.action_players_involved)
-            + self.action_error_type
+            # + ";"
+            # + self.action_type
+            # + str(self.action_players_involved)
+            # + self.action_error_type
         )[0]
 
     @classmethod
@@ -181,9 +182,9 @@ class Gameaction(AbstractAction):
             raise TVRSyntaxError()
         new.direction[0] = str(s[7])
         new.direction[1] = str(s[8])
-        new.action_type = s[10]
-        new.action_players_involved = int(s[11])
-        new.action_error_type = s[12]
+        # new.action_type = s[10]
+        # new.action_players_involved = int(s[11])
+        # new.action_error_type = s[12]
         return new
 
 
