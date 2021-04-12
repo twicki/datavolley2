@@ -238,41 +238,59 @@ class Rally:
         self.last_serve = None
         self.setter_call = None
 
-    def correct_setter_call_from_reception(self):
+    def correct_setter_call(self):
+        if self.setter_call:
+            if self.setter_call.team is None:
+                self.setter_call.team = find_receiveing_team_from_reception()
+            if self.setter_call.team is None:
+                self.setter_call.team = find_receiveing_team_from_serve()
+
+    def find_receiveing_team_from_reception(self):
         for action in self.actions:
             if isinstance(action, Gameaction):
                 action_string = str(action)
                 if compare_action_to_string(action_string, "@@@r"):
-                    self.setter_call.team = action.team
-                    return
+                    return action.team
+        return None
 
-    def correct_setter_call_from_serve(self):
+    def find_receiveing_team_from_serve(self):
         for action in self.actions:
             if isinstance(action, Gameaction):
                 action_string = str(action)
                 if compare_action_to_string(action_string, "@@@s"):
-                    self.setter_call.team = Team.inverse(action.team)
-                    return
+                    return Team.inverse(action.team)
+        return None
 
-    def correct_setter_call(self):
-        if self.setter_call:
-            if self.setter_call.team is None:
-                self.correct_setter_call_from_reception()
-            if self.setter_call.team is None:
-                self.correct_setter_call_from_serve()
+    def find_receiveing_team_from_setter_call(self):
+        if self.setter_call and self.setter_call.team:
+            return self.setter_call.team
+        return None
+
+    def find_receiveing_team(self):
+        team = self.find_receiveing_team_from_setter_call()
+        if team is not None:
+            return team
+        team = self.find_receiveing_team_from_reception()
+        if team is not None:
+            return team
+        team = self.find_receiveing_team_from_serve()
+        if team is not None:
+            return team
+        return self.last_serve
+
+    def wins_in_k1(self):
+        rece_team = self.find_receiveing_team()
+        for action in self.actions:
+            if isinstance(action, Gameaction):
+                current_action = str(action)
+                if compare_action_to_string(current_action, str(rece_team) + "@@h#"):
+                    return True
+                elif compare_action_to_string(current_action, "@@@h"):
+                    return False
+        return False
 
 
 class GameState:
-    # score = [0, 0]
-    # set_score = [0, 0]
-    # rallies = []
-    # court = None
-
-    # _current_actions = []
-    # _last_serve = None
-    # teamnames = [None, None]
-    # players = [[], []]
-
     def __init__(self) -> None:
         self.score = [0, 0]
         self.set_score = [0, 0]

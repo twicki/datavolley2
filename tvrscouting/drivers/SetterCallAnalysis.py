@@ -233,27 +233,27 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                         # TODO: check if K1 kill for each of those
                         if rally.setter_call.set_to in ["A", "F", "L"]:
                             distributions[index]["F"][0] += 1
-                            distributions[index]["F"][1] += int(self.rally_wins_in_k1(rally))
+                            distributions[index]["F"][1] += int(rally.wins_in_k1())
                             distributions[index]["total"] += 1
                             total_calls += 1
                         if rally.setter_call.set_to in ["M"]:
                             distributions[index]["M"][0] += 1
-                            distributions[index]["M"][1] += int(self.rally_wins_in_k1(rally))
+                            distributions[index]["M"][1] += int(rally.wins_in_k1())
                             distributions[index]["total"] += 1
                             total_calls += 1
                         if rally.setter_call.set_to in ["D", "B", "R"]:
                             distributions[index]["B"][0] += 1
-                            distributions[index]["B"][1] += int(self.rally_wins_in_k1(rally))
+                            distributions[index]["B"][1] += int(rally.wins_in_k1())
                             distributions[index]["total"] += 1
                             total_calls += 1
                         if rally.setter_call.set_to in ["P"]:
                             distributions[index]["P"][0] += 1
-                            distributions[index]["P"][1] += int(self.rally_wins_in_k1(rally))
+                            distributions[index]["P"][1] += int(rally.wins_in_k1())
                             distributions[index]["total"] += 1
                             total_calls += 1
                         if rally.setter_call.set_to in ["S"]:
                             distributions[index]["S"][0] += 1
-                            distributions[index]["S"][1] += int(self.rally_wins_in_k1(rally))
+                            distributions[index]["S"][1] += int(rally.wins_in_k1())
                             distributions[index]["total"] += 1
                             total_calls += 1
 
