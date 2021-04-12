@@ -116,13 +116,46 @@ def set_from_direction(user_string, returnvalue):
 
 def set_to_direction(user_string, returnvalue):
     if len(user_string) and user_string[0].isnumeric():
-        returnvalue = returnvalue[:8] + user_string[0]
+        returnvalue = returnvalue[:8] + user_string[0] + returnvalue[9:]
         return returnvalue, True, user_string[1:]
     return returnvalue, False, user_string
 
 
+def set_type(user_string, returnvalue):
+    if len(user_string) and user_string[0] in ["T", "H", "Q", "L", "R", "A"]:
+        returnvalue = returnvalue[:10] + user_string[0] + returnvalue[11:]
+        user_string = user_string[1:]
+    return returnvalue, user_string
+
+
+def set_players(user_string, returnvalue):
+    players_set = False
+    if len(user_string) and user_string[0].isnumeric():
+        returnvalue = returnvalue[:11] + user_string[0] + returnvalue[12:]
+        user_string = user_string[1:]
+        players_set = True
+    return returnvalue, user_string, players_set
+
+
+def set_error_type(user_string, returnvalue):
+    if len(user_string) and user_string[0] in ["S", "O", "N", "X", "B"]:
+        returnvalue = returnvalue[:12] + user_string[0] + returnvalue[13:]
+        user_string = user_string[1:]
+    return returnvalue, user_string
+
+
+def set_extended_scout(user_string, returnvalue):
+    players_set = False
+    if len(user_string) and user_string[0] == ";":
+        user_string = user_string[1:]
+        returnvalue, user_string = set_type(user_string, returnvalue)
+        returnvalue, user_string, players_set = set_players(user_string, returnvalue)
+        returnvalue, user_string = set_error_type(user_string, returnvalue)
+    return returnvalue, user_string, players_set
+
+
 def expandString(user_string, was_compound=False):
-    returnvalue = "*00h+D000"
+    returnvalue = "*00h+D000;H0B"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
     returnvalue, user_string = set_number(user_string, returnvalue)
     returnvalue, user_string, action_set = set_action(user_string, returnvalue)
@@ -133,6 +166,7 @@ def expandString(user_string, was_compound=False):
     returnvalue, to_directon_set, user_string = set_to_direction(user_string, returnvalue)
     if not quality_set:
         returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
+    returnvalue, user_string, players_set = set_extended_scout(user_string, returnvalue)
     if len(user_string):
         raise TVRSyntaxError()
     return (
@@ -142,6 +176,7 @@ def expandString(user_string, was_compound=False):
         quality_set,
         from_direction_set,
         to_directon_set,
+        players_set,
     )
 
 
@@ -152,12 +187,14 @@ def correct_strings(
     quality,
     from_set,
     to_set,
+    players_set,
     s2,
     team2,
     action2,
     quality2,
     from_set2,
     to_set2,
+    players_set2,
 ):
     ## correct the teams
     if not team2:
@@ -187,6 +224,12 @@ def correct_strings(
     if not to_set:
         s1 = s1[:8] + s2[7] + s1[9:]
 
+    if s1[3] == "H" or s2[3] == "H":
+        if not players_set2:
+            s2 = s2[:9] + s1[10] + s2[10:]
+        if not players_set and players_set2:
+            s1 = s1[:9] + s2[10] + s1[10:]
+
     return s1, s2
 
 
@@ -200,6 +243,7 @@ def split_string(input):
             quality_set,
             from_direction_set,
             to_directon_set,
+            players_set,
         ) = expandString(strings[0])
         (
             s2,
@@ -208,6 +252,7 @@ def split_string(input):
             quality_set_2,
             from_direction_set_2,
             to_directon_set_2,
+            players_set_2,
         ) = expandString(strings[1])
         s1, s2 = correct_strings(
             s1,
@@ -216,15 +261,17 @@ def split_string(input):
             quality_set,
             from_direction_set,
             to_directon_set,
+            players_set,
             s2,
             team_set_2,
             action_set_2,
             quality_set_2,
             from_direction_set_2,
             to_directon_set_2,
+            players_set_2,
         )
     else:
-        s1, _, _, _, _, _ = expandString(strings[0])
+        s1, _, _, _, _, _, _ = expandString(strings[0])
         s2 = None
     return s1, s2
 

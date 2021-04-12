@@ -239,6 +239,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         for rally in self.game_state.rallies:
             for action in rally.actions:
                 self.action_view.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
+                self.action_view.setColumnWidth(i, 200)
                 i += 1
         self.action_view.setRowCount(i)
         self.action_view.scrollToBottom()
