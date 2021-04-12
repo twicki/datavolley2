@@ -288,9 +288,9 @@ class Rally:
     def correct_setter_call(self):
         if self.setter_call:
             if self.setter_call.team is None:
-                self.setter_call.team = find_receiveing_team_from_reception()
+                self.setter_call.team = self.find_receiveing_team_from_reception()
             if self.setter_call.team is None:
-                self.setter_call.team = find_receiveing_team_from_serve()
+                self.setter_call.team = self.find_receiveing_team_from_serve()
 
     def find_receiveing_team_from_reception(self):
         for action in self.actions:
