@@ -144,6 +144,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
                     output_string = output_string + "\\*"
                 elif c == "+":
                     output_string = output_string + "\\+"
+                elif c == ".":
+                    output_string = output_string + "\\."
                 else:
                     output_string = output_string + c
             for m in re.finditer(output_string, fulltext):

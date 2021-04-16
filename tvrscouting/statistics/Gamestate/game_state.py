@@ -245,6 +245,8 @@ def split_string(input):
             to_directon_set,
             players_set,
         ) = expandString(strings[0])
+        if len(strings[1]) == 0:
+            raise TVRSyntaxError()
         (
             s2,
             team_set_2,
