@@ -14,10 +14,33 @@ from tvrscouting.analysis.point_graph import PointGraph
 from tvrscouting.analysis.recent_scores_view import RecentScores
 from tvrscouting.analysis.scoreboard import Scoreboard
 from tvrscouting.analysis.static import StaticWriter
+from tvrscouting.organization.edit_game import EditGame
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
+
+
+class Game:
+    def __init__(self, game_state=None, meta_info=None):
+        self._game_state = game_state
+        self._meta_info = meta_info
+
+    @property
+    def game_state(self):
+        return self._game_state
+
+    @game_state.setter
+    def game_state(self, value):
+        self._game_state = value
+
+    @property
+    def meta_info(self):
+        return self._meta_info
+
+    @meta_info.setter
+    def meta_info(self, value):
+        self._meta_info = value
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
@@ -25,16 +48,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         super().__init__()
         self.setupUi(self)
         ICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon/")
+
         icon = QtGui.QIcon.fromTheme(ICON_PATH + "tvrscouting.jpeg")
         self.setWindowIcon(icon)
-        self.game_state = GameState()
+        self.game = Game(game_state=GameState())
+
         self.fullstring = ""
         self.secondWindow = None
         self.ThirdWindow = None
         self.FourthWindow = None
         self.CommentsWindow = None
-        self.scoreboard = Scoreboard()
-        self.scoreboard.show()
+        self.Scoreboard = Scoreboard()
+        self.Scoreboard.show()
         self.illegal = []
 
         self.details = []
@@ -44,35 +69,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
         self.qt_setup()
 
+    def get_match_info(self):
+        self.game_edit = EditGame(self, self.game.meta_info)
+        self.game_edit.show()
+
     def log_change(self, item):
         raise NotImplementedError()
 
     def save_file(self):
-        ser = Serializer(self, self.game_state)
+        ser = Serializer(self, self.game.game_state)
         ser.serialize()
 
     def load_file(self):
         ser = Serializer(self)
-        self.game_state = ser.deserialize()
+        self.game.game_state = ser.deserialize()
         self.fullstring = ""
-        for rally in self.game_state.rallies:
+        for rally in self.game.game_state.rallies:
             for action in rally.actions:
                 if not action.auto_generated:
                     self.fullstring += str(action) + " "
             if self.fullstring[-1] != "\n":
                 self.fullstring += "\n"
-        self.game_state.fix_time_stamps(self.game_state)
+        self.game.game_state.fix_time_stamps(self.game.game_state)
         self.update()
 
     def write_analysis(self):
-        sw = StaticWriter(self.game_state)
+        sw = StaticWriter(self.game.game_state, self.game.meta_info)
         sw.analyze()
         print("stat file written")
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
-        oldstate = self.game_state
-        self.game_state = GameState()
+        oldstate = self.game.game_state
+        self.game.game_state = GameState()
         self.fullstring = userdata
 
         self.illegal.clear()
@@ -83,7 +112,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             actions = rally.split()
             self.add_stings_to_game_state(actions)
 
-        self.game_state.fix_time_stamps(oldstate)
+        self.game.game_state.fix_time_stamps(oldstate)
 
         if self.fullstring[-1] == "\n":
             self.fullstring = self.fullstring[:-1]
@@ -136,7 +165,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
     def add_action_to_game_action(self, command, action_time=None):
         try:
-            self.game_state.add_string(command, action_time)
+            self.game.game_state.add_string(command, action_time)
         except TVRSyntaxError:
             self.illegal.append(command)
 
@@ -156,7 +185,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         else:
             for command in inputs:
                 self.add_action_to_game_action(command)
-        self.game_state.flush_actions()
+        self.game.game_state.flush_actions()
 
     def add_input_to_game_state(self):
         self.time_stamps.append(time.time())
@@ -171,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.action_view.setRowCount(10000)
         self.action_view.setColumnCount(1)
         i = 0
-        for rally in self.game_state.rallies:
+        for rally in self.game.game_state.rallies:
             for action in rally.actions:
                 self.action_view.setItem(0, i, QtGui.QTableWidgetItem(str(action)))
                 self.action_view.setColumnWidth(i, 200)
@@ -199,26 +228,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
     def update_player_stats(self):
         results = [
-            self.game_state.collect_stats("*"),
-            self.game_state.collect_stats("/"),
+            self.game.game_state.collect_stats("*"),
+            self.game.game_state.collect_stats("/"),
         ]
         self.secondWindow.update_view_from_results(results)
 
     def update_timeline(self):
-        totals, delta = self.game_state.return_timeline()
+        totals, delta = self.game.game_state.return_timeline()
         self.ThirdWindow.update_timeline(totals, delta)
 
     def update_recent_scores_view(self):
         score = {
-            "score": self.game_state.return_truncated_scores(),
+            "score": self.game.game_state.return_truncated_scores(),
             "team_details": [
                 {
-                    "name": self.game_state.teamnames[0],
-                    "score": self.game_state.score[0],
+                    "name": self.game.game_state.teamnames[0],
+                    "score": self.game.game_state.score[0],
                 },
                 {
-                    "name": self.game_state.teamnames[1],
-                    "score": self.game_state.score[1],
+                    "name": self.game.game_state.teamnames[1],
+                    "score": self.game.game_state.score[1],
                 },
             ],
         }
@@ -233,10 +262,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             self.update_recent_scores_view()
 
     def update_scoreboard(self):
-        if self.scoreboard is None:
-            self.scoreboard = Scoreboard()
-        self.scoreboard.update_from_gamestate(self.game_state)
-        self.scoreboard.show()
+        if self.Scoreboard is None:
+            self.Scoreboard = Scoreboard()
+        self.Scoreboard.update_from_gamestate(self.game.game_state)
+        self.Scoreboard.show()
 
     def update(self):
         self.add_input_to_game_state()
@@ -275,6 +304,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.loadFile.clicked.connect(self.load_file)
         self.remote_stats.pressed.connect(self.setup_remote_server)
         self.remote_on.clicked.connect(self.turn_on_or_off_remote)
+        self.matchInfo.clicked.connect(self.get_match_info)
 
     def setup_remote_server(self):
         # TODO: don't read from lineEdit but have a popup
@@ -293,20 +323,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             s.bind((host, port))
             data = {
                 "results": [
-                    self.game_state.collect_stats("*"),
-                    self.game_state.collect_stats("/"),
+                    self.game.game_state.collect_stats("*"),
+                    self.game.game_state.collect_stats("/"),
                 ],
-                "timeline": self.game_state.return_timeline(),
+                "timeline": self.game.game_state.return_timeline(),
                 "score": {
-                    "score": self.game_state.return_truncated_scores(),
+                    "score": self.game.game_state.return_truncated_scores(),
                     "team_details": [
                         {
-                            "name": self.game_state.teamnames[0],
-                            "score": self.game_state.score[0],
+                            "name": self.game.game_state.teamnames[0],
+                            "score": self.game.game_state.score[0],
                         },
                         {
-                            "name": self.game_state.teamnames[1],
-                            "score": self.game_state.score[1],
+                            "name": self.game.game_state.teamnames[1],
+                            "score": self.game.game_state.score[1],
                         },
                     ],
                 },

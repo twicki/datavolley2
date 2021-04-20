@@ -28,15 +28,10 @@ class StaticWriter:
 
     gamestate: GameState
 
-    def __init__(self, game_state: GameState):
+    def __init__(self, game_state: GameState, game_meta_info):
         super().__init__()
         self.gamestate = game_state
-
-    def add_global_info(self, key: str, value: str):
-        self.global_info[key] = value
-
-    def add_coaches(self, team: str, position: str, name: str):
-        self.global_info["coaches"][team] = name
+        self.meta_info = game_meta_info
 
     def fill_scores(self) -> None:
         partialscores = []
@@ -44,6 +39,7 @@ class StaticWriter:
         end_times = []
         intermediates = [8, 16, 21]
         intermediate = intermediates[0]
+        totalscore = 25
         for rally in self.gamestate.rallies:
             setnumber = rally.set_score[0] + rally.set_score[1] + 1
             if len(partialscores) < setnumber:
@@ -143,11 +139,41 @@ class StaticWriter:
             "home": self.gamestate.teamnames[0],
             "guest": self.gamestate.teamnames[1],
         }
-        # TODO: this info is not stored
         self.global_info["coaches"] = {
-            "home": {"HC": "Some Name", "AC": "Another Name"},
-            "guest": {"HC": "Some Name", "AC": "Another Name"},
+            "home": {
+                "HC": "",
+                "AC": "",
+            },
+            "guest": {
+                "HC": "",
+                "AC": "",
+            },
         }
+        if self.meta_info:
+            self.global_info["coaches"]["home"]["HC"] = (
+                self.meta_info.teams[0]["Head Coach"] if self.meta_info.teams[0] else ""
+            )
+            self.global_info["coaches"]["home"]["AC"] = (
+                self.meta_info.teams[0]["Assistent Coach"] if self.meta_info.teams[0] else ""
+            )
+            self.global_info["coaches"]["guest"]["HC"] = (
+                self.meta_info.teams[0]["Head Coach"] if self.meta_info.teams[1] else ""
+            )
+            self.global_info["coaches"]["guest"]["AC"] = (
+                self.meta_info.teams[0]["Assistent Coach"] if self.meta_info.teams[1] else ""
+            )
+            self.global_info["Liga"] = self.meta_info.league
+            self.global_info["Saison"] = self.meta_info.season
+            self.global_info["Runde"] = self.meta_info.phase
+            self.global_info["Spectators"] = self.meta_info.spectators
+            self.global_info["date"] = self.meta_info.date
+            self.global_info["time"] = self.meta_info.time
+            self.global_info["Hall"] = self.meta_info.hall
+            self.global_info["City"] = self.meta_info.city
+            self.global_info["match_number"] = self.meta_info.matchnumber
+            self.global_info["Refs"] = []
+            for ref in self.meta_info.refs:
+                self.global_info["Refs"].append(ref)
 
         self.global_info["serving_teams"] = self.collect_serving_teams()
 

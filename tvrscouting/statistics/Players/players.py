@@ -52,7 +52,7 @@ class Player:
         @classmethod
         def from_string(cls, s):
             for position in cls:
-                if position.value[1] == s:
+                if position.value[1] == s.lower():
                     return position
 
     Position = PlayerPosition.Universal
