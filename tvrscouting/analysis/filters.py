@@ -1,5 +1,6 @@
-from tvrscouting.statistics.Actions import Gameaction
-from typing import List, Any, Dict
+from typing import Any, List
+
+from tvrscouting.statistics.Actions.GameAction import Gameaction
 
 
 def compare_action_to_string(action_string: str, filter_string: str) -> bool:
@@ -16,7 +17,8 @@ def compare_action_to_string(action_string: str, filter_string: str) -> bool:
 def compare_field_to_string(field, string):
     """compares the field to the given input string
     the string is formatted
-    [2-Digit-Number P1][2-Digit-Number P2][2-Digit-Number P3][2-Digit-Number P4][2-Digit-Number P5][2-Digit-Number P6]
+    [2-Digit-Number P1][2-Digit-Number P2][2-Digit-Number P3][2-Digit-Number P4]
+    [2-Digit-Number P5][2-Digit-Number P6]
     """
     for i in range(1, 13, 2):
         if (
@@ -30,7 +32,8 @@ def compare_field_to_string(field, string):
 def compare_court_to_string(court, string):
     """compares the court of a rally to the given input string
     the string is formatted
-    [Team][2-Digit-Number P1][2-Digit-Number P2][2-Digit-Number P3][2-Digit-Number P4][2-Digit-Number P5][2-Digit-Number P6]
+    [Team][2-Digit-Number P1][2-Digit-Number P2][2-Digit-Number P3][2-Digit-Number P4]
+    [2-Digit-Number P5][2-Digit-Number P6]
     """
     if string[0] != "/":
         if not compare_field_to_string(court.fields[0], string):
@@ -43,7 +46,9 @@ def compare_court_to_string(court, string):
 
 def compare_rally_to_string(string, rally):
     """compares the rally to the given input string
-    the string is formatted [2-Digit-Number ScoreHMin][2-Digit-Number ScoreHMax][2-Digit-Number ScoreGMin][2-Digit-Number ScoreGMax][SetScoreH][SetScoreG][SetScoreTotal][HomeServe]
+    the string is formatted
+    [2-Digit-Number ScoreHMin][2-Digit-Number ScoreHMax][2-Digit-Number ScoreGMin]
+    [2-Digit-Number ScoreGMax][SetScoreH][SetScoreG][SetScoreTotal][HomeServe]
     """
     # scores
     if string[0] != "@" and int(string[0:2]) > rally.score[0]:

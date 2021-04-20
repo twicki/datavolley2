@@ -1,7 +1,9 @@
-import pickle
 import os
-from tvrscouting.statistics import GameState
+import pickle
+
 from PyQt5.QtWidgets import QFileDialog
+
+from tvrscouting.statistics.Gamestate.game_state import GameState
 
 
 class Serializer:

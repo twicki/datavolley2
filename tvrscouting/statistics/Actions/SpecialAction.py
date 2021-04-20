@@ -1,4 +1,5 @@
-from tvrscouting.statistics.Players.players import Team, Player
+from tvrscouting.statistics.Players.players import Player, Team
+
 from .AbstractAction import AbstractAction
 
 
@@ -98,11 +99,11 @@ class InitializePlayer(AbstractAction):
 
     def __init__(self, initialization_string: str, time_stamp=None):
         super().__init__(time_stamp)
-        l = initialization_string.split("!")
-        self.team = Team.from_string(l[0][0])
-        self.number = int(l[1])
-        self.name = l[2]
-        self.position = Player.PlayerPosition.from_string(l[3])
+        split_string = initialization_string.split("!")
+        self.team = Team.from_string(split_string[0][0])
+        self.number = int(split_string[1])
+        self.name = split_string[2]
+        self.position = Player.PlayerPosition.from_string(split_string[3])
 
     def __str__(self):
         return (
@@ -123,9 +124,9 @@ class InitializeTeamName(AbstractAction):
 
     def __init__(self, initialization_string: str, time_stamp=None):
         super().__init__(time_stamp)
-        l = initialization_string.split("!")
-        self.team = Team.from_string(l[0][0])
-        self.name = l[1]
+        split_string = initialization_string.split("!")
+        self.team = Team.from_string(split_string[0][0])
+        self.name = split_string[1]
 
     def __str__(self):
         return str(self.team) + "team" + "!" + self.name

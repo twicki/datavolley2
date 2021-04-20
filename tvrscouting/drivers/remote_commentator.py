@@ -1,20 +1,15 @@
-import sys
 import os
-from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QFileDialog
-import tvrscouting
-from tvrscouting.uis.remote_comm import Ui_MainWindow
+import pickle
 import socket
+import sys
+
+from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
 
-from tvrscouting.uis.second import Ui_Form as commentatorUI
-from tvrscouting.uis.third import Ui_Form as thridUI
-from tvrscouting.uis.fourth import Ui_Form as fourthUI
-from tvrscouting.uis.team_view import Ui_Form as TeamUI
-import pickle
-from tvrscouting.statistics.Gamestate.game_state import GameState
-
 from tvrscouting.analysis.playerview import TeamViews
+from tvrscouting.uis.fourth import Ui_Form as fourthUI
+from tvrscouting.uis.remote_comm import Ui_MainWindow
+from tvrscouting.uis.third import Ui_Form as thridUI
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):

@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+
 from tvrscouting.uis.fourth import Ui_Form as fourthUI
 
 
@@ -50,18 +51,14 @@ class RecentScores(QtWidgets.QWidget, fourthUI):
             self.guest_scores[i].show()
             if results["score"][i][0] != results["score"][i + 1][0]:
                 self.home_scores[i].display(results["score"][i + 1][0])
-                self.home_scores[i].setStyleSheet(
-                    """QLCDNumber {background-color: green}"""
-                )
+                self.home_scores[i].setStyleSheet("""QLCDNumber {background-color: green}""")
                 self.guest_scores[i].display(" ")
                 self.guest_scores[i].setStyleSheet(
                     """QLCDNumber {background-color: rgb(114, 159, 207);}"""
                 )
             else:
                 self.guest_scores[i].display(results["score"][i + 1][1])
-                self.guest_scores[i].setStyleSheet(
-                    """QLCDNumber {background-color: green}"""
-                )
+                self.guest_scores[i].setStyleSheet("""QLCDNumber {background-color: green}""")
                 self.home_scores[i].display(" ")
                 self.home_scores[i].setStyleSheet(
                     """QLCDNumber {background-color: rgb(114, 159, 207);}"""

@@ -1,17 +1,17 @@
-import sys
 import os
-
-import tvrscouting
-import tvrscouting.statistics as stats
-from tvrscouting.statistics.Players.players import Team, Player
-import tvrscouting.statistics.Gamestate.game_state as gs
-from tvrscouting.statistics.Actions.GameAction import Gameaction
-from tvrscouting.analysis.filters import *
-
-from tvrscouting.statistics.Actions.SpecialAction import Endset
-from typing import List, Any, Dict
+from typing import Dict
 
 from jinja2 import Environment, FileSystemLoader
+
+from tvrscouting.analysis.filters import (
+    action_filter_from_string,
+    compare_action_to_string,
+    rally_filter_from_string,
+)
+from tvrscouting.statistics.Actions.GameAction import Gameaction
+from tvrscouting.statistics.Actions.SpecialAction import Endset
+from tvrscouting.statistics.Gamestate.game_state import GameState
+from tvrscouting.statistics.Players.players import Player, Team
 
 
 class StaticWriter:
@@ -19,24 +19,24 @@ class StaticWriter:
     writes out the datavolley-like file
     """
 
-    ## all the required information to fill out the template
+    # all the required information to fill out the template
     global_info = {}
     scores = {}
     playerstats = {}
     teamstats = {}
     detailed_infos = {}
 
-    gamestate: stats.GameState
+    gamestate: GameState
 
-    def __init__(self, game_state: stats.GameState):
+    def __init__(self, game_state: GameState):
         super().__init__()
         self.gamestate = game_state
 
     def add_global_info(self, key: str, value: str):
-        global_info[key] = value
+        self.global_info[key] = value
 
     def add_coaches(self, team: str, position: str, name: str):
-        global_info["coaches"][team] = name
+        self.global_info["coaches"][team] = name
 
     def fill_scores(self) -> None:
         partialscores = []

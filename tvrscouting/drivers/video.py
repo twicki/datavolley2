@@ -1,18 +1,18 @@
+import contextlib
 import os
 import sys
 from time import sleep
 
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
-from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QFrame, QFileDialog
+from PyQt5.QtWidgets import QFileDialog
 
-from tvrscouting.statistics import GameState
-from tvrscouting.uis.video import Ui_Dialog
 import tvrscouting.utils.vlc as vlc
-from tvrscouting.serializer.serializer import Serializer
-from tvrscouting.analysis.filters import *
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
-import contextlib
+from tvrscouting.serializer.serializer import Serializer
+from tvrscouting.statistics.Actions.GameAction import Gameaction
+from tvrscouting.statistics.Gamestate.game_state import GameState
+from tvrscouting.uis.video import Ui_Dialog
 
 
 class TimestampedAction:
@@ -241,21 +241,20 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         rally_actions = []
         with self.create_clean_game_state() as new_game_state:
             for new_action in self.all_actions:
-                if new_action.action_index != deleted_action_index:
-                    # create a new rally, store all the data if they don't match
-                    if rally_index != new_action.rally_index:
-                        rally_index = new_action.rally_index
-                        if len(rally_actions):
-                            new_game_state.add_plain(rally_actions)
-                            rally_actions = []
-                    if new_action.action_index == changed_action_index:
-                        for action in new_game_state.create_action_list_from_string(
-                            new_action_string, new_action.absolute_timestamp
-                        ):
-                            rally_actions.append(action)
-                    else:
-                        new_action.action.time_stamp = new_action.absolute_timestamp
-                        rally_actions.append(new_action.action)
+                # create a new rally, store all the data if they don't match
+                if rally_index != new_action.rally_index:
+                    rally_index = new_action.rally_index
+                    if len(rally_actions):
+                        new_game_state.add_plain(rally_actions)
+                        rally_actions = []
+                if new_action.action_index == changed_action_index:
+                    for action in new_game_state.create_action_list_from_string(
+                        action_str, new_action.absolute_timestamp
+                    ):
+                        rally_actions.append(action)
+                else:
+                    new_action.action.time_stamp = new_action.absolute_timestamp
+                    rally_actions.append(new_action.action)
             if len(rally_actions):
                 new_game_state.add_plain(rally_actions)
 
@@ -348,7 +347,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             return
         # create the media
         if sys.version < "3":
-            filename = unicode(filename)
+            filename = unicode(filename)  # noqa
         self.media = self.instance.media_new(filename)
         # put the media in the media player
         self.mediaplayer.set_media(self.media)
@@ -384,7 +383,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             if self.mediaplayer.play() == -1:
                 self.OpenFile()
                 return
-            ## TODO: add slider
+            # TODO: add slider
             self.mediaplayer.audio_set_volume(0)
             self.mediaplayer.play()
             self.timer.start()

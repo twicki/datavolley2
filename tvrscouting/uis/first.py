@@ -37,7 +37,9 @@ class Ui_TVRScouting(object):
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName("lineEdit")
         self.gridLayout_7.addWidget(self.lineEdit, 9, 0, 1, 3)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem, 4, 1, 1, 1)
         self.remote_stats = QtWidgets.QPushButton(self.centralwidget)
         self.remote_stats.setObjectName("remote_stats")
@@ -53,7 +55,9 @@ class Ui_TVRScouting(object):
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.gridLayout_8 = QtWidgets.QGridLayout()
         self.gridLayout_8.setObjectName("gridLayout_8")
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_8.addItem(spacerItem1, 2, 2, 1, 1)
         self.saveFile = QtWidgets.QPushButton(self.centralwidget)
         self.saveFile.setObjectName("saveFile")
@@ -64,11 +68,17 @@ class Ui_TVRScouting(object):
         self.gridLayout_6.addLayout(self.gridLayout_8, 4, 0, 1, 1)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout.addItem(spacerItem2, 1, 0, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem3, 4, 1, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout.addItem(spacerItem4, 4, 2, 1, 1)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
@@ -88,7 +98,9 @@ class Ui_TVRScouting(object):
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 5, 4, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem5, 4, 3, 1, 1)
         self.gridLayout_4 = QtWidgets.QGridLayout()
         self.gridLayout_4.setObjectName("gridLayout_4")
@@ -103,7 +115,9 @@ class Ui_TVRScouting(object):
         self.lcdNumber.setObjectName("lcdNumber")
         self.gridLayout_4.addWidget(self.lcdNumber, 0, 3, 2, 1)
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setStyleSheet("QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}")
+        self.checkBox.setStyleSheet(
+            "QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}"
+        )
         self.checkBox.setText("")
         self.checkBox.setObjectName("checkBox")
         self.gridLayout_4.addWidget(self.checkBox, 1, 1, 1, 1)
@@ -126,7 +140,9 @@ class Ui_TVRScouting(object):
         self.gridLayout_6.addLayout(self.gridLayout, 0, 0, 1, 1)
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_2.addItem(spacerItem6, 1, 3, 1, 1)
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
         self.label_8.setObjectName("label_8")
@@ -140,11 +156,17 @@ class Ui_TVRScouting(object):
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setObjectName("label_7")
         self.gridLayout_2.addWidget(self.label_7, 0, 2, 1, 1)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_2.addItem(spacerItem7, 1, 1, 1, 1)
-        spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_2.addItem(spacerItem8, 1, 2, 1, 1)
-        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem9 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_2.addItem(spacerItem9, 3, 2, 1, 1)
         self.label_10 = QtWidgets.QLabel(self.centralwidget)
         self.label_10.setObjectName("label_10")
@@ -164,7 +186,9 @@ class Ui_TVRScouting(object):
         self.gridLayout_3.addWidget(self.lcdNumber_2, 0, 3, 2, 1)
         self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_2.setAutoFillBackground(False)
-        self.checkBox_2.setStyleSheet("QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}")
+        self.checkBox_2.setStyleSheet(
+            "QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}"
+        )
         self.checkBox_2.setText("")
         self.checkBox_2.setIconSize(QtCore.QSize(50, 50))
         self.checkBox_2.setTristate(False)
@@ -190,7 +214,9 @@ class Ui_TVRScouting(object):
         self.gridLayout_2.setRowStretch(3, 1)
         self.gridLayout_2.setRowStretch(4, 5)
         self.gridLayout_6.addLayout(self.gridLayout_2, 2, 0, 1, 1)
-        spacerItem10 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem10 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_6.addItem(spacerItem10, 3, 0, 1, 1)
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShadow(QtWidgets.QFrame.Plain)

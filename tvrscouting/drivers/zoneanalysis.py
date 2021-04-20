@@ -1,17 +1,11 @@
-import sys
 import os
-from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QFileDialog
+import sys
 
-import tvrscouting
-from tvrscouting.serializer.serializer import Serializer
-from tvrscouting.uis.zoneanalysis import Ui_Form
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-from tvrscouting.statistics import Gameaction
-from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
-from tvrscouting.statistics.Players.players import Team, Player
-from tvrscouting.analysis.filters import *
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
+from tvrscouting.statistics.Players.players import Team
+from tvrscouting.uis.zoneanalysis import Ui_Form
 
 
 class Position:

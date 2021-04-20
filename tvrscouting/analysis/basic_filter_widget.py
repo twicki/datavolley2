@@ -1,18 +1,18 @@
-import sys
-import os
+from PyQt5 import QtWidgets
+
+from tvrscouting.analysis.filters import (
+    compare_action_to_string,
+    compare_court_to_string,
+    compare_rally_to_string,
+    rally_filter_from_action_string,
+)
+from tvrscouting.serializer.serializer import Serializer
+from tvrscouting.statistics.Actions.GameAction import Gameaction
+from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
+from tvrscouting.statistics.Players.players import Player
+
 
 # import contextlib
-
-from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QFileDialog
-
-import tvrscouting
-from tvrscouting.serializer.serializer import Serializer
-
-from tvrscouting.statistics import Gameaction
-from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
-from tvrscouting.statistics.Players.players import Team, Player
-from tvrscouting.analysis.filters import *
 
 
 class Basic_Filter:

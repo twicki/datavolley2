@@ -1,23 +1,20 @@
-import copy
-import enum
 import ast
-from copy import deepcopy
+import copy
 from collections import OrderedDict
 
-
 import tvrscouting.statistics.Actions as actions
-from tvrscouting.utils.errors import TVRSyntaxError
-
+import tvrscouting.statistics.Actions.SpecialAction as SpecialActions
+from tvrscouting.analysis.filters import compare_action_to_string, rally_filter_from_string
+from tvrscouting.statistics.Actions.ActionExpansion import expandString
 from tvrscouting.statistics.Actions.GameAction import (
-    Gameaction,
-    is_scoring,
     Action,
+    Gameaction,
     Quality,
     SetterCall,
+    is_scoring,
 )
-import tvrscouting.statistics.Actions.SpecialAction as SpecialActions
 from tvrscouting.statistics.Players.players import Player, Team
-from tvrscouting.analysis.filters import *
+from tvrscouting.utils.errors import TVRSyntaxError
 
 
 def truncate_list(in_list, size=11):
@@ -54,132 +51,6 @@ class Court:
         self.fields[who].players.append(self.fields[who].players.pop(0))
 
 
-def set_team(user_string, returnvalue):
-    if user_string[0] == "/":
-        returnvalue = user_string[0] + returnvalue[1:]
-        user_string = user_string[1:]
-        return returnvalue, user_string, True
-    elif user_string[0] == "*":
-        returnvalue = user_string[0] + returnvalue[1:]
-        user_string = user_string[1:]
-        return returnvalue, user_string, True
-    else:
-        return returnvalue, user_string, False
-
-
-def set_number(user_string, returnvalue):
-    if len(user_string) > 1 and user_string[1].isnumeric():
-        number = int(user_string[0:2])
-        returnvalue = returnvalue[0] + str(user_string[0:2]) + returnvalue[3:]
-        user_string = user_string[2:]
-    else:
-        returnvalue = returnvalue[0] + "0" + str(user_string[0]) + returnvalue[3:]
-        user_string = user_string[1:]
-    return returnvalue, user_string
-
-
-def set_action(user_string, returnvalue):
-    if len(user_string):
-        if user_string[0] in ["e", "h", "b", "s", "r", "d"]:
-            returnvalue = returnvalue[:3] + user_string[0] + returnvalue[4:]
-            user_string = user_string[1:]
-            return returnvalue, user_string, True
-
-    return returnvalue, user_string, False
-
-
-def set_quality(user_string, returnvalue):
-    if len(user_string):
-        if user_string[0] in ["#", "+", "-", "=", "p", "o"]:
-            returnvalue = returnvalue[:4] + user_string[0] + returnvalue[5:]
-            user_string = user_string[1:]
-            return returnvalue, user_string, True
-    return returnvalue, user_string, False
-
-
-def set_combination(user_string, returnvalue):
-    if len(user_string) > 1:
-        if user_string[0] in ["D", "X", "C", "V"]:
-            returnvalue = returnvalue[:5] + user_string[0:2] + returnvalue[7:]
-            user_string = user_string[2:]
-        return returnvalue, user_string
-    return returnvalue, user_string
-
-
-def set_from_direction(user_string, returnvalue):
-    if len(user_string) and user_string[0].isnumeric():
-        returnvalue = returnvalue[:7] + user_string[0] + returnvalue[8:]
-        user_string = user_string[1:]
-        return returnvalue, user_string, True
-    return returnvalue, user_string, False
-
-
-def set_to_direction(user_string, returnvalue):
-    if len(user_string) and user_string[0].isnumeric():
-        returnvalue = returnvalue[:8] + user_string[0] + returnvalue[9:]
-        return returnvalue, True, user_string[1:]
-    return returnvalue, False, user_string
-
-
-def set_type(user_string, returnvalue):
-    if len(user_string) and user_string[0] in ["T", "H", "Q", "L", "R", "A", "D"]:
-        returnvalue = returnvalue[:10] + user_string[0] + returnvalue[11:]
-        user_string = user_string[1:]
-    return returnvalue, user_string
-
-
-def set_players(user_string, returnvalue):
-    players_set = False
-    if len(user_string) and user_string[0].isnumeric():
-        returnvalue = returnvalue[:11] + user_string[0] + returnvalue[12:]
-        user_string = user_string[1:]
-        players_set = True
-    return returnvalue, user_string, players_set
-
-
-def set_error_type(user_string, returnvalue):
-    if len(user_string) and user_string[0] in ["S", "O", "N", "X", "B", "D"]:
-        returnvalue = returnvalue[:12] + user_string[0] + returnvalue[13:]
-        user_string = user_string[1:]
-    return returnvalue, user_string
-
-
-def set_extended_scout(user_string, returnvalue):
-    players_set = False
-    if len(user_string) and user_string[0] == ";":
-        user_string = user_string[1:]
-        returnvalue, user_string = set_type(user_string, returnvalue)
-        returnvalue, user_string, players_set = set_players(user_string, returnvalue)
-        returnvalue, user_string = set_error_type(user_string, returnvalue)
-    return returnvalue, user_string, players_set
-
-
-def expandString(user_string, was_compound=False):
-    returnvalue = "*00h+D000;D9D"
-    returnvalue, user_string, team_set = set_team(user_string, returnvalue)
-    returnvalue, user_string = set_number(user_string, returnvalue)
-    returnvalue, user_string, action_set = set_action(user_string, returnvalue)
-    returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
-
-    returnvalue, user_string = set_combination(user_string, returnvalue)
-    returnvalue, user_string, from_direction_set = set_from_direction(user_string, returnvalue)
-    returnvalue, to_directon_set, user_string = set_to_direction(user_string, returnvalue)
-    if not quality_set:
-        returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
-    returnvalue, user_string, players_set = set_extended_scout(user_string, returnvalue)
-    if len(user_string):
-        raise TVRSyntaxError()
-    return (
-        returnvalue,
-        team_set,
-        action_set,
-        quality_set,
-        from_direction_set,
-        to_directon_set,
-        players_set,
-    )
-
-
 def correct_strings(
     s1,
     team,
@@ -196,25 +67,25 @@ def correct_strings(
     to_set2,
     players_set2,
 ):
-    ## correct the teams
+    # correct the teams
     if not team2:
         s2 = str(actions.Team.inverse(actions.Team.from_string(s1[0]))) + s2[1:]
     if not team and team2:
         s1 = str(actions.Team.inverse(actions.Team.from_string(s2[0]))) + s1[1:]
 
-    ## correct the action:
+    # correct the action:
     if not action2:
         s2 = s2[:3] + str(actions.Action.inverse(actions.Action.from_string(s1[3]))) + s2[4:]
     if not action and action2:
         s1 = s1[:3] + str(actions.Action.inverse(actions.Action.from_string(s2[3]))) + s1[4:]
 
-    ## correct the quality
+    # correct the quality
     if not quality2:
         s2 = s2[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s1[4]))) + s2[5:]
     if not quality and quality2:
         s1 = s1[:4] + str(actions.Quality.inverse(actions.Quality.from_string(s2[4]))) + s1[5:]
 
-    ## correct the from and to position:
+    # correct the from and to position:
     if not from_set2:
         s2 = s2[:7] + s1[8] + s2[8:]
     if not to_set2:
@@ -388,9 +259,9 @@ class GameState:
             self.add_action_set_serving_team_from_string(action, time_stamp)
         elif "point" in action:
             # TODO: continue the refactoring here
-            l = action.split("!")
-            number = int(l[1])
-            team = l[0][0]
+            split_action = action.split("!")
+            number = int(split_action[1])
+            team = split_action[0][0]
             action = SpecialActions.Point(actions.Team.from_string(team), time_stamp)
             self.add_logical([action])
         elif "endset" in action:
@@ -398,9 +269,9 @@ class GameState:
             action = SpecialActions.Endset(actions.Team.from_string(team), time_stamp)
             self.add_logical([action])
         elif "rota" in action:
-            l = action.split("!")
-            team = l[0][0]
-            direction = True if int(l[1]) > 0 else False
+            split_action = action.split("!")
+            team = split_action[0][0]
+            direction = True if int(split_action[1]) > 0 else False
             action = SpecialActions.Rotation(actions.Team.from_string(team), direction, time_stamp)
             self.add_logical([action])
         elif "team" in action:
@@ -410,9 +281,9 @@ class GameState:
             action = SpecialActions.InitializePlayer(action, time_stamp)
             self.add_logical([action], time_stamp)
         elif "setter" in action:
-            l = action.split("!")
-            team = l[0][0]
-            setter_number = int(l[1])
+            split_action = action.split("!")
+            team = split_action[0][0]
+            setter_number = int(split_action[1])
             action = SpecialActions.SetSetter(
                 actions.Team.from_string(team), setter_number, time_stamp
             )
@@ -452,26 +323,26 @@ class GameState:
             ]
         elif "point" in action:
             # TODO: continue the refactoring here
-            l = action.split("!")
-            number = int(l[1])
-            team = l[0][0]
+            split_string = action.split("!")
+            number = int(split_string[1])
+            team = split_string[0][0]
             return [SpecialActions.Point(actions.Team.from_string(team), time_stamp)]
         elif "endset" in action:
             team = action[0][0]
             return [SpecialActions.Endset(actions.Team.from_string(team), time_stamp)]
         elif "rota" in action:
-            l = action.split("!")
-            team = l[0][0]
-            direction = True if int(l[1]) > 0 else False
+            split_string = action.split("!")
+            team = split_string[0][0]
+            direction = True if int(split_string[1]) > 0 else False
             return [SpecialActions.Rotation(actions.Team.from_string(team), direction, time_stamp)]
         elif "team" in action:
             return [SpecialActions.InitializeTeamName(action, time_stamp)]
         elif "player" in action:
             return [SpecialActions.InitializePlayer(action, time_stamp)]
         elif "setter" in action:
-            l = action.split("!")
-            team = l[0][0]
-            setter_number = int(l[1])
+            split_string = action.split("!")
+            team = split_string[0][0]
+            setter_number = int(split_string[1])
             return [
                 SpecialActions.SetSetter(actions.Team.from_string(team), setter_number, time_stamp)
             ]
@@ -704,7 +575,7 @@ class GameState:
                 endset_rally.score = copy.deepcopy(self.score)
                 endset_rally.set_score = copy.deepcopy(self.set_score)
                 endset_rally.last_serve = copy.deepcopy(self._last_serve)
-                # we need to copy in the state first before we do housekeeping as we update the score
+                # need to copy in the state first before we do housekeeping as we update the score
                 self.end_set_from_scoring_team(self.scoring_team)
                 # we ned to copy in the actions after housekeeping in case point-actions happened
                 endset_rally.actions = list.copy(self._current_actions)
@@ -826,7 +697,7 @@ class GameState:
                                         playerstats[player.Number]["error"] += 1
 
         for numbers in [
-            number for number, stats in playerstats.items() if stats["played"] == False
+            number for number, stats in playerstats.items() if stats["played"] is False
         ]:
             del playerstats[numbers]
 

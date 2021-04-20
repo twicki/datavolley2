@@ -1,12 +1,14 @@
-import sys, os
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from tvrscouting.uis.cone_analysis import Ui_Form
+import os
+import sys
+
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPolygon, QPolygonF
+from PyQt5.QtWidgets import QApplication
+
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
 from tvrscouting.statistics.Actions.GameAction import Quality
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+from tvrscouting.uis.cone_analysis import Ui_Form
 
 
 class ConeAnalysis:

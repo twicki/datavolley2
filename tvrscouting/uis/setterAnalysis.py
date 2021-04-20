@@ -65,9 +65,9 @@ class Ui_Form(object):
         self.Middle1_label.setObjectName("Middle1_label")
         self.gridLayout_5.addWidget(self.Middle1_label, 0, 0, 1, 1)
         self.Middle1_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Middle1_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle1_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle1_Kills.setObjectName("Middle1_Kills")
         self.gridLayout_5.addWidget(self.Middle1_Kills, 1, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout_5, 0, 4, 1, 1)
@@ -81,9 +81,9 @@ class Ui_Form(object):
         self.Middle2_Total.setObjectName("Middle2_Total")
         self.gridLayout_6.addWidget(self.Middle2_Total, 2, 0, 1, 1)
         self.Middle2_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Middle2_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle2_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle2_Kills.setObjectName("Middle2_Kills")
         self.gridLayout_6.addWidget(self.Middle2_Kills, 1, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout_6, 0, 2, 1, 1)
@@ -100,9 +100,9 @@ class Ui_Form(object):
         self.Middle3_label.setObjectName("Middle3_label")
         self.gridLayout_7.addWidget(self.Middle3_label, 0, 0, 1, 1)
         self.Middle3_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Middle3_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle3_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle3_Kills.setObjectName("Middle3_Kills")
         self.gridLayout_7.addWidget(self.Middle3_Kills, 1, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout_7, 0, 1, 1, 1)
@@ -112,7 +112,9 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.Call_label.setFont(font)
-        self.Call_label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.Call_label.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.Call_label.setObjectName("Call_label")
         self.gridLayout_2.addWidget(self.Call_label, 3, 0, 1, 3)
         self.gridLayout_8 = QtWidgets.QGridLayout()
@@ -130,18 +132,18 @@ class Ui_Form(object):
         self.Setter_Total.setObjectName("Setter_Total")
         self.gridLayout_8.addWidget(self.Setter_Total, 2, 0, 1, 1)
         self.Setter_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Setter_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Setter_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Setter_Kills.setObjectName("Setter_Kills")
         self.gridLayout_8.addWidget(self.Setter_Kills, 1, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout_8, 0, 3, 1, 1)
         self.gridLayout_3 = QtWidgets.QGridLayout()
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.Dia_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Dia_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Dia_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Dia_Kills.setObjectName("Dia_Kills")
         self.gridLayout_3.addWidget(self.Dia_Kills, 1, 0, 1, 1)
         self.Dia_label = QtWidgets.QLabel(self.widget_1)
@@ -156,9 +158,9 @@ class Ui_Form(object):
         self.gridLayout_4 = QtWidgets.QGridLayout()
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.Outside_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Outside_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Outside_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Outside_Kills.setObjectName("Outside_Kills")
         self.gridLayout_4.addWidget(self.Outside_Kills, 1, 0, 1, 1)
         self.Outside_label = QtWidgets.QLabel(self.widget_1)
@@ -169,14 +171,16 @@ class Ui_Form(object):
         self.Outside_Total.setObjectName("Outside_Total")
         self.gridLayout_4.addWidget(self.Outside_Total, 2, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout_4, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_2.addItem(spacerItem, 2, 2, 1, 1)
         self.gridLayout_9 = QtWidgets.QGridLayout()
         self.gridLayout_9.setObjectName("gridLayout_9")
         self.Pipe_Kills = QtWidgets.QLCDNumber(self.widget_1)
-        self.Pipe_Kills.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Pipe_Kills.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Pipe_Kills.setObjectName("Pipe_Kills")
         self.gridLayout_9.addWidget(self.Pipe_Kills, 1, 0, 1, 1)
         self.Pipe_label = QtWidgets.QLabel(self.widget_1)
@@ -197,14 +201,16 @@ class Ui_Form(object):
         self.widget_3.setObjectName("widget_3")
         self.gridLayout_20 = QtWidgets.QGridLayout(self.widget_3)
         self.gridLayout_20.setObjectName("gridLayout_20")
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_20.addItem(spacerItem1, 2, 2, 1, 1)
         self.gridLayout_24 = QtWidgets.QGridLayout()
         self.gridLayout_24.setObjectName("gridLayout_24")
         self.Pipe_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Pipe_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Pipe_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Pipe_Kills_3.setObjectName("Pipe_Kills_3")
         self.gridLayout_24.addWidget(self.Pipe_Kills_3, 1, 0, 1, 1)
         self.Pipe_label_3 = QtWidgets.QLabel(self.widget_3)
@@ -228,18 +234,18 @@ class Ui_Form(object):
         self.Middle2_Total_3.setObjectName("Middle2_Total_3")
         self.gridLayout_28.addWidget(self.Middle2_Total_3, 2, 0, 1, 1)
         self.Middle2_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Middle2_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle2_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle2_Kills_3.setObjectName("Middle2_Kills_3")
         self.gridLayout_28.addWidget(self.Middle2_Kills_3, 1, 0, 1, 1)
         self.gridLayout_20.addLayout(self.gridLayout_28, 0, 2, 1, 1)
         self.gridLayout_22 = QtWidgets.QGridLayout()
         self.gridLayout_22.setObjectName("gridLayout_22")
         self.Outside_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Outside_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Outside_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Outside_Kills_3.setObjectName("Outside_Kills_3")
         self.gridLayout_22.addWidget(self.Outside_Kills_3, 1, 0, 1, 1)
         self.Outside_label_3 = QtWidgets.QLabel(self.widget_3)
@@ -260,9 +266,9 @@ class Ui_Form(object):
         self.Middle1_label_3.setObjectName("Middle1_label_3")
         self.gridLayout_23.addWidget(self.Middle1_label_3, 0, 0, 1, 1)
         self.Middle1_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Middle1_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle1_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle1_Kills_3.setObjectName("Middle1_Kills_3")
         self.gridLayout_23.addWidget(self.Middle1_Kills_3, 1, 0, 1, 1)
         self.gridLayout_20.addLayout(self.gridLayout_23, 0, 4, 1, 1)
@@ -276,18 +282,18 @@ class Ui_Form(object):
         self.Middle3_label_3.setObjectName("Middle3_label_3")
         self.gridLayout_25.addWidget(self.Middle3_label_3, 0, 0, 1, 1)
         self.Middle3_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Middle3_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle3_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle3_Kills_3.setObjectName("Middle3_Kills_3")
         self.gridLayout_25.addWidget(self.Middle3_Kills_3, 1, 0, 1, 1)
         self.gridLayout_20.addLayout(self.gridLayout_25, 0, 1, 1, 1)
         self.gridLayout_21 = QtWidgets.QGridLayout()
         self.gridLayout_21.setObjectName("gridLayout_21")
         self.Dia_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Dia_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Dia_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Dia_Kills_3.setObjectName("Dia_Kills_3")
         self.gridLayout_21.addWidget(self.Dia_Kills_3, 1, 0, 1, 1)
         self.Dia_label_3 = QtWidgets.QLabel(self.widget_3)
@@ -314,9 +320,9 @@ class Ui_Form(object):
         self.Setter_Total_3.setObjectName("Setter_Total_3")
         self.gridLayout_27.addWidget(self.Setter_Total_3, 2, 0, 1, 1)
         self.Setter_Kills_3 = QtWidgets.QLCDNumber(self.widget_3)
-        self.Setter_Kills_3.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Setter_Kills_3.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Setter_Kills_3.setObjectName("Setter_Kills_3")
         self.gridLayout_27.addWidget(self.Setter_Kills_3, 1, 0, 1, 1)
         self.gridLayout_20.addLayout(self.gridLayout_27, 0, 3, 1, 1)
@@ -326,7 +332,9 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.Call_label_3.setFont(font)
-        self.Call_label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.Call_label_3.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.Call_label_3.setObjectName("Call_label_3")
         self.gridLayout_20.addWidget(self.Call_label_3, 3, 0, 1, 3)
         self.gridLayout_20.setRowStretch(0, 2)
@@ -349,13 +357,15 @@ class Ui_Form(object):
         self.Middle1_label_2.setObjectName("Middle1_label_2")
         self.gridLayout_14.addWidget(self.Middle1_label_2, 0, 0, 1, 1)
         self.Middle1_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Middle1_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle1_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle1_Kills_2.setObjectName("Middle1_Kills_2")
         self.gridLayout_14.addWidget(self.Middle1_Kills_2, 1, 0, 1, 1)
         self.gridLayout_11.addLayout(self.gridLayout_14, 0, 4, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_11.addItem(spacerItem2, 2, 2, 1, 1)
         self.Call_percentage_2 = QtWidgets.QLCDNumber(self.widget_2)
         self.Call_percentage_2.setObjectName("Call_percentage_2")
@@ -363,9 +373,9 @@ class Ui_Form(object):
         self.gridLayout_12 = QtWidgets.QGridLayout()
         self.gridLayout_12.setObjectName("gridLayout_12")
         self.Dia_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Dia_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Dia_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Dia_Kills_2.setObjectName("Dia_Kills_2")
         self.gridLayout_12.addWidget(self.Dia_Kills_2, 1, 0, 1, 1)
         self.Dia_label_2 = QtWidgets.QLabel(self.widget_2)
@@ -387,18 +397,18 @@ class Ui_Form(object):
         self.Middle2_Total_2.setObjectName("Middle2_Total_2")
         self.gridLayout_19.addWidget(self.Middle2_Total_2, 2, 0, 1, 1)
         self.Middle2_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Middle2_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle2_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle2_Kills_2.setObjectName("Middle2_Kills_2")
         self.gridLayout_19.addWidget(self.Middle2_Kills_2, 1, 0, 1, 1)
         self.gridLayout_11.addLayout(self.gridLayout_19, 0, 2, 1, 1)
         self.gridLayout_13 = QtWidgets.QGridLayout()
         self.gridLayout_13.setObjectName("gridLayout_13")
         self.Outside_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Outside_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Outside_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Outside_Kills_2.setObjectName("Outside_Kills_2")
         self.gridLayout_13.addWidget(self.Outside_Kills_2, 1, 0, 1, 1)
         self.Outside_label_2 = QtWidgets.QLabel(self.widget_2)
@@ -419,18 +429,18 @@ class Ui_Form(object):
         self.Middle3_label_2.setObjectName("Middle3_label_2")
         self.gridLayout_16.addWidget(self.Middle3_label_2, 0, 0, 1, 1)
         self.Middle3_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Middle3_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle3_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle3_Kills_2.setObjectName("Middle3_Kills_2")
         self.gridLayout_16.addWidget(self.Middle3_Kills_2, 1, 0, 1, 1)
         self.gridLayout_11.addLayout(self.gridLayout_16, 0, 1, 1, 1)
         self.gridLayout_15 = QtWidgets.QGridLayout()
         self.gridLayout_15.setObjectName("gridLayout_15")
         self.Pipe_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Pipe_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Pipe_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Pipe_Kills_2.setObjectName("Pipe_Kills_2")
         self.gridLayout_15.addWidget(self.Pipe_Kills_2, 1, 0, 1, 1)
         self.Pipe_label_2 = QtWidgets.QLabel(self.widget_2)
@@ -456,9 +466,9 @@ class Ui_Form(object):
         self.Setter_Total_2.setObjectName("Setter_Total_2")
         self.gridLayout_18.addWidget(self.Setter_Total_2, 2, 0, 1, 1)
         self.Setter_Kills_2 = QtWidgets.QLCDNumber(self.widget_2)
-        self.Setter_Kills_2.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Setter_Kills_2.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Setter_Kills_2.setObjectName("Setter_Kills_2")
         self.gridLayout_18.addWidget(self.Setter_Kills_2, 1, 0, 1, 1)
         self.gridLayout_11.addLayout(self.gridLayout_18, 0, 3, 1, 1)
@@ -468,7 +478,9 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.Call_label_2.setFont(font)
-        self.Call_label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.Call_label_2.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.Call_label_2.setObjectName("Call_label_2")
         self.gridLayout_11.addWidget(self.Call_label_2, 3, 0, 1, 3)
         self.gridLayout_11.setRowStretch(0, 2)
@@ -484,9 +496,9 @@ class Ui_Form(object):
         self.gridLayout_31 = QtWidgets.QGridLayout()
         self.gridLayout_31.setObjectName("gridLayout_31")
         self.Outside_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Outside_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Outside_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Outside_Kills_4.setObjectName("Outside_Kills_4")
         self.gridLayout_31.addWidget(self.Outside_Kills_4, 1, 0, 1, 1)
         self.Outside_label_4 = QtWidgets.QLabel(self.widget_4)
@@ -512,23 +524,25 @@ class Ui_Form(object):
         self.Setter_Total_4.setObjectName("Setter_Total_4")
         self.gridLayout_36.addWidget(self.Setter_Total_4, 2, 0, 1, 1)
         self.Setter_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Setter_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Setter_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Setter_Kills_4.setObjectName("Setter_Kills_4")
         self.gridLayout_36.addWidget(self.Setter_Kills_4, 1, 0, 1, 1)
         self.gridLayout_29.addLayout(self.gridLayout_36, 0, 3, 1, 1)
         self.Call_percentage_4 = QtWidgets.QLCDNumber(self.widget_4)
         self.Call_percentage_4.setObjectName("Call_percentage_4")
         self.gridLayout_29.addWidget(self.Call_percentage_4, 3, 3, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_29.addItem(spacerItem3, 2, 2, 1, 1)
         self.gridLayout_33 = QtWidgets.QGridLayout()
         self.gridLayout_33.setObjectName("gridLayout_33")
         self.Pipe_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Pipe_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Pipe_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Pipe_Kills_4.setObjectName("Pipe_Kills_4")
         self.gridLayout_33.addWidget(self.Pipe_Kills_4, 1, 0, 1, 1)
         self.Pipe_label_4 = QtWidgets.QLabel(self.widget_4)
@@ -549,9 +563,9 @@ class Ui_Form(object):
         self.Middle3_label_4.setObjectName("Middle3_label_4")
         self.gridLayout_34.addWidget(self.Middle3_label_4, 0, 0, 1, 1)
         self.Middle3_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Middle3_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle3_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle3_Kills_4.setObjectName("Middle3_Kills_4")
         self.gridLayout_34.addWidget(self.Middle3_Kills_4, 1, 0, 1, 1)
         self.gridLayout_29.addLayout(self.gridLayout_34, 0, 1, 1, 1)
@@ -565,9 +579,9 @@ class Ui_Form(object):
         self.Middle2_Total_4.setObjectName("Middle2_Total_4")
         self.gridLayout_37.addWidget(self.Middle2_Total_4, 2, 0, 1, 1)
         self.Middle2_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Middle2_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle2_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle2_Kills_4.setObjectName("Middle2_Kills_4")
         self.gridLayout_37.addWidget(self.Middle2_Kills_4, 1, 0, 1, 1)
         self.gridLayout_29.addLayout(self.gridLayout_37, 0, 2, 1, 1)
@@ -581,18 +595,18 @@ class Ui_Form(object):
         self.Middle1_label_4.setObjectName("Middle1_label_4")
         self.gridLayout_32.addWidget(self.Middle1_label_4, 0, 0, 1, 1)
         self.Middle1_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Middle1_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle1_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle1_Kills_4.setObjectName("Middle1_Kills_4")
         self.gridLayout_32.addWidget(self.Middle1_Kills_4, 1, 0, 1, 1)
         self.gridLayout_29.addLayout(self.gridLayout_32, 0, 4, 1, 1)
         self.gridLayout_30 = QtWidgets.QGridLayout()
         self.gridLayout_30.setObjectName("gridLayout_30")
         self.Dia_Kills_4 = QtWidgets.QLCDNumber(self.widget_4)
-        self.Dia_Kills_4.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Dia_Kills_4.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Dia_Kills_4.setObjectName("Dia_Kills_4")
         self.gridLayout_30.addWidget(self.Dia_Kills_4, 1, 0, 1, 1)
         self.Dia_label_4 = QtWidgets.QLabel(self.widget_4)
@@ -610,7 +624,9 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.Call_label_4.setFont(font)
-        self.Call_label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.Call_label_4.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.Call_label_4.setObjectName("Call_label_4")
         self.gridLayout_29.addWidget(self.Call_label_4, 3, 0, 1, 3)
         self.gridLayout_29.setRowStretch(0, 2)
@@ -638,9 +654,9 @@ class Ui_Form(object):
         self.Setter_Total_5.setObjectName("Setter_Total_5")
         self.gridLayout_45.addWidget(self.Setter_Total_5, 2, 0, 1, 1)
         self.Setter_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Setter_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Setter_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Setter_Kills_5.setObjectName("Setter_Kills_5")
         self.gridLayout_45.addWidget(self.Setter_Kills_5, 1, 0, 1, 1)
         self.gridLayout_38.addLayout(self.gridLayout_45, 0, 3, 1, 1)
@@ -650,9 +666,9 @@ class Ui_Form(object):
         self.gridLayout_40 = QtWidgets.QGridLayout()
         self.gridLayout_40.setObjectName("gridLayout_40")
         self.Outside_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Outside_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Outside_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Outside_Kills_5.setObjectName("Outside_Kills_5")
         self.gridLayout_40.addWidget(self.Outside_Kills_5, 1, 0, 1, 1)
         self.Outside_label_5 = QtWidgets.QLabel(self.widget_5)
@@ -673,18 +689,18 @@ class Ui_Form(object):
         self.Middle1_label_5.setObjectName("Middle1_label_5")
         self.gridLayout_41.addWidget(self.Middle1_label_5, 0, 0, 1, 1)
         self.Middle1_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Middle1_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle1_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle1_Kills_5.setObjectName("Middle1_Kills_5")
         self.gridLayout_41.addWidget(self.Middle1_Kills_5, 1, 0, 1, 1)
         self.gridLayout_38.addLayout(self.gridLayout_41, 0, 4, 1, 1)
         self.gridLayout_39 = QtWidgets.QGridLayout()
         self.gridLayout_39.setObjectName("gridLayout_39")
         self.Dia_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Dia_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Dia_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Dia_Kills_5.setObjectName("Dia_Kills_5")
         self.gridLayout_39.addWidget(self.Dia_Kills_5, 1, 0, 1, 1)
         self.Dia_label_5 = QtWidgets.QLabel(self.widget_5)
@@ -696,7 +712,9 @@ class Ui_Form(object):
         self.Dia_Total_5.setObjectName("Dia_Total_5")
         self.gridLayout_39.addWidget(self.Dia_Total_5, 2, 0, 1, 1)
         self.gridLayout_38.addLayout(self.gridLayout_39, 0, 5, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_38.addItem(spacerItem4, 2, 2, 1, 1)
         self.gridLayout_46 = QtWidgets.QGridLayout()
         self.gridLayout_46.setObjectName("gridLayout_46")
@@ -708,9 +726,9 @@ class Ui_Form(object):
         self.Middle2_Total_5.setObjectName("Middle2_Total_5")
         self.gridLayout_46.addWidget(self.Middle2_Total_5, 2, 0, 1, 1)
         self.Middle2_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Middle2_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle2_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle2_Kills_5.setObjectName("Middle2_Kills_5")
         self.gridLayout_46.addWidget(self.Middle2_Kills_5, 1, 0, 1, 1)
         self.gridLayout_38.addLayout(self.gridLayout_46, 0, 2, 1, 1)
@@ -724,18 +742,18 @@ class Ui_Form(object):
         self.Middle3_label_5.setObjectName("Middle3_label_5")
         self.gridLayout_43.addWidget(self.Middle3_label_5, 0, 0, 1, 1)
         self.Middle3_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Middle3_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle3_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle3_Kills_5.setObjectName("Middle3_Kills_5")
         self.gridLayout_43.addWidget(self.Middle3_Kills_5, 1, 0, 1, 1)
         self.gridLayout_38.addLayout(self.gridLayout_43, 0, 1, 1, 1)
         self.gridLayout_42 = QtWidgets.QGridLayout()
         self.gridLayout_42.setObjectName("gridLayout_42")
         self.Pipe_Kills_5 = QtWidgets.QLCDNumber(self.widget_5)
-        self.Pipe_Kills_5.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Pipe_Kills_5.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Pipe_Kills_5.setObjectName("Pipe_Kills_5")
         self.gridLayout_42.addWidget(self.Pipe_Kills_5, 1, 0, 1, 1)
         self.Pipe_label_5 = QtWidgets.QLabel(self.widget_5)
@@ -752,7 +770,9 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.Call_label_5.setFont(font)
-        self.Call_label_5.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.Call_label_5.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.Call_label_5.setObjectName("Call_label_5")
         self.gridLayout_38.addWidget(self.Call_label_5, 3, 0, 1, 3)
         self.gridLayout_38.setRowStretch(0, 2)
@@ -768,9 +788,9 @@ class Ui_Form(object):
         self.gridLayout_49 = QtWidgets.QGridLayout()
         self.gridLayout_49.setObjectName("gridLayout_49")
         self.Outside_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Outside_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Outside_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Outside_Kills_6.setObjectName("Outside_Kills_6")
         self.gridLayout_49.addWidget(self.Outside_Kills_6, 1, 0, 1, 1)
         self.Outside_label_6 = QtWidgets.QLabel(self.widget_6)
@@ -791,16 +811,18 @@ class Ui_Form(object):
         self.Middle3_label_6.setObjectName("Middle3_label_6")
         self.gridLayout_52.addWidget(self.Middle3_label_6, 0, 0, 1, 1)
         self.Middle3_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Middle3_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle3_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle3_Kills_6.setObjectName("Middle3_Kills_6")
         self.gridLayout_52.addWidget(self.Middle3_Kills_6, 1, 0, 1, 1)
         self.gridLayout_47.addLayout(self.gridLayout_52, 0, 1, 1, 1)
         self.Call_percentage_6 = QtWidgets.QLCDNumber(self.widget_6)
         self.Call_percentage_6.setObjectName("Call_percentage_6")
         self.gridLayout_47.addWidget(self.Call_percentage_6, 3, 3, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_47.addItem(spacerItem5, 2, 2, 1, 1)
         self.gridLayout_50 = QtWidgets.QGridLayout()
         self.gridLayout_50.setObjectName("gridLayout_50")
@@ -812,9 +834,9 @@ class Ui_Form(object):
         self.Middle1_label_6.setObjectName("Middle1_label_6")
         self.gridLayout_50.addWidget(self.Middle1_label_6, 0, 0, 1, 1)
         self.Middle1_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Middle1_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle1_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle1_Kills_6.setObjectName("Middle1_Kills_6")
         self.gridLayout_50.addWidget(self.Middle1_Kills_6, 1, 0, 1, 1)
         self.gridLayout_47.addLayout(self.gridLayout_50, 0, 4, 1, 1)
@@ -833,9 +855,9 @@ class Ui_Form(object):
         self.Setter_Total_6.setObjectName("Setter_Total_6")
         self.gridLayout_54.addWidget(self.Setter_Total_6, 2, 0, 1, 1)
         self.Setter_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Setter_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Setter_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Setter_Kills_6.setObjectName("Setter_Kills_6")
         self.gridLayout_54.addWidget(self.Setter_Kills_6, 1, 0, 1, 1)
         self.gridLayout_47.addLayout(self.gridLayout_54, 0, 3, 1, 1)
@@ -849,18 +871,18 @@ class Ui_Form(object):
         self.Middle2_Total_6.setObjectName("Middle2_Total_6")
         self.gridLayout_55.addWidget(self.Middle2_Total_6, 2, 0, 1, 1)
         self.Middle2_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Middle2_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Middle2_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Middle2_Kills_6.setObjectName("Middle2_Kills_6")
         self.gridLayout_55.addWidget(self.Middle2_Kills_6, 1, 0, 1, 1)
         self.gridLayout_47.addLayout(self.gridLayout_55, 0, 2, 1, 1)
         self.gridLayout_48 = QtWidgets.QGridLayout()
         self.gridLayout_48.setObjectName("gridLayout_48")
         self.Dia_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Dia_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Dia_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Dia_Kills_6.setObjectName("Dia_Kills_6")
         self.gridLayout_48.addWidget(self.Dia_Kills_6, 1, 0, 1, 1)
         self.Dia_label_6 = QtWidgets.QLabel(self.widget_6)
@@ -875,9 +897,9 @@ class Ui_Form(object):
         self.gridLayout_51 = QtWidgets.QGridLayout()
         self.gridLayout_51.setObjectName("gridLayout_51")
         self.Pipe_Kills_6 = QtWidgets.QLCDNumber(self.widget_6)
-        self.Pipe_Kills_6.setStyleSheet("border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.Pipe_Kills_6.setStyleSheet(
+            "border-color: rgb(0,104,55);\n" "border-style: outset;\n" "border-width: 3px;"
+        )
         self.Pipe_Kills_6.setObjectName("Pipe_Kills_6")
         self.gridLayout_51.addWidget(self.Pipe_Kills_6, 1, 0, 1, 1)
         self.Pipe_label_6 = QtWidgets.QLabel(self.widget_6)
@@ -894,7 +916,9 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.Call_label_6.setFont(font)
-        self.Call_label_6.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.Call_label_6.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.Call_label_6.setObjectName("Call_label_6")
         self.gridLayout_47.addWidget(self.Call_label_6, 3, 0, 1, 3)
         self.gridLayout_47.setRowStretch(0, 2)

@@ -1,8 +1,10 @@
 from enum import Enum
-from .AbstractAction import AbstractAction
-import tvrscouting.statistics.Gamestate.game_state as gs
+
+from tvrscouting.statistics.Actions.ActionExpansion import expandString
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.utils.errors import TVRSyntaxError
+
+from .AbstractAction import AbstractAction
 
 
 class Quality(Enum):
@@ -149,7 +151,7 @@ class Gameaction(AbstractAction):
         self.action_error_type = "D"
 
     def __str__(self):
-        return gs.expandString(
+        return expandString(
             str(self.team)
             + str(self.player)
             + str(self.action)

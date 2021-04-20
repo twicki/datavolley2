@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+
 from tvrscouting.uis.third import Ui_Form as thridUI
 
 

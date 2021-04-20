@@ -13,12 +13,11 @@ from tvrscouting.analysis.point_graph import PointGraph
 from tvrscouting.analysis.recent_scores_view import RecentScores
 from tvrscouting.analysis.static import StaticWriter
 from tvrscouting.serializer.serializer import Serializer
-from tvrscouting.statistics import GameState
+from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Players.players import Team
+from tvrscouting.uis.comments import Ui_Form as Comment_UI
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
-
-from tvrscouting.uis.comments import Ui_Form as Comment_UI
 
 
 class PositionView:
@@ -308,7 +307,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def turn_on_or_off_remote(self):
         remote = self.remote_on.isChecked()
 
-        if remote and self.remote_server == None:
+        if remote and self.remote_server is None:
             self.setup_remote_server()
         if not remote:
             self.remote_server = None

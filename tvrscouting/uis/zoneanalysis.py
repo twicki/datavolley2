@@ -35,7 +35,9 @@ class Ui_Form(object):
         self.total_5.setText("")
         self.total_5.setObjectName("total_5")
         self.header_5.addWidget(self.total_5)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_5.addItem(spacerItem)
         self.total_perc_5 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
         font = QtGui.QFont()
@@ -92,7 +94,9 @@ class Ui_Form(object):
         self.total_1.setText("")
         self.total_1.setObjectName("total_1")
         self.header_1.addWidget(self.total_1)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_1.addItem(spacerItem1)
         self.total_perc_1 = QtWidgets.QLabel(self.horizontalLayoutWidget_4)
         font = QtGui.QFont()
@@ -152,7 +156,9 @@ class Ui_Form(object):
         self.total_7.setText("")
         self.total_7.setObjectName("total_7")
         self.header_7.addWidget(self.total_7)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_7.addItem(spacerItem2)
         self.total_perc_7 = QtWidgets.QLabel(self.horizontalLayoutWidget_7)
         font = QtGui.QFont()
@@ -209,7 +215,9 @@ class Ui_Form(object):
         self.total_10.setText("")
         self.total_10.setObjectName("total_10")
         self.header_10.addWidget(self.total_10)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_10.addItem(spacerItem3)
         self.total_perc_10 = QtWidgets.QLabel(self.horizontalLayoutWidget_10)
         font = QtGui.QFont()
@@ -269,7 +277,9 @@ class Ui_Form(object):
         self.total_8.setText("")
         self.total_8.setObjectName("total_8")
         self.header_8.addWidget(self.total_8)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_8.addItem(spacerItem4)
         self.total_perc_8 = QtWidgets.QLabel(self.horizontalLayoutWidget_8)
         font = QtGui.QFont()
@@ -326,7 +336,9 @@ class Ui_Form(object):
         self.total_9.setText("")
         self.total_9.setObjectName("total_9")
         self.header_9.addWidget(self.total_9)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_9.addItem(spacerItem5)
         self.total_perc_9 = QtWidgets.QLabel(self.horizontalLayoutWidget_9)
         font = QtGui.QFont()
@@ -386,7 +398,9 @@ class Ui_Form(object):
         self.total_6.setText("")
         self.total_6.setObjectName("total_6")
         self.header_6.addWidget(self.total_6)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_6.addItem(spacerItem6)
         self.total_perc_6 = QtWidgets.QLabel(self.horizontalLayoutWidget_3)
         font = QtGui.QFont()
@@ -469,7 +483,9 @@ class Ui_Form(object):
         self.total_4.setText("")
         self.total_4.setObjectName("total_4")
         self.header_4.addWidget(self.total_4)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_4.addItem(spacerItem7)
         self.total_perc_4 = QtWidgets.QLabel(self.horizontalLayoutWidget)
         font = QtGui.QFont()
@@ -503,7 +519,9 @@ class Ui_Form(object):
         self.total_2.setText("")
         self.total_2.setObjectName("total_2")
         self.header_2.addWidget(self.total_2)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_2.addItem(spacerItem8)
         self.total_perc_2 = QtWidgets.QLabel(self.horizontalLayoutWidget_5)
         font = QtGui.QFont()
@@ -560,7 +578,9 @@ class Ui_Form(object):
         self.total_3.setText("")
         self.total_3.setObjectName("total_3")
         self.header_3.addWidget(self.total_3)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem9 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.header_3.addItem(spacerItem9)
         self.total_perc_3 = QtWidgets.QLabel(self.horizontalLayoutWidget_6)
         font = QtGui.QFont()

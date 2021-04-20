@@ -27,7 +27,9 @@ class Ui_Dialog(object):
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setObjectName("pushButton_2")
         self.gridLayout.addWidget(self.pushButton_2, 0, 2, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem, 0, 5, 1, 1)
         self.load_button = QtWidgets.QPushButton(Dialog)
         self.load_button.setObjectName("load_button")
@@ -35,12 +37,16 @@ class Ui_Dialog(object):
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setObjectName("pushButton")
         self.gridLayout.addWidget(self.pushButton, 0, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem1, 0, 3, 1, 1)
         self.saveFile_button = QtWidgets.QPushButton(Dialog)
         self.saveFile_button.setObjectName("saveFile_button")
         self.gridLayout.addWidget(self.saveFile_button, 0, 6, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem2, 0, 1, 1, 1)
         self.gridLayout.setColumnStretch(0, 1)
         self.gridLayout.setColumnStretch(2, 1)
@@ -133,4 +139,6 @@ class Ui_Dialog(object):
         self.action_reel_box.setText(_translate("Dialog", "view action reel"))
         self.delete_action.setText(_translate("Dialog", "Delete Action"))
         self.insert_action.setText(_translate("Dialog", "Insert Action"))
+
+
 from PyQt5.QtMultimediaWidgets import QVideoWidget

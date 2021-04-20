@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+
 from tvrscouting.uis.team_view import Ui_Form as TeamUI
 
 
@@ -376,13 +377,13 @@ class TeamView(QtWidgets.QWidget, TeamUI):
 
     def find_candidate_results_in_team(self, result):
         candidate_found = False
-        while candidate_found == False:
+        while candidate_found is False:
             if len(result) == 0:
                 value = None
                 candidate_found = True
             else:
                 value = result.popitem(False)
-                if value == None:
+                if value is None:
                     candidate_found = True
                 elif not TeamView.no_actions_performed(value[1]):
                     candidate_found = True

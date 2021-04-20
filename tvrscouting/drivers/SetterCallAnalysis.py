@@ -1,21 +1,12 @@
-import sys
 import os
-from PyQt5 import QtWidgets, QtMultimedia, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QFileDialog
+import sys
 
-import tvrscouting
-from tvrscouting.serializer.serializer import Serializer
-from tvrscouting.uis.setterAnalysis import Ui_Form
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
-import copy
-
-from tvrscouting.statistics import Gameaction
-
-# from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
-from tvrscouting.statistics.Players.players import Team, Player
-from tvrscouting.analysis.filters import *
-
-# from tvrscouting.analysis.basic_filter_widget import Basic_Filter
+from tvrscouting.analysis.filters import compare_action_to_string
+from tvrscouting.statistics.Actions.GameAction import Gameaction
+from tvrscouting.uis.setterAnalysis import Ui_Form
 
 
 class SetterCallAnalysis:

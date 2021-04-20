@@ -1,1 +1,2 @@
-from .game_state import GameState, expandString
+# flake8: noqa: F401
+from .game_state import GameState
