@@ -91,6 +91,15 @@ def set_error_type(user_string, returnvalue):
     return returnvalue, user_string
 
 
+def set_direction_type(user_string, returnvalue):
+    if len(user_string):
+        if user_string[0] in ["c", "z"]:
+            returnvalue = returnvalue[:13] + user_string[0] + returnvalue[14:]
+        user_string = user_string[1:]
+        return returnvalue, user_string
+    return returnvalue, user_string
+
+
 def set_extended_scout(user_string, returnvalue):
     players_set = False
     if len(user_string) and user_string[0] == ";":
@@ -98,11 +107,18 @@ def set_extended_scout(user_string, returnvalue):
         returnvalue, user_string = set_type(user_string, returnvalue)
         returnvalue, user_string, players_set = set_players(user_string, returnvalue)
         returnvalue, user_string = set_error_type(user_string, returnvalue)
+        returnvalue, user_string = set_direction_type(user_string, returnvalue)
     return returnvalue, user_string, players_set
 
 
-def expandString(user_string, was_compound=False):
-    returnvalue = "*00h+D000;D9D"
+def correct_zones(returnvalue):
+    if returnvalue[3] != "h":
+        returnvalue = returnvalue[:13] + "z" + returnvalue[14:]
+    return returnvalue
+
+
+def expandString(user_string):
+    returnvalue = "*00h+D000;D9Dc"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
     returnvalue, user_string = set_number(user_string, returnvalue)
     returnvalue, user_string, action_set = set_action(user_string, returnvalue)
@@ -114,6 +130,8 @@ def expandString(user_string, was_compound=False):
     if not quality_set:
         returnvalue, user_string, quality_set = set_quality(user_string, returnvalue)
     returnvalue, user_string, players_set = set_extended_scout(user_string, returnvalue)
+
+    returnvalue = correct_zones(returnvalue)
     if len(user_string):
         raise TVRSyntaxError()
     return (

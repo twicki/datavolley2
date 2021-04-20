@@ -149,6 +149,7 @@ class Gameaction(AbstractAction):
         self.action_type = "D"
         self.action_players_involved = 9
         self.action_error_type = "D"
+        self.direction_type = "c"
 
     def __str__(self):
         return expandString(
@@ -163,6 +164,7 @@ class Gameaction(AbstractAction):
             + self.action_type
             + str(self.action_players_involved)
             + self.action_error_type
+            + self.direction_type
         )[0]
 
     @classmethod
@@ -187,6 +189,7 @@ class Gameaction(AbstractAction):
         new.action_type = s[10]
         new.action_players_involved = int(s[11])
         new.action_error_type = s[12]
+        new.direction_type = s[13]
         return new
 
 
