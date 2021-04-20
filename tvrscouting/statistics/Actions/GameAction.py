@@ -144,9 +144,9 @@ class Gameaction(AbstractAction):
         self.quality = Quality.Good
         self.combination = Combination.Default
         self.direction = [0, 0]
-        self.action_type = ""
-        self.action_players_involved = -1
-        self.action_error_type = ""
+        self.action_type = "D"
+        self.action_players_involved = 9
+        self.action_error_type = "D"
 
     def __str__(self):
         return gs.expandString(

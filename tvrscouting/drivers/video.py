@@ -20,14 +20,16 @@ class TimestampedAction:
         self,
         action,
         rally,
-        index=0,
+        action_index=0,
+        rally_index=0,
         absolute_timestamp=None,
         relative_timestamp=None,
     ):
         super().__init__()
         self.action = action
         self.from_rally = rally
-        self.action_index = index
+        self.action_index = action_index
+        self.rally_index = rally_index
         self.absolute_timestamp = absolute_timestamp
         self.relative_timestamp = relative_timestamp
 
@@ -71,11 +73,12 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         if game_state:
             self.update_action_view_from_game_state()
 
-    def set_total_number_of_actions(self):
-        self.total_nuber_of_actions = 0
+    def collect_total_number_of_actions(self):
+        total_nuber_of_actions = 0
         for rally in self.game_state.rallies:
             for action in rally.actions:
-                self.total_nuber_of_actions += 1
+                total_nuber_of_actions += 1
+        return total_nuber_of_actions
 
     @contextlib.contextmanager
     def edit_table(self):
@@ -85,17 +88,21 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.action_view.itemChanged.connect(self.save_modified_version)
 
     def update_action_view_from_game_state(self):
-        self.set_total_number_of_actions()
+        self.total_nuber_of_actions = self.collect_total_number_of_actions()
         with self.edit_table():
             self.action_view.setRowCount(self.total_nuber_of_actions)
             self.action_view.setColumnCount(1)
-            i = 0
+            action_index = 0
             initial_time_stamp = None
             self.all_actions = []
             self.displayed_actions = []
-            for rally in self.game_state.rallies:
+
+            for rally_index, rally in enumerate(self.game_state.rallies):
                 for action in rally.actions:
-                    self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(str(action)))
+                    self.action_view.setItem(
+                        0, action_index, QtWidgets.QTableWidgetItem(str(action))
+                    )
+                    self.action_view.setColumnWidth(action_index, 200)
                     if initial_time_stamp is None:
                         if action.time_stamp is not None:
                             initial_time_stamp = (
@@ -109,7 +116,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         TimestampedAction(
                             action,
                             rally,
-                            i,
+                            action_index,
+                            rally_index,
                             relative_time_stamp,
                             relative_time_stamp,
                         )
@@ -118,24 +126,35 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         TimestampedAction(
                             action,
                             rally,
-                            i,
+                            action_index,
+                            rally_index,
                             relative_time_stamp,
                             relative_time_stamp,
                         )
                     )
-                    i += 1
+                    action_index += 1
             self.action_view.scrollToBottom()
 
     def load_file(self):
         ser = Serializer(self)
         game_state = ser.deserialize()
         self.set_up_game_state(game_state)
+        self.apply_all_filters()
 
     def save_file(self):
         new_game_state = GameState()
+        rally_index = None
+        rally_actions = []
         for new_action in self.all_actions:
+            if rally_index != new_action.rally_index:
+                rally_index = new_action.rally_index
+                if len(rally_actions):
+                    new_game_state.add_plain(rally_actions)
+                    rally_actions = []
             new_action.action.time_stamp = new_action.absolute_timestamp
-            new_game_state.add_plain([new_action.action])
+            rally_actions.append(new_action.action)
+        if len(rally_actions):
+            new_game_state.add_plain(rally_actions)
         self.game_state = new_game_state
         ser = Serializer(self, self.game_state)
         ser.serialize()
@@ -159,14 +178,25 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
         current_action_index = self.get_current_action_index_or_default()
         new_action_string = self.lineEdit.text()
+        rally_index = None
+        rally_actions = []
         with self.create_clean_game_state() as new_game_state:
             for new_action in self.all_actions:
+                # create a new rally, store all the data if they don't match
+                if rally_index != new_action.rally_index:
+                    rally_index = new_action.rally_index
+                    if len(rally_actions):
+                        new_game_state.add_plain(rally_actions)
+                        rally_actions = []
                 new_action.action.time_stamp = new_action.absolute_timestamp
-                new_game_state.add_plain([new_action.action])
+                rally_actions.append(new_action.action)
                 if new_action.action_index == current_action_index:
-                    new_game_state.add_plain_from_string(
+                    for action in new_game_state.create_action_list_from_string(
                         new_action_string, new_action.absolute_timestamp
-                    )
+                    ):
+                        rally_actions.append(action)
+            if len(rally_actions):
+                new_game_state.add_plain(rally_actions)
 
         self.action_view.clearSelection()
         self.action_view.item(row + 1, 0).setSelected(True)
@@ -180,12 +210,21 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         new_highlight_column = 0
         deleted_action_index = current_action.action_index
 
+        rally_index = None
+        rally_actions = []
         with self.create_clean_game_state() as new_game_state:
             for new_action in self.all_actions:
                 if new_action.action_index != deleted_action_index:
+                    # create a new rally, store all the data if they don't match
+                    if rally_index != new_action.rally_index:
+                        rally_index = new_action.rally_index
+                        if len(rally_actions):
+                            new_game_state.add_plain(rally_actions)
+                            rally_actions = []
                     new_action.action.time_stamp = new_action.absolute_timestamp
-                    new_game_state.add_plain([new_action.action])
-
+                    rally_actions.append(new_action.action)
+            if len(rally_actions):
+                new_game_state.add_plain(rally_actions)
         self.action_view.clearSelection()
         if self.action_view.item(row, 0):
             self.action_view.item(row, 0).setSelected(True)
@@ -197,13 +236,28 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         changed_action_index = self.displayed_actions[item.row()].action_index
         highlited_row = item.row()
         action_str = item.text()
+
+        rally_index = None
+        rally_actions = []
         with self.create_clean_game_state() as new_game_state:
             for new_action in self.all_actions:
-                if new_action.action_index == changed_action_index:
-                    new_game_state.add_plain_from_string(action_str, new_action.absolute_timestamp)
-                else:
-                    new_action.action.time_stamp = new_action.absolute_timestamp
-                    new_game_state.add_plain([new_action.action])
+                if new_action.action_index != deleted_action_index:
+                    # create a new rally, store all the data if they don't match
+                    if rally_index != new_action.rally_index:
+                        rally_index = new_action.rally_index
+                        if len(rally_actions):
+                            new_game_state.add_plain(rally_actions)
+                            rally_actions = []
+                    if new_action.action_index == changed_action_index:
+                        for action in new_game_state.create_action_list_from_string(
+                            new_action_string, new_action.absolute_timestamp
+                        ):
+                            rally_actions.append(action)
+                    else:
+                        new_action.action.time_stamp = new_action.absolute_timestamp
+                        rally_actions.append(new_action.action)
+            if len(rally_actions):
+                new_game_state.add_plain(rally_actions)
 
         self.action_view.clearSelection()
         self.action_view.item(highlited_row, 0).setSelected(True)
@@ -233,6 +287,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
                         and self.check_all_action_filters(current_action)
                     ):
                         self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(current_action))
+                        self.action_view.setColumnWidth(i, 200)
                         self.displayed_actions.append(action)
                         i += 1
                         if action.action_index == old_highlight_index:
@@ -383,6 +438,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         if abs(current_time - start_with_leadup) > jump_threshold:
             percentage = start_with_leadup / self.total_time
             self.mediaplayer.set_position(percentage)
+        self.updateUI()
 
     def get_current_action_from_highlight(self):
         current_action = None

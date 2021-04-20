@@ -137,7 +137,19 @@
       \rowcolor[HTML]{9B9B9B}
       \multicolumn{2}{l}{\cellcolor[HTML]{9B9B9B}} & \multicolumn{5}{c}{\cellcolor[HTML]{9B9B9B}Set} & \multicolumn{3}{c}{\cellcolor[HTML]{9B9B9B}Points} & \multicolumn{3}{c}{\cellcolor[HTML]{9B9B9B}Serve} & \multicolumn{4}{c}{\cellcolor[HTML]{9B9B9B}Reception} & \multicolumn{5}{c}{\cellcolor[HTML]{9B9B9B}Attack} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}BK} \\
       \rowcolor[HTML]{9B9B9B}
-      \multicolumn{2}{l}{\multirow{-2}{*}{\cellcolor[HTML]{9B9B9B}\textbf{ \normalsize {{global_info.teamnames.home}} }}} &  {\tiny 1} & {\tiny 2} & {\tiny 3} & {\tiny 4} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny 5} & {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
+      \multicolumn{2}{l}{\multirow{-2}{*}{\cellcolor[HTML]{9B9B9B}\textbf{ \normalsize {{global_info.teamnames.home}} }}} & 
+      {% for n in [1,2,3,4,5] %} 
+        {% if n in global_info.serving_teams %}
+          {% if global_info.serving_teams[n] == "0" %}
+          \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{F0F0F0} {{n}} }} &
+          {% else %}
+          \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{9B9B9B} {{n}} }} &
+          {% endif %}
+        {% else %}
+          \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{9B9B9B} }} &
+        {% endif %}
+      {% endfor %}
+      {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
       \midrule
       {% for player in playerstats.home %}
       {{ player.Number }} {{ player.Role}} & {{ player.Name}} & {% for start in player.Starts %} {% if start == 0 %} {% elif start == -1 %} \played {% else %} {% if player.IsSetter %} \cellcolor[HTML]{9B9B9B} {% endif %}{{ start }} {% endif %} & {% endfor %} {{player.Points.Total}} & {{player.Points.BP}} & {{player.Points.Plus_minus}} & {{player.Serve.Total}} & {{player.Serve.Error}} & {{player.Serve.Points}} & {{player.Reception.Total}} & {{player.Reception.Error}} & {% if player.Reception.Positive == "." %} . {% else %} {{ player.Reception.Positive }}\% {% endif %} & {% if player.Reception.Perfect == "." %} . {% else %} {{player.Reception.Perfect}}\% {% endif %} & {{player.Attack.Total}} & {{player.Attack.Error}} & {{player.Attack.Blocked}} & {{player.Attack.Points}} & {% if player.Attack.Percentage == "." %} . {% else %} {{ player.Attack.Percentage }}\% {% endif %} & {{player.Blocks}} \\
@@ -161,7 +173,19 @@
       \rowcolor[HTML]{9B9B9B}
       \multicolumn{2}{l}{\cellcolor[HTML]{9B9B9B}} & \multicolumn{5}{c}{\cellcolor[HTML]{9B9B9B}Set} & \multicolumn{3}{c}{\cellcolor[HTML]{9B9B9B}Points} & \multicolumn{3}{c}{\cellcolor[HTML]{9B9B9B}Serve} & \multicolumn{4}{c}{\cellcolor[HTML]{9B9B9B}Reception} & \multicolumn{5}{c}{\cellcolor[HTML]{9B9B9B}Attack} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}BK} \\
       \rowcolor[HTML]{9B9B9B}
-      \multicolumn{2}{l}{\multirow{-2}{*}{\cellcolor[HTML]{9B9B9B}\textbf{ \normalsize {{global_info.teamnames.guest}} }}} &  {\tiny 1} & {\tiny 2} & {\tiny 3} & {\tiny 4} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny 5} & {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
+      \multicolumn{2}{l}{\multirow{-2}{*}{\cellcolor[HTML]{9B9B9B}\textbf{ \normalsize {{global_info.teamnames.guest}} }}} &  
+      {% for n in [1,2,3,4,5] %} 
+        {% if n in global_info.serving_teams %}
+          {% if global_info.serving_teams[n] == "1" %}
+          \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{F0F0F0} {{n}} }} &
+          {% else %}
+          \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{9B9B9B} {{n}} }} &
+          {% endif %}
+        {% else %}
+          \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{9B9B9B} }} &
+        {% endif %}
+      {% endfor %}
+      {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
       \midrule
       {% for player in playerstats.guest %}
       {{ player.Number }} {{ player.Role}} & {{ player.Name}} & {% for start in player.Starts %} {% if start == 0 %} {% elif start == -1 %} \played {% else %} {% if player.IsSetter %} \cellcolor[HTML]{9B9B9B} {% endif %} {{ start }} {% endif %} & {% endfor %} {{player.Points.Total}} & {{player.Points.BP}} & {{player.Points.Plus_minus}} & {{player.Serve.Total}} & {{player.Serve.Error}} & {{player.Serve.Points}} & {{player.Reception.Total}} & {{player.Reception.Error}} & {% if player.Reception.Positive == "." %} . {% else %} {{ player.Reception.Positive }}\% {% endif %} & {% if player.Reception.Perfect == "." %} . {% else %} {{player.Reception.Perfect}}\% {% endif %} & {{player.Attack.Total}} & {{player.Attack.Error}} & {{player.Attack.Blocked}} & {{player.Attack.Points}} & {% if player.Attack.Percentage == "." %} . {% else %} {{ player.Attack.Percentage }}\% {% endif %} & {{player.Blocks}} \\

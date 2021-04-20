@@ -122,7 +122,7 @@ def set_to_direction(user_string, returnvalue):
 
 
 def set_type(user_string, returnvalue):
-    if len(user_string) and user_string[0] in ["T", "H", "Q", "L", "R", "A"]:
+    if len(user_string) and user_string[0] in ["T", "H", "Q", "L", "R", "A", "D"]:
         returnvalue = returnvalue[:10] + user_string[0] + returnvalue[11:]
         user_string = user_string[1:]
     return returnvalue, user_string
@@ -138,7 +138,7 @@ def set_players(user_string, returnvalue):
 
 
 def set_error_type(user_string, returnvalue):
-    if len(user_string) and user_string[0] in ["S", "O", "N", "X", "B"]:
+    if len(user_string) and user_string[0] in ["S", "O", "N", "X", "B", "D"]:
         returnvalue = returnvalue[:12] + user_string[0] + returnvalue[13:]
         user_string = user_string[1:]
     return returnvalue, user_string
@@ -155,7 +155,7 @@ def set_extended_scout(user_string, returnvalue):
 
 
 def expandString(user_string, was_compound=False):
-    returnvalue = "*00h+D000;H0B"
+    returnvalue = "*00h+D000;D9D"
     returnvalue, user_string, team_set = set_team(user_string, returnvalue)
     returnvalue, user_string = set_number(user_string, returnvalue)
     returnvalue, user_string, action_set = set_action(user_string, returnvalue)
@@ -233,7 +233,7 @@ def correct_strings(
     return s1, s2
 
 
-def split_string(input):
+def split_compound_statements(input):
     strings = input.split(".")
     if len(strings) > 1:
         (
@@ -419,83 +419,138 @@ class GameState:
             self.add_logical([action], time_stamp)
         elif "K" in action:
             action = SetterCall.from_string(action, time_stamp)
-            self._setter_call = action
             self.add_logical([action], time_stamp)
         else:
-            str1, str2 = split_string(action)
+            str1, str2 = split_compound_statements(action)
             allactions = []
             allactions.append(copy.copy(Gameaction.from_string(str1, time_stamp)))
             if str2:
                 allactions.append(copy.copy(Gameaction.from_string(str2, time_stamp)))
             self.add_logical(allactions, time_stamp)
 
-    def add_plain_from_string(self, action, time_stamp=None):
-        # TODO: refactor things out here
+    def create_action_list_from_string(self, action: str, time_stamp=None):
+        if len(action) == 0:
+            return
         if "sub" in action:
-            self.add_action_substitution_from_string(action, time_stamp)
+            split_string = action.split("!")
+            number = int(split_string[1])
+            position = int(split_string[2])
+            team = split_string[0][0]
+            return [
+                SpecialActions.Substitute(
+                    actions.Team.from_string(team), number, position, time_stamp
+                )
+            ]
         elif "serve" in action:
-            l = action.split("!")
-            self.add_action_set_serving_team_from_string(action, time_stamp)
+            split_string = action.split("!")
+            autogen = False
+            if len(split_string) > 1:
+                autogen = ast.literal_eval(split_string[1])
+            team = split_string[0][0]
+            return [
+                SpecialActions.SetServingTeam(actions.Team.from_string(team), time_stamp, autogen)
+            ]
         elif "point" in action:
             # TODO: continue the refactoring here
             l = action.split("!")
-            autogen = ast.literal_eval(l[1])
+            number = int(l[1])
             team = l[0][0]
-            action = SpecialActions.Point(
-                actions.Team.from_string(team),
-                time_stamp=time_stamp,
-                auto_generated=autogen,
-            )
-            self.add_logical([action])
+            return [SpecialActions.Point(actions.Team.from_string(team), time_stamp)]
         elif "endset" in action:
-            l = action.split("!")
-            autogen = ast.literal_eval(l[1])
-            team = l[0][0]
-            action = SpecialActions.Endset(
-                actions.Team.from_string(team),
-                time_stamp=time_stamp,
-                auto_generated=autogen,
-            )
-            self.add_logical([action])
+            team = action[0][0]
+            return [SpecialActions.Endset(actions.Team.from_string(team), time_stamp)]
         elif "rota" in action:
             l = action.split("!")
-            autogen = ast.literal_eval(l[2])
             team = l[0][0]
             direction = True if int(l[1]) > 0 else False
-            action = SpecialActions.Rotation(
-                actions.Team.from_string(team),
-                direction,
-                time_stamp=time_stamp,
-                auto_generated=autogen,
-            )
-            self.add_logical([action])
+            return [SpecialActions.Rotation(actions.Team.from_string(team), direction, time_stamp)]
         elif "team" in action:
-            action = SpecialActions.InitializeTeamName(action, time_stamp)
-            self.add_logical([action])
+            return [SpecialActions.InitializeTeamName(action, time_stamp)]
         elif "player" in action:
-            action = SpecialActions.InitializePlayer(action, time_stamp)
-            self.add_logical([action])
+            return [SpecialActions.InitializePlayer(action, time_stamp)]
         elif "setter" in action:
             l = action.split("!")
             team = l[0][0]
             setter_number = int(l[1])
-            action = SpecialActions.SetSetter(
-                actions.Team.from_string(team), setter_number, time_stamp
-            )
-            self.add_logical([action], time_stamp)
+            return [
+                SpecialActions.SetSetter(actions.Team.from_string(team), setter_number, time_stamp)
+            ]
         elif "K" in action:
-            action = SetterCall.from_string(action, time_stamp)
-            self._setter_call = action
-            self.add_logical([action], time_stamp)
+            return [SetterCall.from_string(action, time_stamp)]
         else:
-            self.add_plain([Gameaction.from_string(action, time_stamp)])
+            str1, str2 = split_compound_statements(action)
+            allactions = []
+            allactions.append(copy.copy(Gameaction.from_string(str1, time_stamp)))
+            if str2:
+                allactions.append(copy.copy(Gameaction.from_string(str2, time_stamp)))
+            return allactions
+
+    # def add_plain_from_string(self, action, time_stamp=None):
+    #     # TODO: refactor things out here
+    #     if "sub" in action:
+    #         self.add_action_substitution_from_string(action, time_stamp)
+    #     elif "serve" in action:
+    #         l = action.split("!")
+    #         self.add_action_set_serving_team_from_string(action, time_stamp)
+    #     elif "point" in action:
+    #         # TODO: continue the refactoring here
+    #         l = action.split("!")
+    #         autogen = ast.literal_eval(l[1])
+    #         team = l[0][0]
+    #         action = SpecialActions.Point(
+    #             actions.Team.from_string(team),
+    #             time_stamp=time_stamp,
+    #             auto_generated=autogen,
+    #         )
+    #         self.add_logical([action])
+    #     elif "endset" in action:
+    #         l = action.split("!")
+    #         autogen = ast.literal_eval(l[1])
+    #         team = l[0][0]
+    #         action = SpecialActions.Endset(
+    #             actions.Team.from_string(team),
+    #             time_stamp=time_stamp,
+    #             auto_generated=autogen,
+    #         )
+    #         self.add_logical([action])
+    #     elif "rota" in action:
+    #         l = action.split("!")
+    #         autogen = ast.literal_eval(l[2])
+    #         team = l[0][0]
+    #         direction = True if int(l[1]) > 0 else False
+    #         action = SpecialActions.Rotation(
+    #             actions.Team.from_string(team),
+    #             direction,
+    #             time_stamp=time_stamp,
+    #             auto_generated=autogen,
+    #         )
+    #         self.add_logical([action])
+    #     elif "team" in action:
+    #         action = SpecialActions.InitializeTeamName(action, time_stamp)
+    #         self.add_logical([action])
+    #     elif "player" in action:
+    #         action = SpecialActions.InitializePlayer(action, time_stamp)
+    #         self.add_logical([action])
+    #     elif "setter" in action:
+    #         l = action.split("!")
+    #         team = l[0][0]
+    #         setter_number = int(l[1])
+    #         action = SpecialActions.SetSetter(
+    #             actions.Team.from_string(team), setter_number, time_stamp
+    #         )
+    #         self.add_logical([action], time_stamp)
+    #     elif "K" in action:
+    #         action = SetterCall.from_string(action, time_stamp)
+    #         self.add_logical([action], time_stamp)
+    #     else:
+    #         self.add_plain([Gameaction.from_string(action, time_stamp)])
 
     def add_plain(self, action_list, time_stamp=None):
         for action in action_list:
             self._current_actions.append(action)
-        self.scoring_team = None
+        self.flush_actions_plain()
         for action in action_list:
-            ## todo: this is copied form below, refactor!
+            # TODO: this is copied form below, refactor!
             if isinstance(action, SpecialActions.Substitute):
                 who = action.team_
                 field = self.court.fields[int(who)].players
@@ -503,34 +558,27 @@ class GameState:
                 fpos = field[:pos]
                 fpos.append(Player(action.player_in))
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
-                self.flush_actions()
             elif isinstance(action, SpecialActions.Endset):
                 self.set_score[int(action.team_)] += 1
                 self.score[0] = 0
                 self.score[1] = 0
                 self.court.fields[0] = Field()
                 self.court.fields[1] = Field()
-                self.flush_actions()
             elif isinstance(action, SpecialActions.Rotation):
                 self.court.rotate(int(action.team_))
-                self.flush_actions()
             elif isinstance(action, SpecialActions.SetServingTeam):
                 self._last_serve = action.team_
-                self.flush_actions()
             elif isinstance(action, SpecialActions.Point):
                 self.score[int(action.team_)] += action.value
-                self.flush_actions()
             elif isinstance(action, SpecialActions.InitializePlayer):
                 p = Player(action.number, action.position, action.name)
                 self.players[int(action.team)].append(p)
-                self.flush_actions()
             elif isinstance(action, SpecialActions.InitializeTeamName):
                 self.teamnames[int(action.team)] = action.name
-                self.flush_actions()
+            elif isinstance(action, SpecialActions.SetSetter):
+                self.court.fields[int(action.team_)].setter = action.setter_number
             elif isinstance(action, Gameaction):
                 pass
-            else:
-                self.flush_actions()
 
     def add_logical(self, action_list, time_stamp=None):
         for action in action_list:
@@ -568,7 +616,7 @@ class GameState:
                 self.teamnames[int(action.team)] = action.name
                 self.flush_actions()
             elif isinstance(action, SetterCall):
-                pass
+                self._setter_call = action
             elif isinstance(action, SpecialActions.SetSetter):
                 self.court.fields[int(action.team_)].setter = action.setter_number
             else:
@@ -619,6 +667,19 @@ class GameState:
         self.set_ended = False
         self.scoring_time_stamp = None
         self.scoring_team = None
+
+    def flush_actions_plain(self):
+        current_rally = Rally()
+        current_rally.court = copy.deepcopy(self.court)
+        current_rally.score = copy.deepcopy(self.score)
+        current_rally.set_score = copy.deepcopy(self.set_score)
+        current_rally.last_serve = copy.deepcopy(self._last_serve)
+        current_rally.actions = list.copy(self._current_actions)
+        current_rally.setter_call = self._setter_call
+        current_rally.correct_setter_call()
+        self.rallies.append(current_rally)
+        self._setter_call = None
+        self._current_actions.clear()
 
     def flush_actions(self):
         if len(self._current_actions):

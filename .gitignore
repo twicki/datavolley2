@@ -5,3 +5,5 @@ tvr_ve
 
 *.tvr
 gamestats.*
+tests/test_network_server.py
+tests/test_network_client.py

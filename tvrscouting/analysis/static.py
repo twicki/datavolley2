@@ -149,6 +149,25 @@ class StaticWriter:
             "guest": {"HC": "Some Name", "AC": "Another Name"},
         }
 
+        self.global_info["serving_teams"] = self.collect_serving_teams()
+
+    @staticmethod
+    def rally_contains_gameaction(rally):
+        for action in rally.actions:
+            if isinstance(action, Gameaction):
+                return True
+        return False
+
+    def collect_serving_teams(self):
+        result = {}
+        number_of_sets = self.gamestate.set_score[0] + self.gamestate.set_score[1]
+        for rally in self.gamestate.rallies:
+            setnumber = rally.set_score[0] + rally.set_score[1] + 1
+            if setnumber not in result and rally.last_serve:
+                if self.rally_contains_gameaction(rally):
+                    result[setnumber] = str(int(rally.last_serve))
+        return result
+
     def fill_team_stats(self):
         self.teamstats = {
             "home": {
