@@ -31,7 +31,9 @@ class Ui_TVRScouting(object):
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName("pushButton_3")
         self.gridLayout_7.addWidget(self.pushButton_3, 4, 1, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem, 8, 1, 1, 1)
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName("pushButton_2")
@@ -48,7 +50,9 @@ class Ui_TVRScouting(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
         self.gridLayout_7.addWidget(self.pushButton, 2, 1, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem1, 5, 1, 1, 1)
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setObjectName("textEdit")
@@ -56,7 +60,9 @@ class Ui_TVRScouting(object):
         self.remote_stats = QtWidgets.QPushButton(self.centralwidget)
         self.remote_stats.setObjectName("remote_stats")
         self.gridLayout_7.addWidget(self.remote_stats, 1, 1, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem2, 3, 1, 1, 1)
         self.gridLayout_9.addLayout(self.gridLayout_7, 0, 0, 1, 1)
         self.gridLayout_5 = QtWidgets.QGridLayout()

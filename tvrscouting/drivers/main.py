@@ -8,16 +8,16 @@ import time
 
 from PyQt5 import QtGui, QtWidgets
 
+from tvrscouting.analysis.comments import CommentView
 from tvrscouting.analysis.playerview import TeamViews
 from tvrscouting.analysis.point_graph import PointGraph
 from tvrscouting.analysis.recent_scores_view import RecentScores
+from tvrscouting.analysis.scoreboard import Scoreboard
 from tvrscouting.analysis.static import StaticWriter
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
-from tvrscouting.analysis.scoreboard import Scoreboard
-from tvrscouting.analysis.comments import CommentView
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):

@@ -74,7 +74,9 @@ class Ui_Scoreboard(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.h_g_serve.sizePolicy().hasHeightForWidth())
         self.h_g_serve.setSizePolicy(sizePolicy)
-        self.h_g_serve.setStyleSheet("QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}")
+        self.h_g_serve.setStyleSheet(
+            "QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}"
+        )
         self.h_g_serve.setText("")
         self.h_g_serve.setIconSize(QtCore.QSize(35, 35))
         self.h_g_serve.setCheckable(True)
@@ -195,9 +197,13 @@ class Ui_Scoreboard(object):
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget_6)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem, 0, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem1, 0, 2, 1, 1)
         self.oneeighty_switch = QtWidgets.QPushButton(self.gridLayoutWidget_6)
         self.oneeighty_switch.setObjectName("oneeighty_switch")
@@ -224,7 +230,9 @@ class Ui_Scoreboard(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.v_g_serve.sizePolicy().hasHeightForWidth())
         self.v_g_serve.setSizePolicy(sizePolicy)
-        self.v_g_serve.setStyleSheet("QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}")
+        self.v_g_serve.setStyleSheet(
+            "QCheckBox::indicator {width: 30px; height: 30px;spacing: 0px;}"
+        )
         self.v_g_serve.setText("")
         self.v_g_serve.setIconSize(QtCore.QSize(35, 35))
         self.v_g_serve.setCheckable(True)

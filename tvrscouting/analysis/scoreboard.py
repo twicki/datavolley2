@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.uis.scoreboard import Ui_Scoreboard as Scoreboard
 
