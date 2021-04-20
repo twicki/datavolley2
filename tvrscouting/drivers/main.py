@@ -14,29 +14,10 @@ from tvrscouting.analysis.recent_scores_view import RecentScores
 from tvrscouting.analysis.static import StaticWriter
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Gamestate.game_state import GameState
-from tvrscouting.statistics.Players.players import Team
-from tvrscouting.uis.comments import Ui_Form as Comment_UI
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
-
-
-class PositionView:
-    def __init__(self, name_label):
-        self.name_label = name_label
-
-
-class TeamView:
-    def __init__(self, name_label, serve_box, set_score, point_score):
-        self.name_label = name_label
-        self.serve_box = serve_box
-        self.set_score = set_score
-        self.point_score = point_score
-
-
-class CommentView(QtWidgets.QWidget, Comment_UI):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
+from tvrscouting.analysis.scoreboard import Scoreboard
+from tvrscouting.analysis.comments import CommentView
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
@@ -52,6 +33,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.ThirdWindow = None
         self.FourthWindow = None
         self.CommentsWindow = None
+        self.scoreboard = Scoreboard()
+        self.scoreboard.show()
         self.illegal = []
 
         self.details = []
@@ -88,8 +71,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
-
-        s = userdata.split()
         oldstate = self.game_state
         self.game_state = GameState()
         self.fullstring = userdata
@@ -184,39 +165,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.add_stings_to_game_state(actions)
         self.time_stamps.clear()
 
-    def display_team_info(self):
-        for team in range(2):
-            self.fieldView["teams"][team].name_label.setText(self.game_state.teamnames[team])
-            self.fieldView["teams"][team].point_score.display(self.game_state.score[team])
-            self.fieldView["teams"][team].set_score.display(self.game_state.set_score[team])
-
-    def display_serving_teams(self):
-        if self.game_state._last_serve == Team.from_string("*"):
-            self.fieldView["teams"][0].serve_box.setChecked(True)
-            self.fieldView["teams"][1].serve_box.setChecked(False)
-
-        elif self.game_state._last_serve == Team.from_string("/"):
-            self.fieldView["teams"][0].serve_box.setChecked(False)
-            self.fieldView["teams"][1].serve_box.setChecked(True)
-
-        else:
-            self.fieldView["teams"][0].serve_box.setChecked(False)
-            self.fieldView["teams"][1].serve_box.setChecked(False)
-
-    def display_players_on_court(self):
-        for team in range(2):
-            for player, positionview in zip(
-                self.game_state.court.fields[team].players,
-                self.fieldView["field"][team],
-            ):
-                number = player.Number
-                full_label = str(number) if number > 0 else ""
-                for player_in_list in self.game_state.players[team]:
-                    if player_in_list.Number == number:
-                        full_label = str(number) + " " + player_in_list.Name
-                        break
-                positionview.name_label.setText(full_label)
-
     def display_detailed_actions(self):
         self.action_view.itemChanged.connect(self.log_change)
         self.action_view.itemChanged.disconnect()
@@ -246,9 +194,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def update_main_view(self):
         self.update_full_text_view()
         self.highlight_errors()
-        self.display_team_info()
-        self.display_serving_teams()
-        self.display_players_on_court()
         self.display_detailed_actions()
         self.update_buttons()
 
@@ -287,9 +232,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         if self.FourthWindow:
             self.update_recent_scores_view()
 
+    def update_scoreboard(self):
+        if self.scoreboard is None:
+            self.scoreboard = Scoreboard()
+        self.scoreboard.update_from_gamestate(self.game_state)
+        self.scoreboard.show()
+
     def update(self):
         self.add_input_to_game_state()
         self.update_main_view()
+        self.update_scoreboard()
         self.update_commentator_view()
         self.send_data_to_remote_server()
 
@@ -323,29 +275,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.loadFile.clicked.connect(self.load_file)
         self.remote_stats.pressed.connect(self.setup_remote_server)
         self.remote_on.clicked.connect(self.turn_on_or_off_remote)
-
-        self.checkBox_2.setEnabled(False)
-        self.checkBox.setEnabled(False)
-
-        self.fieldView = {"field": [[], []], "teams": []}
-        self.fieldView["teams"].append(
-            TeamView(self.label_14, self.checkBox, self.lcdNumber_4, self.lcdNumber)
-        )
-        self.fieldView["teams"].append(
-            TeamView(self.label_13, self.checkBox_2, self.lcdNumber_3, self.lcdNumber_2)
-        )
-        self.fieldView["field"][0].append(PositionView(self.label))
-        self.fieldView["field"][0].append(PositionView(self.label_5))
-        self.fieldView["field"][0].append(PositionView(self.label_4))
-        self.fieldView["field"][0].append(PositionView(self.label_6))
-        self.fieldView["field"][0].append(PositionView(self.label_3))
-        self.fieldView["field"][0].append(PositionView(self.label_2))
-        self.fieldView["field"][1].append(PositionView(self.label_12))
-        self.fieldView["field"][1].append(PositionView(self.label_8))
-        self.fieldView["field"][1].append(PositionView(self.label_7))
-        self.fieldView["field"][1].append(PositionView(self.label_9))
-        self.fieldView["field"][1].append(PositionView(self.label_11))
-        self.fieldView["field"][1].append(PositionView(self.label_10))
 
     def setup_remote_server(self):
         # TODO: don't read from lineEdit but have a popup
