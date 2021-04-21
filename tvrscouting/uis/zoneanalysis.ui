@@ -30,11 +30,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>361</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_5" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_5" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_5">
          <property name="font">
@@ -69,6 +69,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -139,11 +152,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>371</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_1" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_1" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_1">
          <property name="font">
@@ -178,6 +191,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_1">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -240,7 +266,7 @@
     </widget>
    </item>
    <item row="5" column="6" colspan="2">
-    <widget class="QFrame" name="frame_7">
+    <widget class="QFrame" name="frame_10">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
@@ -255,13 +281,13 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>371</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_7" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_9" stretch="5,1,5,0">
        <item>
-        <widget class="QLabel" name="total_7">
+        <widget class="QLabel" name="total_9">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
@@ -273,7 +299,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_7">
+        <spacer name="horizontalSpacer_9">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -286,7 +312,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="total_perc_7">
+        <widget class="QLabel" name="total_perc_9">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
@@ -294,6 +320,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_9">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -308,37 +347,37 @@
         <height>141</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="leads_7">
+      <layout class="QVBoxLayout" name="leads_9">
        <item>
-        <widget class="QLabel" name="lead_7">
+        <widget class="QLabel" name="lead_9">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="second_7">
+        <widget class="QLabel" name="second_9">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="third_7">
+        <widget class="QLabel" name="third_9">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fourth_7">
+        <widget class="QLabel" name="fourth_9">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fifth_7">
+        <widget class="QLabel" name="fifth_9">
          <property name="text">
           <string/>
          </property>
@@ -368,7 +407,7 @@
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_10" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_10" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_10">
          <property name="font">
@@ -403,6 +442,22 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_10">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -476,11 +531,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>371</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_8" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_8" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_8">
          <property name="font">
@@ -515,6 +570,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_8">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -570,7 +638,7 @@
     </widget>
    </item>
    <item row="5" column="0">
-    <widget class="QFrame" name="frame_9">
+    <widget class="QFrame" name="frame_7">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(48, 136, 145);</string>
      </property>
@@ -585,13 +653,13 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>361</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_9" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_7" stretch="5,1,5,0">
        <item>
-        <widget class="QLabel" name="total_9">
+        <widget class="QLabel" name="total_7">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
@@ -603,7 +671,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_9">
+        <spacer name="horizontalSpacer_7">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -616,7 +684,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="total_perc_9">
+        <widget class="QLabel" name="total_perc_7">
          <property name="font">
           <font>
            <pointsize>15</pointsize>
@@ -624,6 +692,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_7">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -638,37 +719,37 @@
         <height>141</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="leads_9">
+      <layout class="QVBoxLayout" name="leads_7">
        <item>
-        <widget class="QLabel" name="lead_9">
+        <widget class="QLabel" name="lead_7">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="second_9">
+        <widget class="QLabel" name="second_7">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="third_9">
+        <widget class="QLabel" name="third_7">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fourth_9">
+        <widget class="QLabel" name="fourth_7">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fifth_9">
+        <widget class="QLabel" name="fifth_7">
          <property name="text">
           <string/>
          </property>
@@ -701,11 +782,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>371</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_6" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_6" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_6">
          <property name="font">
@@ -740,6 +821,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_6">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -857,11 +951,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>361</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_4" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_4" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_4">
          <property name="font">
@@ -899,6 +993,19 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_4">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -926,11 +1033,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>371</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_2" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_2" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_2">
          <property name="font">
@@ -965,6 +1072,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -1035,11 +1155,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>251</width>
+        <width>371</width>
         <height>31</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="header_3" stretch="5,1,5">
+      <layout class="QHBoxLayout" name="header_3" stretch="5,1,5,0">
        <item>
         <widget class="QLabel" name="total_3">
          <property name="font">
@@ -1074,6 +1194,19 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="kills_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(82,82,82);
+border-color: rgb(0,104,55);
+border-style: outset;
+border-width: 3px;</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>

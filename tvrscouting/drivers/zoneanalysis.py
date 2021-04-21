@@ -6,14 +6,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.uis.zoneanalysis import Ui_Form
+from tvrscouting.statistics.Actions.GameAction import Action, Quality
 
 
 class Position:
-    def __init__(self, total, percentage, first, second, thrid, fourth, fifth):
+    def __init__(self, total, percentage, first, second, thrid, fourth, fifth, kills):
         super().__init__()
         self.total = total
         self.percentage = percentage
         self.leaders = [first, second, thrid, fourth, fifth]
+        self.kills = kills
+        self.kills.hide()
 
 
 def keyPressed(evt):
@@ -61,6 +64,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_1,
                 self.fourth_1,
                 self.fifth_1,
+                self.kills_1,
             )
         )
         self.court.append(
@@ -72,6 +76,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_2,
                 self.fourth_2,
                 self.fifth_2,
+                self.kills_2,
             )
         )
         self.court.append(
@@ -83,6 +88,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_3,
                 self.fourth_3,
                 self.fifth_3,
+                self.kills_3,
             )
         )
         self.court.append(
@@ -94,6 +100,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_4,
                 self.fourth_4,
                 self.fifth_4,
+                self.kills_4,
             )
         )
         self.court.append(
@@ -105,6 +112,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_5,
                 self.fourth_5,
                 self.fifth_5,
+                self.kills_5,
             )
         )
         self.court.append(
@@ -116,6 +124,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_6,
                 self.fourth_6,
                 self.fifth_6,
+                self.kills_6,
             )
         )
         self.court.append(
@@ -127,6 +136,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_7,
                 self.fourth_7,
                 self.fifth_7,
+                self.kills_7,
             )
         )
         self.court.append(
@@ -138,6 +148,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_8,
                 self.fourth_8,
                 self.fifth_8,
+                self.kills_8,
             )
         )
         self.court.append(
@@ -149,6 +160,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_9,
                 self.fourth_9,
                 self.fifth_9,
+                self.kills_9,
             )
         )
         self.court.append(
@@ -160,16 +172,78 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 self.third_10,
                 self.fourth_10,
                 self.fifth_10,
+                self.kills_10,
             )
         )
+
+    @staticmethod
+    def zone_from_cone(from_zone, to_zone):
+        if from_zone in [4, 5, 7]:
+            if to_zone in [1, 2]:
+                return 1
+            elif to_zone in [3, 4]:
+                return 6
+            elif to_zone == 5:
+                return 5
+            elif to_zone == 6:
+                return 7
+            elif to_zone == 7:
+                return 4
+            else:  # if to_zone === 8:
+                return 2
+
+        elif from_zone in [1, 2, 9]:
+            if to_zone in [1, 2]:
+                return 5
+            elif to_zone in [3, 4]:
+                return 6
+            elif to_zone == 5:
+                return 1
+            elif to_zone == 6:
+                return 9
+            elif to_zone == 7:
+                return 2
+            else:  # if to_zone === 8:
+                return 4
+
+        else:  # if from_zone in [3, 6, 8]:
+            if to_zone in [2, 3]:
+                return 1
+            elif to_zone == 4:
+                return 6
+            elif to_zone in [5, 6]:
+                return 5
+            elif to_zone == 1:
+                return 2
+            elif to_zone == 7:
+                return 4
+            else:  # if to_zone === 8:
+                return 3
 
     def analyze(self):
         for position in range(9):
             total = 0
+            wins = 0
             leaders = {}
             for action in self.actions:
-                if int(action.direction[self.position_to_check]) == (position + 1):
+                direction = int(action.direction[self.position_to_check])
+                if (
+                    self.position_to_check == 1
+                    and action.direction_type == "c"
+                    and action.action == Action.Hit
+                ):
+                    direction = self.zone_from_cone(
+                        int(action.direction[0]), int(action.direction[1])
+                    )
+
+                if direction == (position + 1):
                     total += 1
+                    if action.action == Action.Reception:
+                        if action.quality == Quality.Perfect or action.quality == Quality.Good:
+                            wins += 1
+                    else:
+                        if action.quality == Quality.Perfect or action.quality == Quality.Kill:
+                            wins += 1
                     name = str(action.team) + str(action.player)
                     if name in leaders:
                         leaders[name] += 1
@@ -195,6 +269,11 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
                 if len(self.actions) and int(100 * (total / len(self.actions))) > 0
                 else ""
             )
+            if total > 0:
+                self.court[position].kills.show()
+                self.court[position].kills.display(round(100 * wins / total))
+            else:
+                self.court[position].kills.hide()
             for label, leader in zip(self.court[position].leaders, sorted_leaders):
                 label.setText(str(leader[0]) + " : " + str(leader[1]))
 

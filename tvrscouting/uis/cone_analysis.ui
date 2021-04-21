@@ -6,48 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1206</width>
-    <height>842</height>
+    <width>1194</width>
+    <height>805</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Zone Analysis</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,6" columnstretch="4,1,1,1,1,1" rowminimumheight="3,1,1,0">
-   <item row="0" column="3">
-    <widget class="QPushButton" name="court_filter_button">
-     <property name="text">
-      <string>CourtFilter</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLineEdit" name="lineEdit"/>
-   </item>
-   <item row="0" column="4">
-    <widget class="QPushButton" name="subaction_filter_button">
-     <property name="text">
-      <string>SubactionFilter</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="6">
-    <widget class="QWidget" name="widget" native="true"/>
-   </item>
-   <item row="1" column="5">
-    <widget class="QPushButton" name="reset_button">
-     <property name="text">
-      <string>Reset</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="action_filter_button">
-     <property name="text">
-      <string>ActionFilter</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0" colspan="6">
     <widget class="QTableWidget" name="filter_table"/>
    </item>
@@ -58,11 +24,98 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="4">
+    <widget class="QPushButton" name="subaction_filter_button">
+     <property name="text">
+      <string>SubactionFilter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="court_filter_button">
+     <property name="text">
+      <string>CourtFilter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLineEdit" name="lineEdit"/>
+   </item>
    <item row="0" column="2">
     <widget class="QPushButton" name="rally_button">
      <property name="text">
       <string>RallyFilter</string>
      </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="action_filter_button">
+     <property name="text">
+      <string>ActionFilter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QPushButton" name="reset_button">
+     <property name="text">
+      <string>Reset</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="6">
+    <widget class="QWidget" name="widget" native="true">
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>210</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt; 30%</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>250</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>30% - 50%</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>290</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>50% - 70%</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>330</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&gt; 70%</string>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>

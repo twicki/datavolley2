@@ -17,30 +17,9 @@ from tvrscouting.analysis.static import StaticWriter
 from tvrscouting.organization.edit_game import EditGame
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Gamestate.game_state import GameState
+from tvrscouting.statistics.Gamestate.game import Game
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
-
-
-class Game:
-    def __init__(self, game_state=None, meta_info=None):
-        self._game_state = game_state
-        self._meta_info = meta_info
-
-    @property
-    def game_state(self):
-        return self._game_state
-
-    @game_state.setter
-    def game_state(self, value):
-        self._game_state = value
-
-    @property
-    def meta_info(self):
-        return self._meta_info
-
-    @meta_info.setter
-    def meta_info(self, value):
-        self._meta_info = value
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
@@ -77,12 +56,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         raise NotImplementedError()
 
     def save_file(self):
-        ser = Serializer(self, self.game.game_state)
+        ser = Serializer(self, self.game)
         ser.serialize()
 
     def load_file(self):
         ser = Serializer(self)
-        self.game.game_state = ser.deserialize()
+        self.game = ser.deserialize()
         self.fullstring = ""
         for rally in self.game.game_state.rallies:
             for action in rally.actions:

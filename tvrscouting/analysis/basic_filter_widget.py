@@ -164,6 +164,7 @@ class Basic_Filter:
 
     def load_file(self):
         ser = Serializer(self)
-        self.game_state = ser.deserialize()
+        game = ser.deserialize()
+        self.game_state = game.game_state
         self.apply_all_filters()
         # self.fill_action_view()

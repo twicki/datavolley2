@@ -7,12 +7,13 @@ from PyQt5.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPolygon, 
 from PyQt5.QtWidgets import QApplication
 
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
-from tvrscouting.statistics.Actions.GameAction import Quality
+from tvrscouting.statistics.Actions.GameAction import Quality, Action
 from tvrscouting.uis.cone_analysis import Ui_Form
 
 
 class ConeAnalysis:
-    def __init__(self, from_position, to_position, quality, percentage):
+    def __init__(self, action_type, from_position, to_position, quality, percentage):
+        self.action_type = action_type
         self.from_position = from_position
         self.to_position = to_position
         self.quality = quality
@@ -43,8 +44,16 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
         self.outline_color = QColor(167, 176, 174, 255)
         self.net_color = QColor(0, 0, 0, 255)
         self.background_color = QColor(21, 157, 136, 255)
+        self.legend_color = QColor(128, 128, 124, 255)
         self.court_color = QColor(211, 94, 16, 255)
         self.analysis = []
+
+    def paint_legend(self, painter):
+        painter.fillRect(680, 350, 200, 220, self.legend_color)
+        painter.fillRect(710, 382, 30, 30, QColor(59, 116, 218, 255))
+        painter.fillRect(710, 422, 30, 30, QColor(39, 223, 116, 255))
+        painter.fillRect(710, 462, 30, 30, QColor(211, 197, 23, 255))
+        painter.fillRect(710, 502, 30, 30, QColor(231, 73, 12, 255))
 
     def paint_court(self, painter):
         painter.fillRect(10, 310, 640, 340, self.background_color)
@@ -101,28 +110,209 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
         painter = QPainter(self)
 
         self.paint_court(painter)
+        self.paint_legend(painter)
         self.paintAnalysis(painter)
+
+    @staticmethod
+    def cone_from_rhs(to_zone):
+        if to_zone in [5, 7]:
+            return 1
+        elif to_zone == 4:
+            return 8
+        elif to_zone in [2, 3]:
+            return 7
+        elif to_zone == 9:
+            return 6
+        elif to_zone == 8:
+            return 5
+        elif to_zone == 1:
+            return 5
+        else:
+            return 4
+
+    @staticmethod
+    def cone_from_lhs(to_zone):
+        if to_zone in [1, 9]:
+            return 1
+        elif to_zone == 2:
+            return 8
+        elif to_zone in [3, 4]:
+            return 7
+        elif to_zone == 7:
+            return 6
+        elif to_zone == 8:
+            return 5
+        elif to_zone == 5:
+            return 5
+        else:
+            return 4
+
+    @staticmethod
+    def cone_from_center(to_zone):
+        if to_zone == 1:
+            return 3
+        elif to_zone == [2, 9]:
+            return 1
+        elif to_zone == [3, 8]:
+            return 8
+        elif to_zone == [4, 7]:
+            return 7
+        elif to_zone == 6:
+            return 4
+        else:
+            return 5
+
+    @staticmethod
+    def cone_from_zone(from_zone, to_zone):
+        if from_zone in [1, 2, 9]:
+            return Main.cone_from_rhs(to_zone)
+        elif from_zone in [4, 5, 7]:
+            return Main.cone_from_lhs(to_zone)
+        else:
+            return Main.cone_from_center(to_zone)
+
+    @staticmethod
+    def get_start_x_from_cone(cone):
+        if cone.action_type in ["h", "b"]:
+            if cone.from_position in [2, 3, 4]:
+                return 330
+            elif cone.from_position in [7, 8, 9]:
+                return 230
+            else:
+                return 130
+        elif cone.action_type == "s":
+            if cone.from_position in [2, 3, 4]:
+                return 230
+            elif cone.from_position in [7, 8, 9]:
+                return 130
+            else:
+                return 30
+        else:
+            if cone.from_position in [2, 3, 4]:
+                return 280
+            elif cone.from_position in [7, 8, 9]:
+                return 180
+            else:
+                return 80
+
+    @staticmethod
+    def get_start_y_from_cone(cone):
+        if cone.from_position in [1, 2, 9]:
+            return 580
+        elif cone.from_position in [3, 6, 8]:
+            return 480
+        # elif cone.from_position in [4, 5, 7]:
+        else:
+            return 380
+
+    @staticmethod
+    def get_end_x_from_zone_indicator(zone):
+        if zone in [2, 3, 4]:
+            return 380
+        elif zone in [7, 8, 9]:
+            return 480
+        else:
+            return 580
+
+    @staticmethod
+    def get_end_x_from_cone_indicator(cone):
+        start_point = cone.from_position
+        end_point = cone.to_position
+        if start_point in [3, 6, 8]:
+            if end_point in [2, 3, 4, 5, 6]:
+                return 580
+            else:
+                return 480
+        else:
+            if end_point in [1, 2, 3, 4, 5]:
+                return 580
+            elif end_point == 6:
+                return 480
+            elif end_point == 7:
+                return 380
+            else:  # end_point == 8
+                return 340
+
+    @staticmethod
+    def get_end_x_from_cone(cone):
+        if cone.action_type in ["h"]:
+            return Main.get_end_x_from_cone_indicator(cone)
+        else:
+            return Main.get_end_x_from_zone_indicator(cone.to_position)
+
+    @staticmethod
+    def get_end_y_from_zone_indicator(zone):
+        if zone in [4, 5, 7]:
+            return 580
+        elif zone in [3, 6, 8]:
+            return 480
+        # elif zone in [1, 2, 9]:
+        else:
+            return 380
+
+    @staticmethod
+    def get_end_y_from_cone_indicator(cone):
+        start_point = cone.from_position
+        end_point = cone.to_position
+        if start_point in [3, 6, 8]:
+            if end_point == 2:
+                return 355
+            elif end_point == 3:
+                return 405
+            elif end_point == 4:
+                return 480
+            elif end_point == 5:
+                return 555
+            elif end_point == 6:
+                return 605
+            elif end_point == 7:
+                return 580
+            elif end_point == 8:
+                return 480
+            else:  # end_point == 1:
+                return 380
+        elif start_point in [4, 5, 7]:
+            if end_point == 1:
+                return 355
+            elif end_point == 2:
+                return 405
+            elif end_point == 3:
+                return 455
+            elif end_point == 4:
+                return 505
+            elif end_point in [5, 6, 7]:
+                return 580
+            else:  # end_point == 8
+                return 380
+        else:  # if start_point in [1,2,9]:
+            if end_point == 1:
+                return 605
+            elif end_point == 2:
+                return 555
+            elif end_point == 3:
+                return 505
+            elif end_point == 4:
+                return 455
+            elif end_point in [5, 6, 7]:
+                return 380
+            else:  # end_point == 8
+                return 580
+
+    @staticmethod
+    def get_end_y_from_cone(cone):
+        if cone.action_type in ["h"]:
+            return Main.get_end_y_from_cone_indicator(cone)
+        else:
+            return Main.get_end_y_from_zone_indicator(cone.to_position)
 
     def paintAnalysis(self, painter):
         for cone in self.analysis:
-            startpoint_x = 330 if cone.from_position in [2, 3, 4] else 230
-            if cone.from_position in [1, 2, 9]:
-                startpoint_y = 580
-            elif cone.from_position in [3, 6, 8]:
-                startpoint_y = 480
-            # elif cone.from_position in [4, 5, 7]:
-            else:
-                startpoint_y = 380
+            startpoint_x = self.get_start_x_from_cone(cone)
+            startpoint_y = self.get_start_y_from_cone(cone)
 
-            if cone.to_position in [4, 5, 7]:
-                endpoint_y = 580
-            elif cone.to_position in [3, 6, 8]:
-                endpoint_y = 480
-            # elif cone.to_position in [1, 2, 9]:
-            else:
-                endpoint_y = 380
+            endpoint_x = self.get_end_x_from_cone(cone)
+            endpoint_y = self.get_end_y_from_cone(cone)
             size = 80 * cone.percentage
-            endpoint_x = 380 if cone.to_position in [2, 3, 4] else 580
 
             p1 = [
                 QPoint(startpoint_x, startpoint_y),
@@ -156,15 +346,26 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
         total = 0
         for action in self.actions:
             if int(action.direction[0]) > 0 and int(action.direction[1]) > 0:
-                key = str(action.direction[0]) + str(action.direction[1])
+                to_direction = int(action.direction[1])
+                if action.direction_type == "z" and action.action == Action.Hit:
+                    to_direction = self.cone_from_zone(
+                        int(action.direction[0]), int(action.direction[1])
+                    )
+                category = "center"
+                if str(action.action) in ["h", "b"]:
+                    category = "front"
+                if str(action.action) == "s":
+                    category = "back"
+                key = str(action.direction[0]) + str(to_direction) + category
                 if key in directions:
                     directions[key]["quantity"] += 1
                     directions[key]["quality"] += quality_to_float(action.quality)
                     total += 1
                 else:
                     directions[key] = {
+                        "type": str(action.action),
                         "from": action.direction[0],
-                        "to": action.direction[1],
+                        "to": to_direction,
                         "quality": quality_to_float(action.quality),
                         "quantity": 1,
                     }
@@ -173,6 +374,7 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
         for value in directions.values():
             self.analysis.append(
                 ConeAnalysis(
+                    value["type"],
                     int(value["from"]),
                     int(value["to"]),
                     value["quality"] / value["quantity"],

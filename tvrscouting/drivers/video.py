@@ -12,6 +12,7 @@ from tvrscouting.analysis.basic_filter_widget import Basic_Filter
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Actions.GameAction import Gameaction
 from tvrscouting.statistics.Gamestate.game_state import GameState
+from tvrscouting.statistics.Gamestate.game import Game
 from tvrscouting.uis.video import Ui_Dialog
 
 
@@ -137,7 +138,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
     def load_file(self):
         ser = Serializer(self)
-        game_state = ser.deserialize()
+        self.game = ser.deserialize()
+        game_state = self.game.game_state
         self.set_up_game_state(game_state)
         self.apply_all_filters()
 
@@ -156,7 +158,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         if len(rally_actions):
             new_game_state.add_plain(rally_actions)
         self.game_state = new_game_state
-        ser = Serializer(self, self.game_state)
+        new_game = Game()
+        new_game.game_state = self.game_state
+        new_game.meta_info = self.game.meta_info
+        ser = Serializer(self, new_game)
         ser.serialize()
 
     @contextlib.contextmanager
