@@ -1,3 +1,8 @@
+from typing import List
+
+from tvrscouting.organization.team_info import TeamInfo
+
+
 class GameMetaInfo:
     def __init__(
         self,
@@ -11,17 +16,17 @@ class GameMetaInfo:
         city="",
         hall="",
         matchnumber=0,
-        teams=[{}, {}],
+        teams=[TeamInfo(), TeamInfo()],
     ):
         super().__init__()
-        self.date = date
-        self.time = time
-        self.season = season
-        self.league = league
-        self.phase = phase
-        self.refs = refs
-        self.spectators = spectators
-        self.city = city
-        self.hall = hall
-        self.teams = teams
-        self.matchnumber = matchnumber
+        self.date: str = date
+        self.time: str = time
+        self.season: str = season
+        self.league: str = league
+        self.phase: str = phase
+        self.refs: str = refs
+        self.spectators: int = spectators
+        self.city: str = city
+        self.hall: str = hall
+        self.teams: List[TeamInfo] = teams
+        self.matchnumber: int = matchnumber

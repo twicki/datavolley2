@@ -7,7 +7,7 @@ from PyQt5.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPolygon, 
 from PyQt5.QtWidgets import QApplication
 
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
-from tvrscouting.statistics.Actions.GameAction import Quality, Action
+from tvrscouting.statistics.Actions.GameAction import Action, Quality
 from tvrscouting.uis.cone_analysis import Ui_Form
 
 

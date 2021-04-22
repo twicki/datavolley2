@@ -133,6 +133,22 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        Form.setTabOrder(self.date_line, self.time_line)
+        Form.setTabOrder(self.time_line, self.season_line)
+        Form.setTabOrder(self.season_line, self.league_line)
+        Form.setTabOrder(self.league_line, self.phase_line)
+        Form.setTabOrder(self.phase_line, self.ref_line)
+        Form.setTabOrder(self.ref_line, self.spec_line)
+        Form.setTabOrder(self.spec_line, self.city_line)
+        Form.setTabOrder(self.city_line, self.hall_line)
+        Form.setTabOrder(self.hall_line, self.matchnumber_line)
+        Form.setTabOrder(self.matchnumber_line, self.home_team)
+        Form.setTabOrder(self.home_team, self.guest_team)
+        Form.setTabOrder(self.guest_team, self.save)
+        Form.setTabOrder(self.save, self.show_home_name)
+        Form.setTabOrder(self.show_home_name, self.show_guest_coach)
+        Form.setTabOrder(self.show_guest_coach, self.show_guest_name)
+        Form.setTabOrder(self.show_guest_name, self.show_home_coach)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

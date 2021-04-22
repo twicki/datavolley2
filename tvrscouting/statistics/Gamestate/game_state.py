@@ -442,7 +442,7 @@ class GameState:
             elif isinstance(action, SpecialActions.Point):
                 self.score[int(action.team_)] += action.value
             elif isinstance(action, SpecialActions.InitializePlayer):
-                p = Player(action.number, action.position, action.name)
+                p = Player(action.number, action.position, action.name, action.is_capitan)
                 self.players[int(action.team)].append(p)
             elif isinstance(action, SpecialActions.InitializeTeamName):
                 self.teamnames[int(action.team)] = action.name
@@ -480,7 +480,7 @@ class GameState:
                 self.score[int(action.team_)] += action.value
                 self.flush_actions()
             elif isinstance(action, SpecialActions.InitializePlayer):
-                p = Player(action.number, action.position, action.name)
+                p = Player(action.number, action.position, action.name, action.is_capitan)
                 self.players[int(action.team)].append(p)
                 self.flush_actions()
             elif isinstance(action, SpecialActions.InitializeTeamName):

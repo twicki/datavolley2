@@ -1,11 +1,14 @@
 import os
-import sys
 import pickle
-from tvrscouting.statistics.Players.players import Team
-from PyQt5 import QtWidgets, QtGui
-from tvrscouting.uis.game_info import Ui_Form as Widget
+import sys
+from typing import List, Optional
+
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
+
 from tvrscouting.organization.game_meta_info import GameMetaInfo
+from tvrscouting.organization.team_info import TeamInfo
+from tvrscouting.uis.game_info import Ui_Form as Widget
 
 
 class EditGame(QtWidgets.QWidget, Widget):
@@ -19,10 +22,10 @@ class EditGame(QtWidgets.QWidget, Widget):
         self.setupUi(self)
         self.parent = parent
         self.qt_setup()
-        self.teams = [None, None]
+        self.teams: List[Optional[TeamInfo]] = [None, None]
         self.set_up_game_info(game_info)
 
-    def set_up_game_info(self, game_info):
+    def set_up_game_info(self, game_info: GameMetaInfo):
         if game_info:
             self.date_line.setText(game_info.date)
             self.time_line.setText(game_info.time)
@@ -39,10 +42,10 @@ class EditGame(QtWidgets.QWidget, Widget):
             for index, team in enumerate(game_info.teams):
                 if team:
                     self.teams[index] = team
-                    self.show_coaches[index].setText(team["Head Coach"])
-                    self.show_teams[index].setText(team["Name"])
+                    self.show_coaches[index].setText(team.head_coach)
+                    self.show_teams[index].setText(team.name)
 
-    def save_metadata(self):
+    def save_metadata(self) -> GameMetaInfo:
         info = GameMetaInfo()
         info.date = self.date_line.text()
         info.time = self.time_line.text()
@@ -61,25 +64,13 @@ class EditGame(QtWidgets.QWidget, Widget):
             info.teams.append(team)
         return info
 
-    def team_to_string(self, team, index):
-        retval = ""
+    def team_to_string(self, team: Optional[TeamInfo], index: int):
         if team:
             teams = ["*", "/"]
             team_char = teams[index]
-            retval += team_char + "team" + "!" + team["Name"] + "\n"
-            for player in team["Players"]:
-                retval += (
-                    team_char
-                    + "player"
-                    + "!"
-                    + str(player.Number)
-                    + "!"
-                    + player.Name.split()[-1]
-                    + "!"
-                    + str(player.Position)
-                    + "\n"
-                )
-        return retval
+            return team.to_string(team_char)
+        else:
+            return ""
 
     def return_info_to_parent(self):
         if self.parent:
@@ -100,8 +91,8 @@ class EditGame(QtWidgets.QWidget, Widget):
                 return
         with open(filename, "rb") as picklefile:
             self.teams[team_index] = pickle.load(picklefile)
-        self.show_coaches[team_index].setText(self.teams[team_index]["Head Coach"])
-        self.show_teams[team_index].setText(self.teams[team_index]["Name"])
+        self.show_coaches[team_index].setText(self.teams[team_index].head_coach)
+        self.show_teams[team_index].setText(self.teams[team_index].name)
 
     def set_up_home_team(self):
         self.set_up_team(team_index=0)

@@ -104,9 +104,13 @@ class InitializePlayer(AbstractAction):
         self.number = int(split_string[1])
         self.name = split_string[2]
         self.position = Player.PlayerPosition.from_string(split_string[3])
+        self.is_capitan = False
+        if len(split_string) > 4:
+            if split_string[4].upper() == "C":
+                self.is_capitan = True
 
     def __str__(self):
-        return (
+        returnvalue = (
             str(self.team)
             + "player"
             + "!"
@@ -116,6 +120,10 @@ class InitializePlayer(AbstractAction):
             + "!"
             + str(self.position)
         )
+        if self.is_capitan:
+            returnvalue = returnvalue + "!" + "C"
+
+        return returnvalue
 
 
 class InitializeTeamName(AbstractAction):

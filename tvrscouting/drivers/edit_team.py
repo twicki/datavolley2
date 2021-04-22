@@ -1,11 +1,13 @@
-import sys
-import pickle
 import os
+import pickle
+import sys
 
-from PyQt5 import QtWidgets, QtGui
-from tvrscouting.uis.edit_team import Ui_Form as Widget
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
+
+from tvrscouting.organization.team_info import TeamInfo
 from tvrscouting.statistics.Players.players import Player
+from tvrscouting.uis.edit_team import Ui_Form as Widget
 
 
 class EditTeam(QtWidgets.QWidget, Widget):
@@ -38,11 +40,10 @@ class EditTeam(QtWidgets.QWidget, Widget):
         self.table.setColumnWidth(4, 50)
 
     def save_to_file(self, *, filename: str = None):
-
-        team = {"Name": "", "Head Coach": "", "Assistent Coach": "", "Players": []}
-        team["Name"] = self.Teamname.text()
-        team["Head Coach"] = self.HC.text()
-        team["Assistent Coach"] = self.AC.text()
+        team = TeamInfo()
+        team.name = self.Teamname.text()
+        team.head_coach = self.HC.text()
+        team.assistant_coach = self.AC.text()
         for row in range(self.table.rowCount()):
             if self.table.item(row, 0) and len(self.table.item(row, 0).text()):
                 lastName = ""
@@ -59,7 +60,7 @@ class EditTeam(QtWidgets.QWidget, Widget):
                 player.is_las = False
                 if self.table.item(row, 4) and str(self.table.item(row, 4).text()) == "LAS":
                     player.is_las = True
-                team["Players"].append(player)
+                team.players.append(player)
         if filename is None:
             filename = QFileDialog.getSaveFileName(
                 self, "Save File", self.STORED_DATA_PATH, "*.tvrt"
@@ -80,13 +81,13 @@ class EditTeam(QtWidgets.QWidget, Widget):
             team = pickle.load(picklefile)
             self.fill_view_from_team(team)
 
-    def fill_view_from_team(self, team):
-        self.Teamname.setText(team["Name"])
-        self.HC.setText(team["Head Coach"])
-        self.AC.setText(team["Assistent Coach"])
+    def fill_view_from_team(self, team: TeamInfo):
+        self.Teamname.setText(team.name)
+        self.HC.setText(team.head_coach)
+        self.AC.setText(team.assistant_coach)
 
-        self.table.setRowCount(len(team["Players"]))
-        for index, player in enumerate(team["Players"]):
+        self.table.setRowCount(len(team.players))
+        for index, player in enumerate(team.players):
             self.table.setItem(index, 0, QtWidgets.QTableWidgetItem(str(player.Number)))
             self.table.setItem(index, 1, QtWidgets.QTableWidgetItem(str(player.Position)))
             self.table.setItem(

@@ -8,6 +8,7 @@ from tvrscouting.analysis.filters import (
     compare_action_to_string,
     rally_filter_from_string,
 )
+from tvrscouting.organization.game_meta_info import GameMetaInfo
 from tvrscouting.statistics.Actions.GameAction import Gameaction
 from tvrscouting.statistics.Actions.SpecialAction import Endset
 from tvrscouting.statistics.Gamestate.game_state import GameState
@@ -31,7 +32,7 @@ class StaticWriter:
     def __init__(self, game_state: GameState, game_meta_info):
         super().__init__()
         self.gamestate = game_state
-        self.meta_info = game_meta_info
+        self.meta_info: GameMetaInfo = game_meta_info
 
     def fill_scores(self) -> None:
         partialscores = []
@@ -151,16 +152,16 @@ class StaticWriter:
         }
         if self.meta_info:
             self.global_info["coaches"]["home"]["HC"] = (
-                self.meta_info.teams[0]["Head Coach"] if self.meta_info.teams[0] else ""
+                self.meta_info.teams[0].head_coach if self.meta_info.teams[0] else ""
             )
             self.global_info["coaches"]["home"]["AC"] = (
-                self.meta_info.teams[0]["Assistent Coach"] if self.meta_info.teams[0] else ""
+                self.meta_info.teams[0].assistant_coach if self.meta_info.teams[0] else ""
             )
             self.global_info["coaches"]["guest"]["HC"] = (
-                self.meta_info.teams[0]["Head Coach"] if self.meta_info.teams[1] else ""
+                self.meta_info.teams[1].head_coach if self.meta_info.teams[1] else ""
             )
             self.global_info["coaches"]["guest"]["AC"] = (
-                self.meta_info.teams[0]["Assistent Coach"] if self.meta_info.teams[1] else ""
+                self.meta_info.teams[1].assistant_coach if self.meta_info.teams[1] else ""
             )
             self.global_info["Liga"] = self.meta_info.league
             self.global_info["Saison"] = self.meta_info.season
@@ -607,6 +608,14 @@ class StaticWriter:
         fulldata["Name"] = player.Name
         fulldata["Number"] = player.Number
         fulldata["Role"] = ""
+        if self.meta_info and self.meta_info.teams[int(team)]:
+            for player_from_team in self.meta_info.teams[int(team)].players:
+                if (
+                    player_from_team.Name == player.Name
+                    and player_from_team.Number == player.Number
+                    and player_from_team.is_capitain
+                ):
+                    fulldata["Role"] = "C"
         fulldata["IsSetter"] = player.PlayerPosition.Setter == player.Position
         if player.is_capitain:
             fulldata["Role"] = "C"
@@ -635,11 +644,17 @@ class StaticWriter:
         return fulldata
 
     def analyze(self) -> None:
+        print("start")
         self.fill_scores()
+        print("scores")
         self.fill_global_info()
+        print("global")
         self.fill_team_stats()
+        print("team_stats")
         self.fill_player_stats()
+        print("player stats")
         self.fill_detailed_info()
+        print("details")
 
         TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "template")
         file_loader = FileSystemLoader(TEMPLATE_PATH)
@@ -655,6 +670,7 @@ class StaticWriter:
             detailed_infos=self.detailed_infos,
             template_path=TEMPLATE_PATH,
         )
+        print("template")
 
         with open("gamestats.tex", "w") as f:
             f.write(output)

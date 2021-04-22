@@ -11,8 +11,8 @@ import tvrscouting.utils.vlc as vlc
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Actions.GameAction import Gameaction
-from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Gamestate.game import Game
+from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.uis.video import Ui_Dialog
 
 
@@ -139,9 +139,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def load_file(self):
         ser = Serializer(self)
         self.game = ser.deserialize()
-        game_state = self.game.game_state
-        self.set_up_game_state(game_state)
-        self.apply_all_filters()
+        if self.game:
+            game_state = self.game.game_state
+            self.set_up_game_state(game_state)
+            self.apply_all_filters()
 
     def save_file(self):
         new_game_state = GameState()
@@ -175,6 +176,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
     def get_current_action_index_or_default(self):
         current_action = self.get_current_action_from_highlight()
         if current_action is None:
+            if len(self.displayed_actions) == 0:
+                return -1
             current_action = self.displayed_actions[0]
         return current_action.action_index
 
@@ -272,6 +275,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             self.load_file()
             if self.game_state is None:
                 return
+
         old_highlight_index = self.get_current_action_index_or_default()
         self.action_view.clearSelection()
         new_highlight_column = 0
@@ -301,8 +305,9 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         new_highlight_column = (
             new_highlight_column - 1 if new_highlight_column > 0 else new_highlight_column
         )
-        self.action_view.item(new_highlight_column, 0).setSelected(True)
-        self.center_new_selection()
+        if self.action_view.item(new_highlight_column, 0):
+            self.action_view.item(new_highlight_column, 0).setSelected(True)
+            self.center_new_selection()
         self.lineEdit.clear()
 
     def cell_was_clicked(self, row, column):

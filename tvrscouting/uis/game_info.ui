@@ -233,6 +233,25 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>date_line</tabstop>
+  <tabstop>time_line</tabstop>
+  <tabstop>season_line</tabstop>
+  <tabstop>league_line</tabstop>
+  <tabstop>phase_line</tabstop>
+  <tabstop>ref_line</tabstop>
+  <tabstop>spec_line</tabstop>
+  <tabstop>city_line</tabstop>
+  <tabstop>hall_line</tabstop>
+  <tabstop>matchnumber_line</tabstop>
+  <tabstop>home_team</tabstop>
+  <tabstop>guest_team</tabstop>
+  <tabstop>save</tabstop>
+  <tabstop>show_home_name</tabstop>
+  <tabstop>show_guest_coach</tabstop>
+  <tabstop>show_guest_name</tabstop>
+  <tabstop>show_home_coach</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

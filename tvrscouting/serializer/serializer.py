@@ -3,7 +3,6 @@ import pickle
 
 from PyQt5.QtWidgets import QFileDialog
 
-from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Gamestate.game import Game
 
 

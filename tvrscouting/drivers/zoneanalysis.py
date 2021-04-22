@@ -4,9 +4,9 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
+from tvrscouting.statistics.Actions.GameAction import Action, Quality
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.uis.zoneanalysis import Ui_Form
-from tvrscouting.statistics.Actions.GameAction import Action, Quality
 
 
 class Position:

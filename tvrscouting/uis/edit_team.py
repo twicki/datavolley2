@@ -58,5 +58,5 @@ class Ui_Form(object):
         self.plus.setText(_translate("Form", "+"))
         self.save.setText(_translate("Form", "Save"))
         self.label.setText(_translate("Form", "Head Coach"))
-        self.label_2.setText(_translate("Form", "Assistent Coach"))
+        self.label_2.setText(_translate("Form", "Assistant Coach"))
         self.load.setText(_translate("Form", "Load"))

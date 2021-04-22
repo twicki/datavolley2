@@ -16,8 +16,8 @@ from tvrscouting.analysis.scoreboard import Scoreboard
 from tvrscouting.analysis.static import StaticWriter
 from tvrscouting.organization.edit_game import EditGame
 from tvrscouting.serializer.serializer import Serializer
-from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Gamestate.game import Game
+from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
 
@@ -79,7 +79,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
-        oldstate = self.game.game_state
+        if self.game:
+            oldstate = self.game.game_state
+        else:
+            oldstate = None
         self.game.game_state = GameState()
         self.fullstring = userdata
 
@@ -91,7 +94,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             actions = rally.split()
             self.add_stings_to_game_state(actions)
 
-        self.game.game_state.fix_time_stamps(oldstate)
+        if oldstate:
+            self.game.game_state.fix_time_stamps(oldstate)
 
         if self.fullstring[-1] == "\n":
             self.fullstring = self.fullstring[:-1]
