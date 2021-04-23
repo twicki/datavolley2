@@ -1,3 +1,5 @@
+from typing import Optional
+
 from PyQt5 import QtWidgets
 
 from tvrscouting.analysis.filters import (
@@ -9,6 +11,7 @@ from tvrscouting.analysis.filters import (
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Actions.GameAction import Gameaction
 from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
+from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Players.players import Player
 
 
@@ -19,7 +22,7 @@ class Basic_Filter:
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.game_state = None
+        self.game_state: Optional[GameState] = None
 
         self.action_filter_button.clicked.connect(self.store_action_filter)
         self.court_filter_button.clicked.connect(self.store_court_filter)
@@ -165,6 +168,7 @@ class Basic_Filter:
     def load_file(self):
         ser = Serializer(self)
         game = ser.deserialize()
-        self.game_state = game.game_state
-        self.apply_all_filters()
+        if game:
+            self.game_state = game.game_state
+            self.apply_all_filters()
         # self.fill_action_view()
