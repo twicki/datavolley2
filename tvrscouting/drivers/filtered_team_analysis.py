@@ -1,12 +1,13 @@
+import copy
 import os
 import sys
-import copy
+from typing import List
 
 from PyQt5 import QtGui, QtWidgets
-from typing import List
-from tvrscouting.analysis.playerview import TeamView, PlayerProfileInView
-from tvrscouting.uis.filtered_team_view import Ui_Form
+
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
+from tvrscouting.analysis.playerview import PlayerProfileInView, TeamView
+from tvrscouting.uis.filtered_team_view import Ui_Form
 
 
 class MainWindow(QtWidgets.QWidget, Ui_Form, Basic_Filter):

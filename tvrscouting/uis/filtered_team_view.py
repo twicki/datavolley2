@@ -31,10 +31,12 @@ class Ui_Form(object):
         self.l_rece_10.setObjectName("l_rece_10")
         self.gridLayout_8.addWidget(self.l_rece_10, 3, 0, 1, 1)
         self.total_points_10 = QtWidgets.QLCDNumber(Form)
-        self.total_points_10.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_10.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_10.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_10.setDigitCount(2)
         self.total_points_10.setObjectName("total_points_10")
@@ -69,11 +71,13 @@ class Ui_Form(object):
         self.player_name_10.setObjectName("player_name_10")
         self.gridLayout_8.addWidget(self.player_name_10, 0, 0, 1, 1)
         self.error_10 = QtWidgets.QLCDNumber(Form)
-        self.error_10.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_10.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_10.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_10.setDigitCount(2)
         self.error_10.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -124,10 +128,12 @@ class Ui_Form(object):
         self.l_rece.setObjectName("l_rece")
         self.gridLayout.addWidget(self.l_rece, 3, 0, 1, 1)
         self.total_points = QtWidgets.QLCDNumber(Form)
-        self.total_points.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points.setDigitCount(2)
         self.total_points.setObjectName("total_points")
@@ -162,12 +168,14 @@ class Ui_Form(object):
         self.player_name.setObjectName("player_name")
         self.gridLayout.addWidget(self.player_name, 0, 0, 1, 1)
         self.error = QtWidgets.QLCDNumber(Form)
-        self.error.setStyleSheet("background-color: rgb(204,204,204);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "color: rgb(0, 0, 0);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error.setLineWidth(0)
         self.error.setMidLineWidth(0)
@@ -233,20 +241,24 @@ class Ui_Form(object):
         self.rece_11.setObjectName("rece_11")
         self.gridLayout_9.addWidget(self.rece_11, 3, 1, 1, 1)
         self.total_points_11 = QtWidgets.QLCDNumber(Form)
-        self.total_points_11.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_11.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_11.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_11.setDigitCount(2)
         self.total_points_11.setObjectName("total_points_11")
         self.gridLayout_9.addWidget(self.total_points_11, 0, 1, 1, 1)
         self.error_11 = QtWidgets.QLCDNumber(Form)
-        self.error_11.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_11.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_11.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_11.setDigitCount(2)
         self.error_11.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -319,10 +331,12 @@ class Ui_Form(object):
         self.l_rece_9.setObjectName("l_rece_9")
         self.gridLayout_7.addWidget(self.l_rece_9, 3, 0, 1, 1)
         self.total_points_9 = QtWidgets.QLCDNumber(Form)
-        self.total_points_9.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_9.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_9.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_9.setDigitCount(2)
         self.total_points_9.setObjectName("total_points_9")
@@ -357,11 +371,13 @@ class Ui_Form(object):
         self.player_name_9.setObjectName("player_name_9")
         self.gridLayout_7.addWidget(self.player_name_9, 0, 0, 1, 1)
         self.error_9 = QtWidgets.QLCDNumber(Form)
-        self.error_9.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_9.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_9.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_9.setDigitCount(2)
         self.error_9.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -417,10 +433,12 @@ class Ui_Form(object):
         self.l_rece_4.setObjectName("l_rece_4")
         self.gridLayout_14.addWidget(self.l_rece_4, 3, 0, 1, 1)
         self.total_points_4 = QtWidgets.QLCDNumber(Form)
-        self.total_points_4.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_4.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_4.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_4.setDigitCount(2)
         self.total_points_4.setObjectName("total_points_4")
@@ -455,11 +473,13 @@ class Ui_Form(object):
         self.player_name_4.setObjectName("player_name_4")
         self.gridLayout_14.addWidget(self.player_name_4, 0, 0, 1, 1)
         self.error_4 = QtWidgets.QLCDNumber(Form)
-        self.error_4.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_4.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_4.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_4.setDigitCount(2)
         self.error_4.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -513,10 +533,12 @@ class Ui_Form(object):
         self.l_rece_16.setObjectName("l_rece_16")
         self.gridLayout_13.addWidget(self.l_rece_16, 3, 0, 1, 1)
         self.total_points_16 = QtWidgets.QLCDNumber(Form)
-        self.total_points_16.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_16.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_16.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_16.setDigitCount(2)
         self.total_points_16.setObjectName("total_points_16")
@@ -551,11 +573,13 @@ class Ui_Form(object):
         self.player_name_16.setObjectName("player_name_16")
         self.gridLayout_13.addWidget(self.player_name_16, 0, 0, 1, 1)
         self.error_16 = QtWidgets.QLCDNumber(Form)
-        self.error_16.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_16.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_16.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_16.setDigitCount(2)
         self.error_16.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -606,10 +630,12 @@ class Ui_Form(object):
         self.l_rece_13.setObjectName("l_rece_13")
         self.gridLayout_10.addWidget(self.l_rece_13, 3, 0, 1, 1)
         self.total_points_13 = QtWidgets.QLCDNumber(Form)
-        self.total_points_13.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_13.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_13.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_13.setDigitCount(2)
         self.total_points_13.setObjectName("total_points_13")
@@ -644,11 +670,13 @@ class Ui_Form(object):
         self.player_name_13.setObjectName("player_name_13")
         self.gridLayout_10.addWidget(self.player_name_13, 0, 0, 1, 1)
         self.error_13 = QtWidgets.QLCDNumber(Form)
-        self.error_13.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_13.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_13.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_13.setDigitCount(2)
         self.error_13.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -699,10 +727,12 @@ class Ui_Form(object):
         self.l_rece_15.setObjectName("l_rece_15")
         self.gridLayout_12.addWidget(self.l_rece_15, 3, 0, 1, 1)
         self.total_points_15 = QtWidgets.QLCDNumber(Form)
-        self.total_points_15.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_15.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_15.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_15.setDigitCount(2)
         self.total_points_15.setObjectName("total_points_15")
@@ -737,11 +767,13 @@ class Ui_Form(object):
         self.player_name_15.setObjectName("player_name_15")
         self.gridLayout_12.addWidget(self.player_name_15, 0, 0, 1, 1)
         self.error_15 = QtWidgets.QLCDNumber(Form)
-        self.error_15.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_15.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_15.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_15.setDigitCount(2)
         self.error_15.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -792,10 +824,12 @@ class Ui_Form(object):
         self.l_rece_7.setObjectName("l_rece_7")
         self.gridLayout_6.addWidget(self.l_rece_7, 3, 0, 1, 1)
         self.total_points_7 = QtWidgets.QLCDNumber(Form)
-        self.total_points_7.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_7.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_7.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_7.setDigitCount(2)
         self.total_points_7.setObjectName("total_points_7")
@@ -830,11 +864,13 @@ class Ui_Form(object):
         self.player_name_7.setObjectName("player_name_7")
         self.gridLayout_6.addWidget(self.player_name_7, 0, 0, 1, 1)
         self.error_7 = QtWidgets.QLCDNumber(Form)
-        self.error_7.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_7.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_7.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_7.setDigitCount(2)
         self.error_7.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -885,10 +921,12 @@ class Ui_Form(object):
         self.l_rece_12.setObjectName("l_rece_12")
         self.gridLayout_16.addWidget(self.l_rece_12, 3, 0, 1, 1)
         self.total_points_12 = QtWidgets.QLCDNumber(Form)
-        self.total_points_12.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_12.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_12.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_12.setDigitCount(2)
         self.total_points_12.setObjectName("total_points_12")
@@ -923,11 +961,13 @@ class Ui_Form(object):
         self.player_name_12.setObjectName("player_name_12")
         self.gridLayout_16.addWidget(self.player_name_12, 0, 0, 1, 1)
         self.error_12 = QtWidgets.QLCDNumber(Form)
-        self.error_12.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_12.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_12.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_12.setDigitCount(2)
         self.error_12.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -984,10 +1024,12 @@ class Ui_Form(object):
         self.l_rece_8.setObjectName("l_rece_8")
         self.gridLayout_15.addWidget(self.l_rece_8, 3, 0, 1, 1)
         self.total_points_8 = QtWidgets.QLCDNumber(Form)
-        self.total_points_8.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_8.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_8.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_8.setDigitCount(2)
         self.total_points_8.setObjectName("total_points_8")
@@ -1022,11 +1064,13 @@ class Ui_Form(object):
         self.player_name_8.setObjectName("player_name_8")
         self.gridLayout_15.addWidget(self.player_name_8, 0, 0, 1, 1)
         self.error_8 = QtWidgets.QLCDNumber(Form)
-        self.error_8.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_8.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_8.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_8.setDigitCount(2)
         self.error_8.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -1077,10 +1121,12 @@ class Ui_Form(object):
         self.l_rece_5.setObjectName("l_rece_5")
         self.gridLayout_4.addWidget(self.l_rece_5, 3, 0, 1, 1)
         self.total_points_5 = QtWidgets.QLCDNumber(Form)
-        self.total_points_5.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_5.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_5.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_5.setDigitCount(2)
         self.total_points_5.setObjectName("total_points_5")
@@ -1115,11 +1161,13 @@ class Ui_Form(object):
         self.player_name_5.setObjectName("player_name_5")
         self.gridLayout_4.addWidget(self.player_name_5, 0, 0, 1, 1)
         self.error_5 = QtWidgets.QLCDNumber(Form)
-        self.error_5.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_5.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_5.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_5.setDigitCount(2)
         self.error_5.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -1173,10 +1221,12 @@ class Ui_Form(object):
         self.l_rece_3.setObjectName("l_rece_3")
         self.gridLayout_3.addWidget(self.l_rece_3, 3, 0, 1, 1)
         self.total_points_3 = QtWidgets.QLCDNumber(Form)
-        self.total_points_3.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_3.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_3.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_3.setDigitCount(2)
         self.total_points_3.setObjectName("total_points_3")
@@ -1211,12 +1261,14 @@ class Ui_Form(object):
         self.player_name_3.setObjectName("player_name_3")
         self.gridLayout_3.addWidget(self.player_name_3, 0, 0, 1, 1)
         self.error_3 = QtWidgets.QLCDNumber(Form)
-        self.error_3.setStyleSheet("background-color: rgb(204,204,204);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_3.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "color: rgb(0, 0, 0);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_3.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_3.setLineWidth(0)
         self.error_3.setMidLineWidth(0)
@@ -1269,10 +1321,12 @@ class Ui_Form(object):
         self.l_rece_14.setObjectName("l_rece_14")
         self.gridLayout_11.addWidget(self.l_rece_14, 3, 0, 1, 1)
         self.total_points_14 = QtWidgets.QLCDNumber(Form)
-        self.total_points_14.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_14.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_14.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_14.setDigitCount(2)
         self.total_points_14.setObjectName("total_points_14")
@@ -1307,11 +1361,13 @@ class Ui_Form(object):
         self.player_name_14.setObjectName("player_name_14")
         self.gridLayout_11.addWidget(self.player_name_14, 0, 0, 1, 1)
         self.error_14 = QtWidgets.QLCDNumber(Form)
-        self.error_14.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_14.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_14.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_14.setDigitCount(2)
         self.error_14.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
@@ -1365,10 +1421,12 @@ class Ui_Form(object):
         self.l_rece_2.setObjectName("l_rece_2")
         self.gridLayout_2.addWidget(self.l_rece_2, 3, 0, 1, 1)
         self.total_points_2 = QtWidgets.QLCDNumber(Form)
-        self.total_points_2.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_2.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_2.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_2.setDigitCount(2)
         self.total_points_2.setObjectName("total_points_2")
@@ -1403,12 +1461,14 @@ class Ui_Form(object):
         self.player_name_2.setObjectName("player_name_2")
         self.gridLayout_2.addWidget(self.player_name_2, 0, 0, 1, 1)
         self.error_2 = QtWidgets.QLCDNumber(Form)
-        self.error_2.setStyleSheet("background-color: rgb(204,204,204);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_2.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "color: rgb(0, 0, 0);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_2.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_2.setLineWidth(0)
         self.error_2.setMidLineWidth(0)
@@ -1461,10 +1521,12 @@ class Ui_Form(object):
         self.l_rece_6.setObjectName("l_rece_6")
         self.gridLayout_5.addWidget(self.l_rece_6, 3, 0, 1, 1)
         self.total_points_6 = QtWidgets.QLCDNumber(Form)
-        self.total_points_6.setStyleSheet("background-color: rgb(82,82,82);\n"
-"border-color: rgb(0,104,55);\n"
-"border-style: outset;\n"
-"border-width: 3px;")
+        self.total_points_6.setStyleSheet(
+            "background-color: rgb(82,82,82);\n"
+            "border-color: rgb(0,104,55);\n"
+            "border-style: outset;\n"
+            "border-width: 3px;"
+        )
         self.total_points_6.setFrameShadow(QtWidgets.QFrame.Plain)
         self.total_points_6.setDigitCount(2)
         self.total_points_6.setObjectName("total_points_6")
@@ -1496,11 +1558,13 @@ class Ui_Form(object):
         self.player_name_6.setObjectName("player_name_6")
         self.gridLayout_5.addWidget(self.player_name_6, 0, 0, 1, 1)
         self.error_6 = QtWidgets.QLCDNumber(Form)
-        self.error_6.setStyleSheet("background-color: rgb(204,204,204);\n"
-"border-color: rgb(179,0,0);\n"
-"border-style: outset;\n"
-"border-width: 2px;\n"
-"")
+        self.error_6.setStyleSheet(
+            "background-color: rgb(204,204,204);\n"
+            "border-color: rgb(179,0,0);\n"
+            "border-style: outset;\n"
+            "border-width: 2px;\n"
+            ""
+        )
         self.error_6.setFrameShadow(QtWidgets.QFrame.Plain)
         self.error_6.setDigitCount(2)
         self.error_6.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
