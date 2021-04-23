@@ -236,7 +236,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.action_view.clearSelection()
         if self.action_view.item(row, 0):
             self.action_view.item(row, 0).setSelected(True)
-        else:
+        elif self.action_view.item(row - 1, 0):
             self.action_view.item(row - 1, 0).setSelected(True)
         self.center_new_selection()
 

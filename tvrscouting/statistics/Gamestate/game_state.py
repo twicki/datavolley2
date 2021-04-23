@@ -1,6 +1,7 @@
 import ast
 import copy
 from collections import OrderedDict
+from typing import List, Optional
 
 import tvrscouting.statistics.Actions as actions
 import tvrscouting.statistics.Actions.SpecialAction as SpecialActions
@@ -26,7 +27,7 @@ def truncate_list(in_list, size=11):
 
 class Field:
     def __init__(self) -> None:
-        self.players = []
+        self.players: List[Player] = []
         self.setter = None
         for _ in range(6):
             self.players.append(Player(0))
@@ -41,7 +42,7 @@ class Field:
 
 class Court:
     def __init__(self) -> None:
-        self.fields = []
+        self.fields: List[Field] = []
         f1 = Field()
         self.fields.append(f1)
         f2 = Field()
@@ -212,20 +213,21 @@ class Rally:
 
 class GameState:
     def __init__(self) -> None:
-        self.score = [0, 0]
-        self.set_score = [0, 0]
-        self.rallies = []
-        self.court = Court()
+        self.score: List[int] = [0, 0]
+        self.set_score: List[int] = [0, 0]
+        self.final_scores: List[List[int]] = []
+        self.rallies: List[Rally] = []
+        self.court: Court = Court()
 
         self._current_actions = []
-        self.scoring_team = None
+        self.scoring_team: Optional[Team] = None
         self.set_ended = False
         self._setter_call = None
 
         self._last_serve = None
         self.teamnames = [None, None]
         self.setters = [None, None]
-        self.players = [[], []]
+        self.players: List[List[Player]] = [[], []]
 
         self.details = []
 
@@ -356,66 +358,6 @@ class GameState:
                 allactions.append(copy.copy(Gameaction.from_string(str2, time_stamp)))
             return allactions
 
-    # def add_plain_from_string(self, action, time_stamp=None):
-    #     # TODO: refactor things out here
-    #     if "sub" in action:
-    #         self.add_action_substitution_from_string(action, time_stamp)
-    #     elif "serve" in action:
-    #         l = action.split("!")
-    #         self.add_action_set_serving_team_from_string(action, time_stamp)
-    #     elif "point" in action:
-    #         # TODO: continue the refactoring here
-    #         l = action.split("!")
-    #         autogen = ast.literal_eval(l[1])
-    #         team = l[0][0]
-    #         action = SpecialActions.Point(
-    #             actions.Team.from_string(team),
-    #             time_stamp=time_stamp,
-    #             auto_generated=autogen,
-    #         )
-    #         self.add_logical([action])
-    #     elif "endset" in action:
-    #         l = action.split("!")
-    #         autogen = ast.literal_eval(l[1])
-    #         team = l[0][0]
-    #         action = SpecialActions.Endset(
-    #             actions.Team.from_string(team),
-    #             time_stamp=time_stamp,
-    #             auto_generated=autogen,
-    #         )
-    #         self.add_logical([action])
-    #     elif "rota" in action:
-    #         l = action.split("!")
-    #         autogen = ast.literal_eval(l[2])
-    #         team = l[0][0]
-    #         direction = True if int(l[1]) > 0 else False
-    #         action = SpecialActions.Rotation(
-    #             actions.Team.from_string(team),
-    #             direction,
-    #             time_stamp=time_stamp,
-    #             auto_generated=autogen,
-    #         )
-    #         self.add_logical([action])
-    #     elif "team" in action:
-    #         action = SpecialActions.InitializeTeamName(action, time_stamp)
-    #         self.add_logical([action])
-    #     elif "player" in action:
-    #         action = SpecialActions.InitializePlayer(action, time_stamp)
-    #         self.add_logical([action])
-    #     elif "setter" in action:
-    #         l = action.split("!")
-    #         team = l[0][0]
-    #         setter_number = int(l[1])
-    #         action = SpecialActions.SetSetter(
-    #             actions.Team.from_string(team), setter_number, time_stamp
-    #         )
-    #         self.add_logical([action], time_stamp)
-    #     elif "K" in action:
-    #         action = SetterCall.from_string(action, time_stamp)
-    #         self.add_logical([action], time_stamp)
-    #     else:
-    #         self.add_plain([Gameaction.from_string(action, time_stamp)])
-
     def add_plain(self, action_list, time_stamp=None):
         for action in action_list:
             self._current_actions.append(action)
@@ -430,6 +372,7 @@ class GameState:
                 fpos.append(Player(action.player_in))
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
             elif isinstance(action, SpecialActions.Endset):
+                self.final_scores.append[self.score[0], self.score[1]]
                 self.set_score[int(action.team_)] += 1
                 self.score[0] = 0
                 self.score[1] = 0
@@ -625,7 +568,7 @@ class GameState:
         scores = truncate_list(scores)
         return scores
 
-    def collect_stats(self, teamname):
+    def collect_stats(self, teamname) -> OrderedDict:
         team = actions.Team.from_string(teamname)
         playerstats = OrderedDict()
 
@@ -648,11 +591,14 @@ class GameState:
             playerstats[player.Number]["rece"] = {}
             playerstats[player.Number]["rece"]["win"] = 0
             playerstats[player.Number]["rece"]["total"] = 0
+            playerstats[player.Number]["rece"]["perc"] = 0
             playerstats[player.Number]["hit"] = {}
             playerstats[player.Number]["hit"]["kill"] = 0
             playerstats[player.Number]["hit"]["total"] = 0
+            playerstats[player.Number]["hit"]["perc"] = 0
             playerstats[player.Number]["error"] = 0
             playerstats[player.Number]["block"] = 0
+            playerstats[player.Number]["points"] = 0
         for player in allplayers:
             for rally in self.rallies:
                 for action in rally.actions:
@@ -667,32 +613,41 @@ class GameState:
                                     playerstats[player.Number]["serve"]["total"] += 1
                                     if action.quality == Quality.Kill:
                                         playerstats[player.Number]["serve"]["kill"] += 1
+                                        playerstats[player.Number]["points"] += 1
                                     elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
 
                                 # hitting statistics
-                                if action.action == Action.Hit:
+                                elif action.action == Action.Hit:
                                     playerstats[player.Number]["hit"]["total"] += 1
                                     if action.quality == Quality.Kill:
                                         playerstats[player.Number]["hit"]["kill"] += 1
+                                        playerstats[player.Number]["points"] += 1
                                     elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
 
                                 # blocking statistics
-                                if action.action == Action.Block:
+                                elif action.action == Action.Block:
                                     if action.quality == Quality.Kill:
                                         playerstats[player.Number]["block"] += 1
+                                        playerstats[player.Number]["points"] += 1
                                     elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
 
-                                # blocking statistics
-                                if action.action == Action.Reception:
+                                # rece statistics
+                                elif action.action == Action.Reception:
                                     playerstats[player.Number]["rece"]["total"] += 1
                                     if (
                                         action.quality == Quality.Perfect
                                         or action.quality == Quality.Good
                                     ):
                                         playerstats[player.Number]["rece"]["win"] += 1
+                                    elif action.quality == Quality.Error:
+                                        playerstats[player.Number]["error"] += 1
+                                # other actions
+                                else:
+                                    if action.quality == Quality.Kill:
+                                        playerstats[player.Number]["points"] += 1
                                     elif action.quality == Quality.Error:
                                         playerstats[player.Number]["error"] += 1
 
@@ -706,11 +661,18 @@ class GameState:
         playerstats["team"]["group"] = 7
         playerstats["team"]["serve"] = {}
         playerstats["team"]["serve"]["kill"] = 0
-        playerstats["team"]["rece"] = 0
+        playerstats["team"]["serve"]["total"] = 0
+        playerstats["team"]["rece"] = {}
+        playerstats["team"]["rece"]["win"] = 0
+        playerstats["team"]["rece"]["total"] = 0
+        playerstats["team"]["rece"]["perc"] = 0
         playerstats["team"]["hit"] = {}
         playerstats["team"]["hit"]["kill"] = 0
+        playerstats["team"]["hit"]["total"] = 0
+        playerstats["team"]["hit"]["perc"] = 0
         playerstats["team"]["error"] = 0
         playerstats["team"]["block"] = 0
+        playerstats["team"]["points"] = 0
         for rally in self.rallies:
             for action in rally.actions:
                 if isinstance(action, Gameaction):
@@ -718,30 +680,56 @@ class GameState:
                     if action.team == team:
                         # serve statistics
                         if action.action == Action.Serve:
+                            playerstats["team"]["serve"]["total"] += 1
                             if action.quality == Quality.Kill:
                                 playerstats["team"]["serve"]["kill"] += 1
+                                playerstats["team"]["points"] += 1
                             elif action.quality == Quality.Error:
                                 playerstats["team"]["error"] += 1
 
                         # hitting statistics
-                        if action.action == Action.Hit:
+                        elif action.action == Action.Hit:
+                            playerstats["team"]["hit"]["total"] += 1
                             if action.quality == Quality.Kill:
                                 playerstats["team"]["hit"]["kill"] += 1
+                                playerstats["team"]["points"] += 1
                             elif action.quality == Quality.Error:
                                 playerstats["team"]["error"] += 1
 
                         # blocking statistics
-                        if action.action == Action.Block:
+                        elif action.action == Action.Block:
                             if action.quality == Quality.Kill:
                                 playerstats["team"]["block"] += 1
+                                playerstats["team"]["points"] += 1
                             elif action.quality == Quality.Error:
                                 playerstats["team"]["error"] += 1
 
                         # blocking statistics
-                        if action.action == Action.Reception:
-                            playerstats["team"]["rece"] += 1
-                            if action.quality == Quality.Error:
+                        elif action.action == Action.Reception:
+                            playerstats["team"]["rece"]["total"] += 1
+                            if action.quality == Quality.Perfect or action.quality == Quality.Good:
+                                playerstats["team"]["rece"]["win"] += 1
+                            elif action.quality == Quality.Error:
                                 playerstats["team"]["error"] += 1
+                        # other actions
+                        else:
+                            if action.quality == Quality.Kill:
+                                playerstats["team"]["points"] += 1
+                            elif action.quality == Quality.Error:
+                                playerstats["team"]["error"] += 1
+
+        for stats in playerstats.values():
+            stats["rece"]["perc"] = (
+                int(100 * stats["rece"]["win"] / stats["rece"]["total"])
+                if stats["rece"]["total"] > 0
+                else 0
+            )
+            stats["hit"]["perc"] = (
+                int(100 * stats["hit"]["kill"] / stats["hit"]["total"])
+                if stats["hit"]["total"] > 0
+                else 0
+            )
+
         return playerstats
 
     def fix_time_stamps(self, old_game_state) -> None:

@@ -1,5 +1,6 @@
-from tvrscouting.statistics.Players.players import Player
 from typing import List
+
+from tvrscouting.statistics.Players.players import Player
 
 
 class TeamInfo:

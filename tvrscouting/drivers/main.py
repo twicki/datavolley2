@@ -14,6 +14,7 @@ from tvrscouting.analysis.point_graph import PointGraph
 from tvrscouting.analysis.recent_scores_view import RecentScores
 from tvrscouting.analysis.scoreboard import Scoreboard
 from tvrscouting.analysis.static import StaticWriter
+from tvrscouting.live_stats.results_to_js import write_results_to_js
 from tvrscouting.organization.edit_game import EditGame
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Gamestate.game import Game
@@ -214,6 +215,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             self.game.game_state.collect_stats("*"),
             self.game.game_state.collect_stats("/"),
         ]
+        # TODO: Make this a check
+        self.html_dir = "file.js"
+        if self.html_dir:
+            # TODO: ideally don't pass in the full gs but only the required thing for scores
+            write_results_to_js(
+                results,
+                self.game.game_state,
+                self.game.game_state.court,
+                self.game.game_state.players,
+            )
         self.secondWindow.update_view_from_results(results)
 
     def update_timeline(self):

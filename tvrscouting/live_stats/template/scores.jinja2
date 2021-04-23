@@ -1,0 +1,83 @@
+var scores = {
+    "home" : {{ scores.home }},
+    "guest" : {{ scores.guest }},
+    "set_home" : {{ scores.set_home }},
+    "set_guest" : {{ scores.set_guest }},
+    "last_scores" : [ 
+      {% for score in scores.set_scores %}
+      "{{ score }}",
+      {% endfor %}
+     ]
+  }
+  
+  var court = {
+    "home" : [
+      {% for player in court.home %}
+        "{{ player }}",
+      {% endfor %}
+    ],
+    "guest" : [
+      {% for player in court.guest %}
+        "{{ player }}",
+      {% endfor %}
+    ]
+  
+  }
+  
+  var stats = {
+    "names" : [ "{{ stats.team[0].name }}", "{{ stats.team[1].name }}" ],
+    "guest_total": {
+        "kills" : {{ stats.team[1].kills }},
+        "errors" : {{ stats.team[1].errors }},
+        "hits" : {{ stats.team[1].hits }},
+        "spikes" : {{ stats.team[1].spikes }},
+        "kill_perc" : "{{ stats.team[1].kill_perc }} %",
+        "rece" : {{ stats.team[1].rece }},
+        "rece_perc" : "{{ stats.team[1].rece_perc }} %",
+        "serve" : {{ stats.team[1].serve }},
+        "block" : {{ stats.team[1].block }},
+    },
+    "guest" : [
+      {% for playerstats in stats.team[1].players %}
+      {
+        "name" : "{{ playerstats.name }}",
+        "kills" : {{ playerstats.kills }},
+        "errors" : {{ playerstats.errors }},
+        "hits" : {{ playerstats.hits }},
+        "spikes" : {{ playerstats.spikes }},
+        "kill_perc" : "{{ playerstats.kill_perc }} %",
+        "rece" : {{ playerstats.rece }},
+        "rece_perc" : "{{ playerstats.rece_perc }} %",
+        "serve" : {{ playerstats.serve }},
+        "block" : {{ playerstats.block }},
+      },
+      {% endfor %}
+    ],
+    "home_total": {
+        "kills" : {{ stats.team[0].kills }},
+        "errors" : {{ stats.team[0].errors }},
+        "hits" : {{ stats.team[0].hits }},
+        "spikes" : {{ stats.team[0].spikes }},
+        "kill_perc" : "{{ stats.team[0].kill_perc }} %",
+        "rece" : {{ stats.team[0].rece }},
+        "rece_perc" : "{{ stats.team[0].rece_perc }} %",
+        "serve" : {{ stats.team[0].serve }},
+        "block" : {{ stats.team[0].block }},
+    },
+    "home" : [
+      {% for playerstats in stats.team[0].players %}
+      {
+        "name" : "{{ playerstats.name }}",
+        "kills" : {{ playerstats.kills }},
+        "errors" : {{ playerstats.errors }},
+        "hits" : {{ playerstats.hits }},
+        "spikes" : {{ playerstats.spikes }},
+        "kill_perc" : "{{ playerstats.kill_perc }} %",
+        "rece" : {{ playerstats.rece }},
+        "rece_perc" : "{{ playerstats.rece_perc }} %",
+        "serve" : {{ playerstats.serve }},
+        "block" : {{ playerstats.block }},
+      },
+      {% endfor %}
+    ]
+  }

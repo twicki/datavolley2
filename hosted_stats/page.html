@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TVRScouting - Detailed Player View</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  #wrapper{width: 5000px;height: 5000px;background-color:#bdbdbd;}
+  #home_team { width: 1000px; height: 650px; padding: 0.5em; border:3px solid #333;display: inline-block;background-color:#737373;}
+  #guest_team { width: 1000px; height: 650px; padding: 0.5em; border:3px solid #333;display: inline-block;background-color:#737373;}
+  #score { width: 150px; height: 300px; padding: 0.5em; border:3px solid #333; background-color:#737373;}
+  #court { width: 550px; height: 400px; padding: 0.5em; border:3px solid #333; background-color: #159d88;}
+  #court_1 {
+    background-color: #d35e10;
+    height: 100px;
+    float: left;
+    width: 100px;
+  }
+  #court_1:after {
+    content: "";
+    background-color: #000;
+    position: absolute;
+    width: 7px;
+    height: 280px;
+    top: 70px;
+    left: 49.5%;
+    display: block;
+  }
+  #court_2 {
+    background-color: #d35e10;
+    height: 100px;
+    width: 100px;
+    float: right;
+  }
+
+  table {
+    border-collapse: collapse;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  th, td {
+    text-align: center;
+    padding: 8px;
+  }
+  tr.bold td{
+    font-weight:bold;
+    border:inset 5px black;
+  }
+  table td#Kills {border:inset 3px green;}
+  table td#Errors {border:inset 3px red;}
+
+  tr:nth-child(even) {background-color: #fff7bc;}
+  tr:nth-child(odd) {background-color: #fec44f;}
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#home_team" ).draggable();
+    $( "#guest_team" ).draggable();
+    $( "#score" ).draggable();
+    $( "#court" ).draggable();
+  } );
+  </script>
+</head>
+
+<body>
+ <div id="wrapper">
+  <div id="home_team" class="ui-widget-content">
+    <h1><div style="width: 100%" id="home_name">Home Team</h1>
+    <table style="width:100%">
+      <tr>
+      </tr>
+      <colgroup>
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+      </colgroup>
+      <tr>
+        <th><div style="width: 10%" >Name</th>
+        <th><div style="width: 10%" >Kills</th>
+        <th><div style="width: 10%" >Errors</th>
+        <th><div style="width: 10%" >Hits</th>
+        <th><div style="width: 10%" >Hit Kills</th>
+        <th><div style="width: 10%" >Hit %</th>
+        <th><div style="width: 10%" >Rece</th>
+        <th><div style="width: 10%" >Rece %</th>
+        <th><div style="width: 10%" >Serve</th>
+        <th><div style="width: 10%" >Block</th>
+      </tr>
+      <tr id= "hteam" class="bold">
+      <td id="hteam_name">Team</td>
+        <td id="hteam_kills"></td>
+        <td id="hteam_errors"></td>
+        <td id="hteam_hits"></td>
+        <td id="hteam_spikes"></td>
+        <td id="hteam_kill_perc"></td>
+        <td id="hteam_rece"></td>
+        <td id="hteam_rece_perc"></td>
+        <td id="hteam_serve"></td>
+        <td id="hteam_block"></td>
+      </tr>
+      <tr id= "h1">
+        <td id="h1_name">Player Name</td>
+        <td id="h1_kills" style="border:inset 3px green"></td>
+        <td id="h1_errors" style="border:inset 3px red"></td>
+        <td id="h1_hits"></td>
+        <td id="h1_spikes"></td>
+        <td id="h1_kill_perc"></td>
+        <td id="h1_rece"></td>
+        <td id="h1_rece_perc"></td>
+        <td id="h1_serve"></td>
+        <td id="h1_block"></td>
+      </tr>
+      <tr id= "h2">
+        <td id="h2_name">Player Name</td>
+        <td id="h2_kills" style="border:inset 3px green"></td>
+        <td id="h2_errors" style="border:inset 3px red"></td>
+        <td id="h2_hits"></td>
+        <td id="h2_spikes"></td>
+        <td id="h2_kill_perc"></td>
+        <td id="h2_rece"></td>
+        <td id="h2_rece_perc"></td>
+        <td id="h2_serve"></td>
+        <td id="h2_block"></td>
+      </tr>
+      <tr id= "h3">
+        <td id="h3_name">Player Name</td>
+        <td id="h3_kills" style="border:inset 3px green"></td>
+        <td id="h3_errors" style="border:inset 3px red"></td>
+        <td id="h3_hits"></td>
+        <td id="h3_spikes"></td>
+        <td id="h3_kill_perc"></td>
+        <td id="h3_rece"></td>
+        <td id="h3_rece_perc"></td>
+        <td id="h3_serve"></td>
+        <td id="h3_block"></td>
+      </tr>
+      <tr id= "h4">
+        <td id="h4_name">Player Name</td>
+        <td id="h4_kills" style="border:inset 3px green"></td>
+        <td id="h4_errors" style="border:inset 3px red"></td>
+        <td id="h4_hits"></td>
+        <td id="h4_spikes"></td>
+        <td id="h4_kill_perc"></td>
+        <td id="h4_rece"></td>
+        <td id="h4_rece_perc"></td>
+        <td id="h4_serve"></td>
+        <td id="h4_block"></td>
+      </tr>
+      <tr id= "h5">
+        <td id="h5_name">Player Name</td>
+        <td id="h5_kills" style="border:inset 3px green"></td>
+        <td id="h5_errors" style="border:inset 3px red"></td>
+        <td id="h5_hits"></td>
+        <td id="h5_spikes"></td>
+        <td id="h5_kill_perc"></td>
+        <td id="h5_rece"></td>
+        <td id="h5_rece_perc"></td>
+        <td id="h5_serve"></td>
+        <td id="h5_block"></td>
+      </tr>
+      <tr id= "h6">
+        <td id="h6_name">Player Name</td>
+        <td id="h6_kills" style="border:inset 3px green"></td>
+        <td id="h6_errors" style="border:inset 3px red"></td>
+        <td id="h6_hits"></td>
+        <td id="h6_spikes"></td>
+        <td id="h6_kill_perc"></td>
+        <td id="h6_rece"></td>
+        <td id="h6_rece_perc"></td>
+        <td id="h6_serve"></td>
+        <td id="h6_block"></td>
+      </tr>
+      <tr id= "h7">
+        <td id="h7_name">Player Name</td>
+        <td id="h7_kills" style="border:inset 3px green"></td>
+        <td id="h7_errors" style="border:inset 3px red"></td>
+        <td id="h7_hits"></td>
+        <td id="h7_spikes"></td>
+        <td id="h7_kill_perc"></td>
+        <td id="h7_rece"></td>
+        <td id="h7_rece_perc"></td>
+        <td id="h7_serve"></td>
+        <td id="h7_block"></td>
+      </tr>
+      <tr id= "h8">
+        <td id="h8_name">Player Name</td>
+        <td id="h8_kills" style="border:inset 3px green"></td>
+        <td id="h8_errors" style="border:inset 3px red"></td>
+        <td id="h8_hits"></td>
+        <td id="h8_spikes"></td>
+        <td id="h8_kill_perc"></td>
+        <td id="h8_rece"></td>
+        <td id="h8_rece_perc"></td>
+        <td id="h8_serve"></td>
+        <td id="h8_block"></td>
+      </tr>
+      <tr id= "h9">
+        <td id="h9_name">Player Name</td>
+        <td id="h9_kills" style="border:inset 3px green"></td>
+        <td id="h9_errors" style="border:inset 3px red"></td>
+        <td id="h9_hits"></td>
+        <td id="h9_spikes"></td>
+        <td id="h9_kill_perc"></td>
+        <td id="h9_rece"></td>
+        <td id="h9_rece_perc"></td>
+        <td id="h9_serve"></td>
+        <td id="h9_block"></td>
+      </tr>
+      <tr id= "h10">
+        <td id="h10_name">Player Name</td>
+        <td id="h10_kills" style="border:inset 3px green"></td>
+        <td id="h10_errors" style="border:inset 3px red"></td>
+        <td id="h10_hits"></td>
+        <td id="h10_spikes"></td>
+        <td id="h10_kill_perc"></td>
+        <td id="h10_rece"></td>
+        <td id="h10_rece_perc"></td>
+        <td id="h10_serve"></td>
+        <td id="h10_block"></td>
+      </tr>
+      <tr id= "h11">
+        <td id="h11_name">Player Name</td>
+        <td id="h11_kills" style="border:inset 3px green"></td>
+        <td id="h11_errors" style="border:inset 3px red"></td>
+        <td id="h11_hits"></td>
+        <td id="h11_spikes"></td>
+        <td id="h11_kill_perc"></td>
+        <td id="h11_rece"></td>
+        <td id="h11_rece_perc"></td>
+        <td id="h11_serve"></td>
+        <td id="h11_block"></td>
+      </tr>
+      <tr id= "h12">
+        <td id="h12_name">Player Name</td>
+        <td id="h12_kills" style="border:inset 3px green"></td>
+        <td id="h12_errors" style="border:inset 3px red"></td>
+        <td id="h12_hits"></td>
+        <td id="h12_spikes"></td>
+        <td id="h12_kill_perc"></td>
+        <td id="h12_rece"></td>
+        <td id="h12_rece_perc"></td>
+        <td id="h12_serve"></td>
+        <td id="h12_block"></td>
+      </tr>
+    </table> 
+  </div>
+  <div id="guest_team" class="ui-widget-content">
+    <h1><div style="width: 100%" id="guest_name">Guest Team</h1>
+      <table style="width:100%">
+      <tr>
+      </tr>
+      <colgroup>
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+         <col span="1" style="width: 10%;">
+      </colgroup>
+      <tr>
+        <th><div style="width: 10%" >Name</th>
+        <th><div style="width: 10%" >Kills</th>
+        <th><div style="width: 10%" >Errors</th>
+        <th><div style="width: 10%" >Hits</th>
+        <th><div style="width: 10%" >Spikes</th>
+        <th><div style="width: 10%" >Hit%</th>
+        <th><div style="width: 10%" >Rece</th>
+        <th><div style="width: 10%" >Rece%</th>
+        <th><div style="width: 10%" >Serve</th>
+        <th><div style="width: 10%" >Block</th>
+      </tr>
+      <tr id= "gteam" class="bold">
+      <td id="gteam_name">Team</td>
+        <td id="gteam_kills" ></td>
+        <td id="gteam_errors"></td>
+        <td id="gteam_hits"></td>
+        <td id="gteam_spikes"></td>
+        <td id="gteam_kill_perc"></td>
+        <td id="gteam_rece"></td>
+        <td id="gteam_rece_perc"></td>
+        <td id="gteam_serve"></td>
+        <td id="gteam_block"></td>
+      </tr>
+      <tr id= "g1">
+        <td id="g1_name">Player Name</td>
+        <td id="g1_kills" style="border:inset 3px green"></td>
+        <td id="g1_errors" style="border:inset 3px red"></td>
+        <td id="g1_hits"></td>
+        <td id="g1_spikes"></td>
+        <td id="g1_kill_perc"></td>
+        <td id="g1_rece"></td>
+        <td id="g1_rece_perc"></td>
+        <td id="g1_serve"></td>
+        <td id="g1_block"></td>
+      </tr>
+      <tr id= "g2">
+        <td id="g2_name">Player Name</td>
+        <td id="g2_kills" style="border:inset 3px green"></td>
+        <td id="g2_errors" style="border:inset 3px red"></td>
+        <td id="g2_hits"></td>
+        <td id="g2_spikes"></td>
+        <td id="g2_kill_perc"></td>
+        <td id="g2_rece"></td>
+        <td id="g2_rece_perc"></td>
+        <td id="g2_serve"></td>
+        <td id="g2_block"></td>
+      </tr>
+      <tr id= "g3">
+        <td id="g3_name">Player Name</td>
+        <td id="g3_kills" style="border:inset 3px green"></td>
+        <td id="g3_errors" style="border:inset 3px red"></td>
+        <td id="g3_hits"></td>
+        <td id="g3_spikes"></td>
+        <td id="g3_kill_perc"></td>
+        <td id="g3_rece"></td>
+        <td id="g3_rece_perc"></td>
+        <td id="g3_serve"></td>
+        <td id="g3_block"></td>
+      </tr>
+      <tr id= "g4">
+        <td id="g4_name">Player Name</td>
+        <td id="g4_kills" style="border:inset 3px green"></td>
+        <td id="g4_errors" style="border:inset 3px red"></td>
+        <td id="g4_hits"></td>
+        <td id="g4_spikes"></td>
+        <td id="g4_kill_perc"></td>
+        <td id="g4_rece"></td>
+        <td id="g4_rece_perc"></td>
+        <td id="g4_serve"></td>
+        <td id="g4_block"></td>
+      </tr>
+      <tr id= "g5">
+        <td id="g5_name">Player Name</td>
+        <td id="g5_kills" style="border:inset 3px green"></td>
+        <td id="g5_errors" style="border:inset 3px red"></td>
+        <td id="g5_hits"></td>
+        <td id="g5_spikes"></td>
+        <td id="g5_kill_perc"></td>
+        <td id="g5_rece"></td>
+        <td id="g5_rece_perc"></td>
+        <td id="g5_serve"></td>
+        <td id="g5_block"></td>
+      </tr>
+      <tr id= "g6">
+        <td id="g6_name">Player Name</td>
+        <td id="g6_kills" style="border:inset 3px green"></td>
+        <td id="g6_errors" style="border:inset 3px red"></td>
+        <td id="g6_hits"></td>
+        <td id="g6_spikes"></td>
+        <td id="g6_kill_perc"></td>
+        <td id="g6_rece"></td>
+        <td id="g6_rece_perc"></td>
+        <td id="g6_serve"></td>
+        <td id="g6_block"></td>
+      </tr>
+      <tr id= "g7">
+        <td id="g7_name">Player Name</td>
+        <td id="g7_kills" style="border:inset 3px green"></td>
+        <td id="g7_errors" style="border:inset 3px red"></td>
+        <td id="g7_hits"></td>
+        <td id="g7_spikes"></td>
+        <td id="g7_kill_perc"></td>
+        <td id="g7_rece"></td>
+        <td id="g7_rece_perc"></td>
+        <td id="g7_serve"></td>
+        <td id="g7_block"></td>
+      </tr>
+      <tr id= "g8">
+        <td id="g8_name">Player Name</td>
+        <td id="g8_kills" style="border:inset 3px green"></td>
+        <td id="g8_errors" style="border:inset 3px red"></td>
+        <td id="g8_hits"></td>
+        <td id="g8_spikes"></td>
+        <td id="g8_kill_perc"></td>
+        <td id="g8_rece"></td>
+        <td id="g8_rece_perc"></td>
+        <td id="g8_serve"></td>
+        <td id="g8_block"></td>
+      </tr>
+      <tr id= "g9">
+        <td id="g9_name">Player Name</td>
+        <td id="g9_kills" style="border:inset 3px green"></td>
+        <td id="g9_errors" style="border:inset 3px red"></td>
+        <td id="g9_hits"></td>
+        <td id="g9_spikes"></td>
+        <td id="g9_kill_perc"></td>
+        <td id="g9_rece"></td>
+        <td id="g9_rece_perc"></td>
+        <td id="g9_serve"></td>
+        <td id="g9_block"></td>
+      </tr>
+      <tr id= "g10">
+        <td id="g10_name">Player Name</td>
+        <td id="g10_kills" style="border:inset 3px green"></td>
+        <td id="g10_errors" style="border:inset 3px red"></td>
+        <td id="g10_hits"></td>
+        <td id="g10_spikes"></td>
+        <td id="g10_kill_perc"></td>
+        <td id="g10_rece"></td>
+        <td id="g10_rece_perc"></td>
+        <td id="g10_serve"></td>
+        <td id="g10_block"></td>
+      </tr>
+      <tr id= "g11">
+        <td id="g11_name">Player Name</td>
+        <td id="g11_kills" style="border:inset 3px green"></td>
+        <td id="g11_errors" style="border:inset 3px red"></td>
+        <td id="g11_hits"></td>
+        <td id="g11_spikes"></td>
+        <td id="g11_kill_perc"></td>
+        <td id="g11_rece"></td>
+        <td id="g11_rece_perc"></td>
+        <td id="g11_serve"></td>
+        <td id="g11_block"></td>
+      </tr>
+      <tr id= "g12">
+        <td id="g12_name">Player Name</td>
+        <td id="g12_kills" style="border:inset 3px green"></td>
+        <td id="g12_errors" style="border:inset 3px red"></td>
+        <td id="g12_hits"></td>
+        <td id="g12_spikes"></td>
+        <td id="g12_kill_perc"></td>
+        <td id="g12_rece"></td>
+        <td id="g12_rece_perc"></td>
+        <td id="g12_serve"></td>
+        <td id="g12_block"></td>
+      </tr>
+    </table> 
+  </div> 
+   
+ <div id="score" class="ui-widget-content">
+  <center>
+  <h1><div style="width: 100%" >Score</h1>
+    <p style="color:#d95f0e;font-size:30px;" id="current_score"></p>
+    <p style="color:black;font-size:20px;" id="set_score"></p>
+    <p style="color:black;font-size:10px;" id="s1"> 25:10 </p>
+    <p style="color:black;font-size:10px;" id="s2"> 25:10 </p>
+    <p style="color:black;font-size:10px;" id="s3"> 20:25 </p>
+    <p style="color:black;font-size:10px;" id="s4"> 20:25 </p>
+  </center>
+ </div>  
+
+
+<div id="court" class="ui-widget-content">
+    <center><h1><div style="width: 100%" >Court</h1></center>
+    <div style="width:273px;height:246px;"id="court_1">
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p5Home">P5</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px"id="p4Home">P4</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px"id="p6Home">P6</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px"id="p3Home">P3</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px"id="p1Home">P1</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px"id="p2Home">P2</p></div>
+    </div>
+
+    <div style="width:274px;height:246px;"id="court_2">
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p2Guest">P2</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p1Guest">P1</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p3Guest">P3</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p6Guest">P6</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p4Guest">P4</p></div>
+      <div style="margin-right: -6px;text-align: center;width:136px;height:80px;border:1px solid #000;display: inline-block"><p style="padding:14px" id="p5Guest">P5</p></div>
+    </div>
+</div>
+
+<script>
+  function set_values() {
+    let generated_data = document.createElement("script");
+    generated_data.setAttribute("src", "scores.js");
+    generated_data.setAttribute("async", "false");
+    document.body.appendChild(generated_data);
+
+    document.getElementById('home_name').innerHTML = stats.names[0];
+    document.getElementById('guest_name').innerHTML = stats.names[1];
+
+    document.getElementById('current_score').innerHTML = scores.home+" : "+scores.guest;
+    document.getElementById('set_score').innerHTML = scores.set_home+" : "+scores.set_guest;
+    document.getElementById('s1').innerHTML = scores.last_scores[0];
+    document.getElementById('s2').innerHTML = scores.last_scores[1];
+    document.getElementById('s3').innerHTML = scores.last_scores[2];
+    document.getElementById('s4').innerHTML = scores.last_scores[3];
+    document.getElementById('p1Home').innerHTML = court.home[0]
+    document.getElementById('p2Home').innerHTML = court.home[1]
+    document.getElementById('p3Home').innerHTML = court.home[2]
+    document.getElementById('p4Home').innerHTML = court.home[3]
+    document.getElementById('p5Home').innerHTML = court.home[4]
+    document.getElementById('p6Home').innerHTML = court.home[5]
+
+    document.getElementById('p1Guest').innerHTML = court.guest[0]
+    document.getElementById('p2Guest').innerHTML = court.guest[1]
+    document.getElementById('p3Guest').innerHTML = court.guest[2]
+    document.getElementById('p4Guest').innerHTML = court.guest[3]
+    document.getElementById('p5Guest').innerHTML = court.guest[4]
+    document.getElementById('p6Guest').innerHTML = court.guest[5]
+
+
+    document.getElementById('hteam_kills').innerHTML = stats.home_total.kills
+    document.getElementById('hteam_errors').innerHTML = stats.home_total.errors
+    document.getElementById('hteam_hits').innerHTML = stats.home_total.hits
+    document.getElementById('hteam_spikes').innerHTML = stats.home_total.spikes
+    document.getElementById('hteam_kill_perc').innerHTML = stats.home_total.kill_perc
+    document.getElementById('hteam_rece').innerHTML = stats.home_total.rece
+    document.getElementById('hteam_rece_perc').innerHTML = stats.home_total.rece_perc
+    document.getElementById('hteam_serve').innerHTML = stats.home_total.serve
+    document.getElementById('hteam_block').innerHTML = stats.home_total.block
+    if (stats.home.length < 1) {
+      document.getElementById('h1').style.display = "none"
+    }
+    else{
+      document.getElementById('h1').style.display = "table-row"
+      document.getElementById('h1_name').innerHTML = stats.home[0].name
+      document.getElementById('h1_kills').innerHTML = stats.home[0].kills
+      document.getElementById('h1_errors').innerHTML = stats.home[0].errors
+      document.getElementById('h1_hits').innerHTML = stats.home[0].hits
+      document.getElementById('h1_spikes').innerHTML = stats.home[0].spikes
+      document.getElementById('h1_kill_perc').innerHTML = stats.home[0].kill_perc
+      document.getElementById('h1_rece').innerHTML = stats.home[0].rece
+      document.getElementById('h1_rece_perc').innerHTML = stats.home[0].rece_perc
+      document.getElementById('h1_serve').innerHTML = stats.home[0].serve
+      document.getElementById('h1_block').innerHTML = stats.home[0].block
+    }
+    if (stats.home.length < 2) {
+      document.getElementById('h2').style.display = "none"
+    }
+    else{
+      document.getElementById('h2').style.display = "table-row"
+      document.getElementById('h2_name').innerHTML = stats.home[1].name
+      document.getElementById('h2_kills').innerHTML = stats.home[1].kills
+      document.getElementById('h2_errors').innerHTML = stats.home[1].errors
+      document.getElementById('h2_hits').innerHTML = stats.home[1].hits
+      document.getElementById('h2_spikes').innerHTML = stats.home[1].spikes
+      document.getElementById('h2_kill_perc').innerHTML = stats.home[1].kill_perc
+      document.getElementById('h2_rece').innerHTML = stats.home[1].rece
+      document.getElementById('h2_rece_perc').innerHTML = stats.home[1].rece_perc
+      document.getElementById('h2_serve').innerHTML = stats.home[1].serve
+      document.getElementById('h2_block').innerHTML = stats.home[1].block
+    }
+    if (stats.home.length < 3) {
+      document.getElementById('h3').style.display = "none"
+    }
+    else{
+      document.getElementById('h3').style.display = "table-row"
+      document.getElementById('h3_name').innerHTML = stats.home[2].name
+      document.getElementById('h3_kills').innerHTML = stats.home[2].kills
+      document.getElementById('h3_errors').innerHTML = stats.home[2].errors
+      document.getElementById('h3_hits').innerHTML = stats.home[2].hits
+      document.getElementById('h3_spikes').innerHTML = stats.home[2].spikes
+      document.getElementById('h3_kill_perc').innerHTML = stats.home[2].kill_perc
+      document.getElementById('h3_rece').innerHTML = stats.home[2].rece
+      document.getElementById('h3_rece_perc').innerHTML = stats.home[2].rece_perc
+      document.getElementById('h3_serve').innerHTML = stats.home[2].serve
+      document.getElementById('h3_block').innerHTML = stats.home[2].block
+    }
+    if (stats.home.length < 4) {
+      document.getElementById('h4').style.display = "none"
+    }
+    else{
+      document.getElementById('h4').style.display = "table-row"
+      document.getElementById('h4_name').innerHTML = stats.home[3].name
+      document.getElementById('h4_kills').innerHTML = stats.home[3].kills
+      document.getElementById('h4_errors').innerHTML = stats.home[3].errors
+      document.getElementById('h4_hits').innerHTML = stats.home[3].hits
+      document.getElementById('h4_spikes').innerHTML = stats.home[3].spikes
+      document.getElementById('h4_kill_perc').innerHTML = stats.home[3].kill_perc
+      document.getElementById('h4_rece').innerHTML = stats.home[3].rece
+      document.getElementById('h4_rece_perc').innerHTML = stats.home[3].rece_perc
+      document.getElementById('h4_serve').innerHTML = stats.home[3].serve
+      document.getElementById('h4_block').innerHTML = stats.home[3].block
+    }
+    if (stats.home.length < 5) {
+      document.getElementById('h5').style.display = "none"
+    }
+    else{
+      document.getElementById('h5').style.display = "table-row"
+      document.getElementById('h5_name').innerHTML = stats.home[4].name
+      document.getElementById('h5_kills').innerHTML = stats.home[4].kills
+      document.getElementById('h5_errors').innerHTML = stats.home[4].errors
+      document.getElementById('h5_hits').innerHTML = stats.home[4].hits
+      document.getElementById('h5_spikes').innerHTML = stats.home[4].spikes
+      document.getElementById('h5_kill_perc').innerHTML = stats.home[4].kill_perc
+      document.getElementById('h5_rece').innerHTML = stats.home[4].rece
+      document.getElementById('h5_rece_perc').innerHTML = stats.home[4].rece_perc
+      document.getElementById('h5_serve').innerHTML = stats.home[4].serve
+      document.getElementById('h5_block').innerHTML = stats.home[4].block
+    }
+    if (stats.home.length < 6) {
+      document.getElementById('h6').style.display = "none"
+    }
+    else{
+      document.getElementById('h6').style.display = "table-row"
+      document.getElementById('h6_name').innerHTML = stats.home[5].name
+      document.getElementById('h6_kills').innerHTML = stats.home[5].kills
+      document.getElementById('h6_errors').innerHTML = stats.home[5].errors
+      document.getElementById('h6_hits').innerHTML = stats.home[5].hits
+      document.getElementById('h6_spikes').innerHTML = stats.home[5].spikes
+      document.getElementById('h6_kill_perc').innerHTML = stats.home[5].kill_perc
+      document.getElementById('h6_rece').innerHTML = stats.home[5].rece
+      document.getElementById('h6_rece_perc').innerHTML = stats.home[5].rece_perc
+      document.getElementById('h6_serve').innerHTML = stats.home[5].serve
+      document.getElementById('h6_block').innerHTML = stats.home[5].block
+    }
+    if (stats.home.length < 7) {
+      document.getElementById('h7').style.display = "none"
+    }
+    else{
+      document.getElementById('h7').style.display = "table-row"
+      document.getElementById('h7_name').innerHTML = stats.home[6].name
+      document.getElementById('h7_kills').innerHTML = stats.home[6].kills
+      document.getElementById('h7_errors').innerHTML = stats.home[6].errors
+      document.getElementById('h7_hits').innerHTML = stats.home[6].hits
+      document.getElementById('h7_spikes').innerHTML = stats.home[6].spikes
+      document.getElementById('h7_kill_perc').innerHTML = stats.home[6].kill_perc
+      document.getElementById('h7_rece').innerHTML = stats.home[6].rece
+      document.getElementById('h7_rece_perc').innerHTML = stats.home[6].rece_perc
+      document.getElementById('h7_serve').innerHTML = stats.home[6].serve
+      document.getElementById('h7_block').innerHTML = stats.home[6].block
+    }
+    if (stats.home.length < 8) {
+      document.getElementById('h8').style.display = "none"
+    }
+    else{
+      document.getElementById('h8').style.display = "table-row"
+      document.getElementById('h8_name').innerHTML = stats.home[7].name
+      document.getElementById('h8_kills').innerHTML = stats.home[7].kills
+      document.getElementById('h8_errors').innerHTML = stats.home[7].errors
+      document.getElementById('h8_hits').innerHTML = stats.home[7].hits
+      document.getElementById('h8_spikes').innerHTML = stats.home[7].spikes
+      document.getElementById('h8_kill_perc').innerHTML = stats.home[7].kill_perc
+      document.getElementById('h8_rece').innerHTML = stats.home[7].rece
+      document.getElementById('h8_rece_perc').innerHTML = stats.home[7].rece_perc
+      document.getElementById('h8_serve').innerHTML = stats.home[7].serve
+      document.getElementById('h8_block').innerHTML = stats.home[7].block
+    }
+    if (stats.home.length < 9) {
+      document.getElementById('h9').style.display = "none"
+    }
+    else{
+      document.getElementById('h9').style.display = "table-row"
+      document.getElementById('h9_name').innerHTML = stats.home[8].name
+      document.getElementById('h9_kills').innerHTML = stats.home[8].kills
+      document.getElementById('h9_errors').innerHTML = stats.home[8].errors
+      document.getElementById('h9_hits').innerHTML = stats.home[8].hits
+      document.getElementById('h9_spikes').innerHTML = stats.home[8].spikes
+      document.getElementById('h9_kill_perc').innerHTML = stats.home[8].kill_perc
+      document.getElementById('h9_rece').innerHTML = stats.home[8].rece
+      document.getElementById('h9_rece_perc').innerHTML = stats.home[8].rece_perc
+      document.getElementById('h9_serve').innerHTML = stats.home[8].serve
+      document.getElementById('h9_block').innerHTML = stats.home[8].block
+    }
+    if (stats.home.length < 10) {
+      document.getElementById('h10').style.display = "none"
+    }
+    else{
+      document.getElementById('h10').style.display = "table-row"
+      document.getElementById('h10_name').innerHTML = stats.home[9].name
+      document.getElementById('h10_kills').innerHTML = stats.home[9].kills
+      document.getElementById('h10_errors').innerHTML = stats.home[9].errors
+      document.getElementById('h10_hits').innerHTML = stats.home[9].hits
+      document.getElementById('h10_spikes').innerHTML = stats.home[9].spikes
+      document.getElementById('h10_kill_perc').innerHTML = stats.home[9].kill_perc
+      document.getElementById('h10_rece').innerHTML = stats.home[9].rece
+      document.getElementById('h10_rece_perc').innerHTML = stats.home[9].rece_perc
+      document.getElementById('h10_serve').innerHTML = stats.home[9].serve
+      document.getElementById('h10_block').innerHTML = stats.home[9].block
+    }
+    if (stats.home.length < 11) {
+      document.getElementById('h11').style.display = "none"
+    }
+    else{
+      document.getElementById('h11').style.display = "table-row"
+      document.getElementById('h11_name').innerHTML = stats.home[10].name
+      document.getElementById('h11_kills').innerHTML = stats.home[10].kills
+      document.getElementById('h11_errors').innerHTML = stats.home[10].errors
+      document.getElementById('h11_hits').innerHTML = stats.home[10].hits
+      document.getElementById('h11_spikes').innerHTML = stats.home[10].spikes
+      document.getElementById('h11_kill_perc').innerHTML = stats.home[10].kill_perc
+      document.getElementById('h11_rece').innerHTML = stats.home[10].rece
+      document.getElementById('h11_rece_perc').innerHTML = stats.home[10].rece_perc
+      document.getElementById('h11_serve').innerHTML = stats.home[10].serve
+      document.getElementById('h11_block').innerHTML = stats.home[10].block
+    }
+    if (stats.home.length < 12) {
+      document.getElementById('h12').style.display = "none"
+    }
+    else{
+      document.getElementById('h12').style.display = "table-row"
+      document.getElementById('h12_name').innerHTML = stats.home[11].name
+      document.getElementById('h12_kills').innerHTML = stats.home[11].kills
+      document.getElementById('h12_errors').innerHTML = stats.home[11].errors
+      document.getElementById('h12_hits').innerHTML = stats.home[11].hits
+      document.getElementById('h12_spikes').innerHTML = stats.home[11].spikes
+      document.getElementById('h12_kill_perc').innerHTML = stats.home[11].kill_perc
+      document.getElementById('h12_rece').innerHTML = stats.home[11].rece
+      document.getElementById('h12_rece_perc').innerHTML = stats.home[11].rece_perc
+      document.getElementById('h12_serve').innerHTML = stats.home[11].serve
+      document.getElementById('h12_block').innerHTML = stats.home[11].block
+    }
+
+
+
+    document.getElementById('gteam_kills').innerHTML = stats.guest_total.kills
+    document.getElementById('gteam_errors').innerHTML = stats.guest_total.errors
+    document.getElementById('gteam_hits').innerHTML = stats.guest_total.hits
+    document.getElementById('gteam_spikes').innerHTML = stats.guest_total.spikes
+    document.getElementById('gteam_kill_perc').innerHTML = stats.guest_total.kill_perc
+    document.getElementById('gteam_rece').innerHTML = stats.guest_total.rece
+    document.getElementById('gteam_rece_perc').innerHTML = stats.guest_total.rece_perc
+    document.getElementById('gteam_serve').innerHTML = stats.guest_total.serve
+    document.getElementById('gteam_block').innerHTML = stats.guest_total.block
+    if (stats.guest.length < 1) {
+      document.getElementById('g1').style.display = "none"
+    }
+    else{
+      document.getElementById('g1').style.display = "table-row"
+      document.getElementById('g1_name').innerHTML = stats.guest[0].name
+      document.getElementById('g1_kills').innerHTML = stats.guest[0].kills
+      document.getElementById('g1_errors').innerHTML = stats.guest[0].errors
+      document.getElementById('g1_hits').innerHTML = stats.guest[0].hits
+      document.getElementById('g1_spikes').innerHTML = stats.guest[0].spikes
+      document.getElementById('g1_kill_perc').innerHTML = stats.guest[0].kill_perc
+      document.getElementById('g1_rece').innerHTML = stats.guest[0].rece
+      document.getElementById('g1_rece_perc').innerHTML = stats.guest[0].rece_perc
+      document.getElementById('g1_serve').innerHTML = stats.guest[0].serve
+      document.getElementById('g1_block').innerHTML = stats.guest[0].block
+    }
+    if (stats.guest.length < 2) {
+      document.getElementById('g2').style.display = "none"
+    }
+    else{
+      document.getElementById('g2').style.display = "table-row"
+      document.getElementById('g2_name').innerHTML = stats.guest[1].name
+      document.getElementById('g2_kills').innerHTML = stats.guest[1].kills
+      document.getElementById('g2_errors').innerHTML = stats.guest[1].errors
+      document.getElementById('g2_hits').innerHTML = stats.guest[1].hits
+      document.getElementById('g2_spikes').innerHTML = stats.guest[1].spikes
+      document.getElementById('g2_kill_perc').innerHTML = stats.guest[1].kill_perc
+      document.getElementById('g2_rece').innerHTML = stats.guest[1].rece
+      document.getElementById('g2_rece_perc').innerHTML = stats.guest[1].rece_perc
+      document.getElementById('g2_serve').innerHTML = stats.guest[1].serve
+      document.getElementById('g2_block').innerHTML = stats.guest[1].block
+    }
+    if (stats.guest.length < 3) {
+      document.getElementById('g3').style.display = "none"
+    }
+    else{
+      document.getElementById('g3').style.display = "table-row"
+      document.getElementById('g3_name').innerHTML = stats.guest[2].name
+      document.getElementById('g3_kills').innerHTML = stats.guest[2].kills
+      document.getElementById('g3_errors').innerHTML = stats.guest[2].errors
+      document.getElementById('g3_hits').innerHTML = stats.guest[2].hits
+      document.getElementById('g3_spikes').innerHTML = stats.guest[2].spikes
+      document.getElementById('g3_kill_perc').innerHTML = stats.guest[2].kill_perc
+      document.getElementById('g3_rece').innerHTML = stats.guest[2].rece
+      document.getElementById('g3_rece_perc').innerHTML = stats.guest[2].rece_perc
+      document.getElementById('g3_serve').innerHTML = stats.guest[2].serve
+      document.getElementById('g3_block').innerHTML = stats.guest[2].block
+    }
+    if (stats.guest.length < 4) {
+      document.getElementById('g4').style.display = "none"
+    }
+    else{
+      document.getElementById('g4').style.display = "table-row"
+      document.getElementById('g4_name').innerHTML = stats.guest[3].name
+      document.getElementById('g4_kills').innerHTML = stats.guest[3].kills
+      document.getElementById('g4_errors').innerHTML = stats.guest[3].errors
+      document.getElementById('g4_hits').innerHTML = stats.guest[3].hits
+      document.getElementById('g4_spikes').innerHTML = stats.guest[3].spikes
+      document.getElementById('g4_kill_perc').innerHTML = stats.guest[3].kill_perc
+      document.getElementById('g4_rece').innerHTML = stats.guest[3].rece
+      document.getElementById('g4_rece_perc').innerHTML = stats.guest[3].rece_perc
+      document.getElementById('g4_serve').innerHTML = stats.guest[3].serve
+      document.getElementById('g4_block').innerHTML = stats.guest[3].block
+    }
+    if (stats.guest.length < 5) {
+      document.getElementById('g5').style.display = "none"
+    }
+    else{
+      document.getElementById('g5').style.display = "table-row"
+      document.getElementById('g5_name').innerHTML = stats.guest[4].name
+      document.getElementById('g5_kills').innerHTML = stats.guest[4].kills
+      document.getElementById('g5_errors').innerHTML = stats.guest[4].errors
+      document.getElementById('g5_hits').innerHTML = stats.guest[4].hits
+      document.getElementById('g5_spikes').innerHTML = stats.guest[4].spikes
+      document.getElementById('g5_kill_perc').innerHTML = stats.guest[4].kill_perc
+      document.getElementById('g5_rece').innerHTML = stats.guest[4].rece
+      document.getElementById('g5_rece_perc').innerHTML = stats.guest[4].rece_perc
+      document.getElementById('g5_serve').innerHTML = stats.guest[4].serve
+      document.getElementById('g5_block').innerHTML = stats.guest[4].block
+    }
+    if (stats.guest.length < 6) {
+      document.getElementById('g6').style.display = "none"
+    }
+    else{
+      document.getElementById('g6').style.display = "table-row"
+      document.getElementById('g6_name').innerHTML = stats.guest[5].name
+      document.getElementById('g6_kills').innerHTML = stats.guest[5].kills
+      document.getElementById('g6_errors').innerHTML = stats.guest[5].errors
+      document.getElementById('g6_hits').innerHTML = stats.guest[5].hits
+      document.getElementById('g6_spikes').innerHTML = stats.guest[5].spikes
+      document.getElementById('g6_kill_perc').innerHTML = stats.guest[5].kill_perc
+      document.getElementById('g6_rece').innerHTML = stats.guest[5].rece
+      document.getElementById('g6_rece_perc').innerHTML = stats.guest[5].rece_perc
+      document.getElementById('g6_serve').innerHTML = stats.guest[5].serve
+      document.getElementById('g6_block').innerHTML = stats.guest[5].block
+    }
+    if (stats.guest.length < 7) {
+      document.getElementById('g7').style.display = "none"
+    }
+    else{
+      document.getElementById('g7').style.display = "table-row"
+      document.getElementById('g7_name').innerHTML = stats.guest[6].name
+      document.getElementById('g7_kills').innerHTML = stats.guest[6].kills
+      document.getElementById('g7_errors').innerHTML = stats.guest[6].errors
+      document.getElementById('g7_hits').innerHTML = stats.guest[6].hits
+      document.getElementById('g7_spikes').innerHTML = stats.guest[6].spikes
+      document.getElementById('g7_kill_perc').innerHTML = stats.guest[6].kill_perc
+      document.getElementById('g7_rece').innerHTML = stats.guest[6].rece
+      document.getElementById('g7_rece_perc').innerHTML = stats.guest[6].rece_perc
+      document.getElementById('g7_serve').innerHTML = stats.guest[6].serve
+      document.getElementById('g7_block').innerHTML = stats.guest[6].block
+    }
+    if (stats.guest.length < 8) {
+      document.getElementById('g8').style.display = "none"
+    }
+    else{
+      document.getElementById('g8').style.display = "table-row"
+      document.getElementById('g8_name').innerHTML = stats.guest[7].name
+      document.getElementById('g8_kills').innerHTML = stats.guest[7].kills
+      document.getElementById('g8_errors').innerHTML = stats.guest[7].errors
+      document.getElementById('g8_hits').innerHTML = stats.guest[7].hits
+      document.getElementById('g8_spikes').innerHTML = stats.guest[7].spikes
+      document.getElementById('g8_kill_perc').innerHTML = stats.guest[7].kill_perc
+      document.getElementById('g8_rece').innerHTML = stats.guest[7].rece
+      document.getElementById('g8_rece_perc').innerHTML = stats.guest[7].rece_perc
+      document.getElementById('g8_serve').innerHTML = stats.guest[7].serve
+      document.getElementById('g8_block').innerHTML = stats.guest[7].block
+    }
+    if (stats.guest.length < 9) {
+      document.getElementById('g9').style.display = "none"
+    }
+    else{
+      document.getElementById('g9').style.display = "table-row"
+      document.getElementById('g9_name').innerHTML = stats.guest[8].name
+      document.getElementById('g9_kills').innerHTML = stats.guest[8].kills
+      document.getElementById('g9_errors').innerHTML = stats.guest[8].errors
+      document.getElementById('g9_hits').innerHTML = stats.guest[8].hits
+      document.getElementById('g9_spikes').innerHTML = stats.guest[8].spikes
+      document.getElementById('g9_kill_perc').innerHTML = stats.guest[8].kill_perc
+      document.getElementById('g9_rece').innerHTML = stats.guest[8].rece
+      document.getElementById('g9_rece_perc').innerHTML = stats.guest[8].rece_perc
+      document.getElementById('g9_serve').innerHTML = stats.guest[8].serve
+      document.getElementById('g9_block').innerHTML = stats.guest[8].block
+    }
+    if (stats.guest.length < 10) {
+      document.getElementById('g10').style.display = "none"
+    }
+    else{
+      document.getElementById('g10').style.display = "table-row"
+      document.getElementById('g10_name').innerHTML = stats.guest[9].name
+      document.getElementById('g10_kills').innerHTML = stats.guest[9].kills
+      document.getElementById('g10_errors').innerHTML = stats.guest[9].errors
+      document.getElementById('g10_hits').innerHTML = stats.guest[9].hits
+      document.getElementById('g10_spikes').innerHTML = stats.guest[9].spikes
+      document.getElementById('g10_kill_perc').innerHTML = stats.guest[9].kill_perc
+      document.getElementById('g10_rece').innerHTML = stats.guest[9].rece
+      document.getElementById('g10_rece_perc').innerHTML = stats.guest[9].rece_perc
+      document.getElementById('g10_serve').innerHTML = stats.guest[9].serve
+      document.getElementById('g10_block').innerHTML = stats.guest[9].block
+    }
+    if (stats.guest.length < 11) {
+      document.getElementById('g11').style.display = "none"
+    }
+    else{
+      document.getElementById('g11').style.display = "table-row"
+      document.getElementById('g11_name').innerHTML = stats.guest[10].name
+      document.getElementById('g11_kills').innerHTML = stats.guest[10].kills
+      document.getElementById('g11_errors').innerHTML = stats.guest[10].errors
+      document.getElementById('g11_hits').innerHTML = stats.guest[10].hits
+      document.getElementById('g11_spikes').innerHTML = stats.guest[10].spikes
+      document.getElementById('g11_kill_perc').innerHTML = stats.guest[10].kill_perc
+      document.getElementById('g11_rece').innerHTML = stats.guest[10].rece
+      document.getElementById('g11_rece_perc').innerHTML = stats.guest[10].rece_perc
+      document.getElementById('g11_serve').innerHTML = stats.guest[10].serve
+      document.getElementById('g11_block').innerHTML = stats.guest[10].block
+    }
+    if (stats.guest.length < 12) {
+      document.getElementById('g12').style.display = "none"
+    }
+    else{
+      document.getElementById('g12').style.display = "table-row"
+      document.getElementById('g12_name').innerHTML = stats.guest[11].name
+      document.getElementById('g12_kills').innerHTML = stats.guest[11].kills
+      document.getElementById('g12_errors').innerHTML = stats.guest[11].errors
+      document.getElementById('g12_hits').innerHTML = stats.guest[11].hits
+      document.getElementById('g12_spikes').innerHTML = stats.guest[11].spikes
+      document.getElementById('g12_kill_perc').innerHTML = stats.guest[11].kill_perc
+      document.getElementById('g12_rece').innerHTML = stats.guest[11].rece
+      document.getElementById('g12_rece_perc').innerHTML = stats.guest[11].rece_perc
+      document.getElementById('g12_serve').innerHTML = stats.guest[11].serve
+      document.getElementById('g12_block').innerHTML = stats.guest[11].block
+    }
+  } 
+  setInterval(set_values, 100);
+
+  
+</script>
+
+</body>
+</html>

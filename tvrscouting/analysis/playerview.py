@@ -1,3 +1,5 @@
+from typing import List
+
 from PyQt5 import QtWidgets
 
 from tvrscouting.uis.team_view import Ui_Form as TeamUI
@@ -88,7 +90,6 @@ class TeamView(QtWidgets.QWidget, TeamUI):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.player_profiles = []
         self.team_profile = {}
         self.qt_setup()
 
@@ -99,7 +100,7 @@ class TeamView(QtWidgets.QWidget, TeamUI):
         self.team_profile["serve"] = self.home_serve
         self.team_profile["block"] = self.home_block
         self.team_profile["error"] = self.home_error
-        self.player_profiles = []
+        self.player_profiles: List[PlayerProfileInView] = []
         self.player_profiles.append(
             PlayerProfileInView(
                 self.player_name,
@@ -409,7 +410,7 @@ class TeamView(QtWidgets.QWidget, TeamUI):
 
 class TeamViews:
     def __init__(self):
-        self.views = []
+        self.views: List[TeamView] = []
         self.home_view = None
         self.guest_view = None
         self.views.append(self.home_view)
