@@ -1,10 +1,12 @@
-import os
-from jinja2 import Environment, FileSystemLoader
-from typing import OrderedDict, List, Dict
-from tvrscouting.statistics.Gamestate.game_state import Court, GameState
 import copy
-from tvrscouting.statistics.Players.players import Player
+import os
 from pathlib import Path
+from typing import Dict, List, OrderedDict
+
+from jinja2 import Environment, FileSystemLoader
+
+from tvrscouting.statistics.Gamestate.game_state import Court, GameState
+from tvrscouting.statistics.Players.players import Player
 
 
 def write_results_to_js(
@@ -22,10 +24,8 @@ def write_results_to_js(
         "set_scores": [],
     }
     for score in game_state.final_scores:
-        scores["set_scores"].append(
-            str(score["finalresult"]["home"]) + ":" + str(score["finalresult"]["guest"])
-        )
-    for _ in range(len(scores["set_scores"]), 4):
+        scores["set_scores"].append(str(score[0]) + ":" + str(score[1]))
+    for _ in range(len(scores["set_scores"]), 5):
         scores["set_scores"].append("")
 
     court = {"home": [], "guest": []}
@@ -140,7 +140,6 @@ def write_results_to_js(
     file_loader = FileSystemLoader(TEMPLATE_PATH)
     env = Environment(loader=file_loader)
     path = Path(os.path.dirname(__file__))
-    print(path.parent.parent.absolute())
     OUTPUT_PATH = os.path.join(
         os.path.join(path.parent.parent.absolute(), "hosted_stats"), "scores.js"
     )

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+import copy
 import os
 import pickle
 import re
 import socket
 import sys
 import time
+from typing import List, OrderedDict
 
 from PyQt5 import QtGui, QtWidgets
 
@@ -38,8 +40,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.ThirdWindow = None
         self.FourthWindow = None
         self.CommentsWindow = None
-        self.Scoreboard = Scoreboard()
-        self.Scoreboard.show()
+        self.Scoreboard: Scoreboard = Scoreboard()
+
+        self.write_live_stat: bool = False
+        """determines if we write the stats to the javascript file"""
+
         self.illegal = []
 
         self.details = []
@@ -76,7 +81,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
     def write_analysis(self):
         sw = StaticWriter(self.game.game_state, self.game.meta_info)
         sw.analyze()
-        print("stat file written")
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
@@ -210,21 +214,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.display_detailed_actions()
         self.update_buttons()
 
-    def update_player_stats(self):
-        results = [
-            self.game.game_state.collect_stats("*"),
-            self.game.game_state.collect_stats("/"),
-        ]
-        # TODO: Make this a check
-        self.html_dir = "file.js"
-        if self.html_dir:
-            # TODO: ideally don't pass in the full gs but only the required thing for scores
-            write_results_to_js(
-                results,
-                self.game.game_state,
-                self.game.game_state.court,
-                self.game.game_state.players,
-            )
+    def update_player_stats(self, input_results: List[OrderedDict]):
+        results = copy.deepcopy(input_results)
         self.secondWindow.update_view_from_results(results)
 
     def update_timeline(self):
@@ -247,9 +238,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         }
         self.FourthWindow.update_view_from_results(score)
 
-    def update_commentator_view(self):
+    def update_commentator_view(self, stats: List[OrderedDict]):
         if self.secondWindow is not None:
-            self.update_player_stats()
+            self.update_player_stats(stats)
         if self.ThirdWindow:
             self.update_timeline()
         if self.FourthWindow:
@@ -261,12 +252,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.Scoreboard.update_from_gamestate(self.game.game_state)
         self.Scoreboard.show()
 
+    def write_data_to_js(self, results):
+        if self.write_live_stat:
+            # TODO: ideally don't pass in the full gs but only the required thing for scores
+            write_results_to_js(
+                results,
+                self.game.game_state,
+                self.game.game_state.court,
+                self.game.game_state.players,
+            )
+
+    def collect_player_stats(self) -> List[OrderedDict]:
+        return [
+            self.game.game_state.collect_stats("*"),
+            self.game.game_state.collect_stats("/"),
+        ]
+
     def update(self):
         self.add_input_to_game_state()
         self.update_main_view()
         self.update_scoreboard()
-        self.update_commentator_view()
-        self.send_data_to_remote_server()
+        stats = self.collect_player_stats()
+        self.update_commentator_view(stats)
+        self.send_data_to_remote_server(stats)
+        self.write_data_to_js(stats)
 
     def display_commentator_windows(self):
         if self.secondWindow is None:
@@ -299,6 +308,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.remote_stats.pressed.connect(self.setup_remote_server)
         self.remote_on.clicked.connect(self.turn_on_or_off_remote)
         self.matchInfo.clicked.connect(self.get_match_info)
+        self.livehost.clicked.connect(self.turn_on_or_off_live_stats)
+        self.Scoreboard.show()
+
+    def turn_on_or_off_live_stats(self):
+        self.write_live_stat = self.livehost.isChecked()
 
     def setup_remote_server(self):
         # TODO: don't read from lineEdit but have a popup
@@ -306,7 +320,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.lineEdit.clear()
         self.update()
 
-    def send_data_to_remote_server(self):
+    def send_data_to_remote_server(self, results: List[OrderedDict]):
         if self.remote_server:
             host = "0.0.0.0"  # client ip
             port = 4005
@@ -316,10 +330,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.bind((host, port))
             data = {
-                "results": [
-                    self.game.game_state.collect_stats("*"),
-                    self.game.game_state.collect_stats("/"),
-                ],
+                "results": results,
                 "timeline": self.game.game_state.return_timeline(),
                 "score": {
                     "score": self.game.game_state.return_truncated_scores(),
@@ -339,8 +350,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             if self.CommentsWindow:
                 comments = self.CommentsWindow.text_box.toPlainText()
                 data["comments"] = comments
-            test = pickle.dumps(data)
-            s.sendto(test, server)
+            compressed_data = pickle.dumps(data)
+            s.sendto(compressed_data, server)
             s.close()
 
     def get_times(self):

@@ -3,13 +3,13 @@ var scores = {
     "guest" : {{ scores.guest }},
     "set_home" : {{ scores.set_home }},
     "set_guest" : {{ scores.set_guest }},
-    "last_scores" : [ 
+    "last_scores" : [
       {% for score in scores.set_scores %}
       "{{ score }}",
       {% endfor %}
      ]
   }
-  
+
   var court = {
     "home" : [
       {% for player in court.home %}
@@ -21,9 +21,9 @@ var scores = {
         "{{ player }}",
       {% endfor %}
     ]
-  
+
   }
-  
+
   var stats = {
     "names" : [ "{{ stats.team[0].name }}", "{{ stats.team[1].name }}" ],
     "guest_total": {

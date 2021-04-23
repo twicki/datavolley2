@@ -19,10 +19,6 @@ class Position:
         self.kills.hide()
 
 
-def keyPressed(evt):
-    print("Key pressed")
-
-
 class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
     sigKeyPress = QtCore.pyqtSignal(object)
 
@@ -315,5 +311,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     w = Main()
     w.show()
-    w.sigKeyPress.connect(keyPressed)
     sys.exit(app.exec())

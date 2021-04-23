@@ -372,7 +372,7 @@ class GameState:
                 fpos.append(Player(action.player_in))
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
             elif isinstance(action, SpecialActions.Endset):
-                self.final_scores.append[self.score[0], self.score[1]]
+                self.final_scores.append([self.score[0], self.score[1]])
                 self.set_score[int(action.team_)] += 1
                 self.score[0] = 0
                 self.score[1] = 0
@@ -407,6 +407,7 @@ class GameState:
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
                 self.flush_actions()
             elif isinstance(action, SpecialActions.Endset):
+                self.final_scores.append([self.score[0], self.score[1]])
                 self.set_score[int(action.team_)] += 1
                 self.score[0] = 0
                 self.score[1] = 0
@@ -473,6 +474,7 @@ class GameState:
         self._current_actions.append(
             actions.Endset(scoring_team, time_stamp=self.scoring_time_stamp, auto_generated=True)
         )
+        self.final_scores.append([self.score[0], self.score[1]])
         self.set_score[team] += 1
         self.score[0] = 0
         self.score[1] = 0

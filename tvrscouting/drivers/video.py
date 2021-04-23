@@ -546,8 +546,6 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         number = self.lineEdit.text()
         if number.isnumeric():
             self.leadup_time = float(number)
-        else:
-            print("unknown reset time")
         self.lineEdit.clear()
 
     def update_view_action_reel(self):

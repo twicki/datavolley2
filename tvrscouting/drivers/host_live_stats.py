@@ -1,7 +1,7 @@
 # Run python server on a different thread
 import http.server
-import socketserver
 import os
+import socketserver
 from pathlib import Path
 
 
