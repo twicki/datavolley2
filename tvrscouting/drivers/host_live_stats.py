@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def run_local_server(port=8000):
-    path = Path(os.path.dirname(__file__))
+    path = Path((os.path.dirname(os.path.abspath(__file__))))
     web_dir = os.path.join(path.parent.parent.absolute(), "hosted_stats")
     os.chdir(web_dir)
     socketserver.TCPServer.allow_reuse_address = True  # required for fast reuse !
