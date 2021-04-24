@@ -6,7 +6,7 @@ from typing import List, Optional
 import tvrscouting.statistics.Actions as actions
 import tvrscouting.statistics.Actions.SpecialAction as SpecialActions
 from tvrscouting.analysis.filters import compare_action_to_string, rally_filter_from_string
-from tvrscouting.statistics.Actions.ActionExpansion import expandString
+from tvrscouting.statistics.Actions.ActionExpansion import StatementSettings, expandString
 from tvrscouting.statistics.Actions.GameAction import (
     Action,
     Gameaction,
@@ -53,32 +53,33 @@ class Court:
 
 
 def correct_strings(
-    s1,
-    team,
-    action,
-    quality,
-    from_set,
-    to_set,
-    players_set,
-    s2,
-    team2,
-    action2,
-    quality2,
-    from_set2,
-    to_set2,
-    players_set2,
+    s1: str,
+    team: bool,
+    action: bool,
+    quality: bool,
+    from_set: bool,
+    to_set: bool,
+    players_set: bool,
+    s2: str,
+    team2: bool,
+    action2: bool,
+    quality2: bool,
+    from_set2: bool,
+    to_set2: bool,
+    players_set2: bool,
+    settings: StatementSettings,
 ):
     # correct the teams
     if not team2:
-        s2 = str(actions.Team.inverse(actions.Team.from_string(s1[0]))) + s2[1:]
+        s2 = str(settings.compound_team(s1)) + s2[1:]
     if not team and team2:
-        s1 = str(actions.Team.inverse(actions.Team.from_string(s2[0]))) + s1[1:]
+        s1 = str(settings.compound_team(21)) + s1[1:]
 
     # correct the action:
     if not action2:
-        s2 = s2[:3] + str(actions.Action.inverse(actions.Action.from_string(s1[3]))) + s2[4:]
+        s2 = s2[:3] + str(settings.compound_action(s1)) + s2[4:]
     if not action and action2:
-        s1 = s1[:3] + str(actions.Action.inverse(actions.Action.from_string(s2[3]))) + s1[4:]
+        s1 = s1[:3] + str(settings.compound_action(s2)) + s1[4:]
 
     # correct the quality
     if not quality2:
@@ -96,7 +97,7 @@ def correct_strings(
     if not to_set:
         s1 = s1[:8] + s2[7] + s1[9:]
 
-    if s1[3] == "H" or s2[3] == "H":
+    if s1[3] == "h" or s2[3] == "h":
         if not players_set2:
             s2 = s2[:9] + s1[10] + s2[10:]
         if not players_set and players_set2:
@@ -105,7 +106,7 @@ def correct_strings(
     return s1, s2
 
 
-def split_compound_statements(input):
+def split_compound_statements(input, settings: StatementSettings):
     strings = input.split(".")
     if len(strings) > 1:
         (
@@ -116,7 +117,7 @@ def split_compound_statements(input):
             from_direction_set,
             to_directon_set,
             players_set,
-        ) = expandString(strings[0])
+        ) = expandString(strings[0], settings)
         if len(strings[1]) == 0:
             raise TVRSyntaxError()
         (
@@ -127,7 +128,7 @@ def split_compound_statements(input):
             from_direction_set_2,
             to_directon_set_2,
             players_set_2,
-        ) = expandString(strings[1])
+        ) = expandString(strings[1], settings)
         s1, s2 = correct_strings(
             s1,
             team_set,
@@ -143,9 +144,10 @@ def split_compound_statements(input):
             from_direction_set_2,
             to_directon_set_2,
             players_set_2,
+            settings,
         )
     else:
-        s1, _, _, _, _, _, _ = expandString(strings[0])
+        s1, _, _, _, _, _, _ = expandString(strings[0], settings)
         s2 = None
     return s1, s2
 
@@ -229,6 +231,8 @@ class GameState:
         self.setters = [None, None]
         self.players: List[List[Player]] = [[], []]
 
+        self.settings: StatementSettings = StatementSettings()
+
         self.details = []
 
     def add_action_substitution_from_string(self, action: str, time_stamp=None) -> None:
@@ -294,7 +298,7 @@ class GameState:
             action = SetterCall.from_string(action, time_stamp)
             self.add_logical([action], time_stamp)
         else:
-            str1, str2 = split_compound_statements(action)
+            str1, str2 = split_compound_statements(action, self.settings)
             allactions = []
             allactions.append(copy.copy(Gameaction.from_string(str1, time_stamp)))
             if str2:
@@ -351,7 +355,7 @@ class GameState:
         elif "K" in action:
             return [SetterCall.from_string(action, time_stamp)]
         else:
-            str1, str2 = split_compound_statements(action)
+            str1, str2 = split_compound_statements(action, self.settings)
             allactions = []
             allactions.append(copy.copy(Gameaction.from_string(str1, time_stamp)))
             if str2:

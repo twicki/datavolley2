@@ -1,6 +1,5 @@
 from enum import Enum
 
-from tvrscouting.statistics.Actions.ActionExpansion import expandString
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.utils.errors import TVRSyntaxError
 
@@ -88,9 +87,15 @@ class Combination(Enum):
     Medium_1 = (1, "C1")
     Medium_2 = (1, "C2")
     Medium_3 = (1, "C3")
+    Medium_4 = (1, "C4")
+    Medium_5 = (1, "C5")
+    Medium_6 = (1, "C6")
     High_1 = (1, "V1")
     High_2 = (1, "V2")
     High_3 = (1, "V3")
+    High_4 = (1, "V4")
+    High_5 = (1, "V5")
+    High_6 = (1, "V6")
 
     @classmethod
     def from_string(cls, s):
@@ -152,7 +157,7 @@ class Gameaction(AbstractAction):
         self.direction_type = "c"
 
     def __str__(self):
-        return expandString(
+        return (
             str(self.team)
             + str(self.player)
             + str(self.action)
@@ -161,11 +166,11 @@ class Gameaction(AbstractAction):
             + str(self.direction[0])
             + str(self.direction[1])
             + ";"
-            + self.action_type
+            + str(self.action_type)
             + str(self.action_players_involved)
-            + self.action_error_type
-            + self.direction_type
-        )[0]
+            + str(self.action_error_type)
+            + str(self.direction_type)
+        )
 
     @classmethod
     def from_string(cls, s, time_stamp=None):
