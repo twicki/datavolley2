@@ -324,7 +324,7 @@ class GameState:
                 SpecialActions.SetServingTeam(actions.Team.from_string(team), time_stamp, autogen)
             ]
         elif "point" in action:
-            # TODO: continue the refactoring here
+            # TODO: this is copied form above, refactor!
             split_string = action.split("!")
             number = int(split_string[1])
             team = split_string[0][0]

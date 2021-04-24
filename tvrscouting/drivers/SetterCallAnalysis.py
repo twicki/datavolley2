@@ -221,7 +221,6 @@ class Main(QtWidgets.QWidget, Ui_Form, Basic_Filter):
             for rally in self.shown_ralleis:
                 if rally.setter_call:
                     if rally.setter_call.combination == call.call[1]:
-                        # TODO: check if K1 kill for each of those
                         if rally.setter_call.set_to in ["A", "F", "L"]:
                             distributions[index]["F"][0] += 1
                             distributions[index]["F"][1] += int(rally.wins_in_k1())
