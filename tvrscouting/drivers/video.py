@@ -2,6 +2,7 @@ import contextlib
 import os
 import sys
 from time import sleep
+from typing import Optional
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
@@ -44,6 +45,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.setWindowIcon(icon)
         self._qt_setup()
         self._media_player_setup()
+        self.set_volume(0)
         self.set_up_game_state(game_state)
         self.current_action_index = 0
         self.nex_action_index = 1
@@ -53,9 +55,9 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.isPaused = False
         self.displayed_actions = []
         self.next_item = None
-        self.play_Actions = False
-        self.auto_jump = True
-        self.concurent_action = True
+        self.auto_jump: bool = False
+        self.concurent_action: bool = False
+        self.timer_start: Optional[float] = None
 
         self.jump_next_action_timer = QtCore.QTimer(self)
         self.jump_next_action_timer.setInterval(2 * self.leadup_time * 1000)
@@ -326,6 +328,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         """updates the user interface"""
         # setting the slider to the desired position
         self.horizontalSlider.setValue(int(self.mediaplayer.get_position() * 10000))
+        if self.timer_start:
+            time_now = self.get_current_second_of_player()
+            self.lcdNumber.show()
+            self.lcdNumber.display(time_now - self.timer_start)
         if self.mediaplayer.is_playing():
             self.pushButton_2.setText("Pause")
         else:
@@ -393,13 +399,14 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             if self.mediaplayer.play() == -1:
                 self.OpenFile()
                 return
-            # TODO: add slider
-            self.mediaplayer.audio_set_volume(0)
             self.mediaplayer.play()
             self.timer.start()
             if self.concurent_action:
                 self.jump_next_action_timer.start()
             self.isPaused = False
+
+    def set_volume(self, position):
+        self.mediaplayer.audio_set_volume(position)
 
     def set_mediaplayer_from_sliderposition(self, position):
         """Set the position"""
@@ -511,6 +518,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             self.advance_frames(1)
         elif e.key() == QtCore.Qt.Key_Comma:
             self.advance_frames(-1)
+        self.updateUI()
 
     def set_position_from_time(self, time):
         if self.total_time:
@@ -592,6 +600,21 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.delete_action.keyPressEvent = self.keyPressEvent
         self.insert_action.keyPressEvent = self.keyPressEvent
 
+        self.pushButton_3.keyPressEvent = self.keyPressEvent
+        self.lcdNumber.keyPressEvent = self.keyPressEvent
+        self.horizontalSlider_2.keyPressEvent = self.keyPressEvent
+
+    def start_stop_timer(self):
+        if self.timer_start is None:
+            self.timer_start = self.get_current_second_of_player()
+            self.pushButton_3.setText("Reset Timer")
+            self.lcdNumber.show()
+        else:
+            self.timer_start = None
+            self.pushButton_3.setText("Start Timer")
+            self.lcdNumber.hide()
+        pass
+
     def _qt_setup(self):
         self.pushButton.clicked.connect(self.open)
         self.pushButton_2.clicked.connect(self.PlayPause)
@@ -610,6 +633,11 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.reset_time_button.clicked.connect(self.set_leadup_time)
         self.insert_action.clicked.connect(self.insert_action_after)
         self.delete_action.clicked.connect(self.delete_current_action)
+
+        self.pushButton_3.clicked.connect(self.start_stop_timer)
+        self.lcdNumber.hide()
+
+        self.horizontalSlider_2.sliderMoved.connect(self.set_volume)
 
         self.set_keypresses_to_custom_keypresses()
 

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from PyQt5 import QtWidgets
 
@@ -13,9 +13,6 @@ from tvrscouting.statistics.Actions.GameAction import Gameaction
 from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
 from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Players.players import Player
-
-
-# import contextlib
 
 
 class Basic_Filter:
@@ -34,9 +31,6 @@ class Basic_Filter:
         self.reset_all_filters()
         self.players = [[], []]
         self.position_to_check = 0
-        # self.actions = []
-        # self.displayed_actions = []
-        # self.players = [[], []]
 
     def initialize_table(self):
         self.filter_table.setRowCount(2)
@@ -75,9 +69,7 @@ class Basic_Filter:
             )
             + 1
         )
-        self.filter_table.setItem(
-            len(self.rally_filters), index, QtWidgets.QTableWidgetItem(filters[-1])
-        )
+        self.filter_table.setItem(len(filters), index, QtWidgets.QTableWidgetItem(filters[-1]))
 
     def store_rally_filter(self):
         rally_filter = self.lineEdit.text()
@@ -140,8 +132,8 @@ class Basic_Filter:
         return False
 
     def apply_all_filters(self):
-        self.actions = []
-        self.players = [[], []]
+        self.actions: List[Gameaction] = []
+        self.players: List[List[Player]] = [[], []]
         if self.game_state is None:
             self.load_file()
             if self.game_state is None:

@@ -1,13 +1,169 @@
 import copy
 import os
 import sys
-from typing import List
+from typing import List, OrderedDict
 
 from PyQt5 import QtGui, QtWidgets
 
 from tvrscouting.analysis.basic_filter_widget import Basic_Filter
 from tvrscouting.analysis.playerview import PlayerProfileInView, TeamView
+from tvrscouting.statistics.Actions.GameAction import Action, Gameaction, Quality
+from tvrscouting.statistics.Players.players import Player, Team
 from tvrscouting.uis.filtered_team_view import Ui_Form
+
+
+def collect_stats(
+    players: List[List[Player]], actions: List[Gameaction], teamname: str
+) -> OrderedDict:
+    team = Team.from_string(teamname)
+    playerstats = OrderedDict()
+
+    players[int(team)] = sorted(players[int(team)], key=lambda player: player.Position)
+    allplayers = players[int(team)]
+
+    for player in allplayers:
+        playerstats[player.Number] = {}
+        playerstats[player.Number]["played"] = False
+        for teams_player in players[int(team)]:
+            if teams_player.Number == player.Number:
+                playerstats[player.Number]["name"] = str(player.Number) + " " + teams_player.Name
+        playerstats[player.Number]["serve"] = {}
+        playerstats[player.Number]["serve"]["kill"] = 0
+        playerstats[player.Number]["serve"]["total"] = 0
+        playerstats[player.Number]["rece"] = {}
+        playerstats[player.Number]["rece"]["win"] = 0
+        playerstats[player.Number]["rece"]["total"] = 0
+        playerstats[player.Number]["rece"]["perc"] = 0
+        playerstats[player.Number]["hit"] = {}
+        playerstats[player.Number]["hit"]["kill"] = 0
+        playerstats[player.Number]["hit"]["total"] = 0
+        playerstats[player.Number]["hit"]["perc"] = 0
+        playerstats[player.Number]["error"] = 0
+        playerstats[player.Number]["block"] = 0
+        playerstats[player.Number]["points"] = 0
+    for player in allplayers:
+        for action in actions:
+            # is is the right player on the right team
+            if action.team == team:
+                if action.player == player.Number:
+                    playerstats[player.Number]["played"] = True
+                    playerstats[player.Number]["group"] = int(player.Position)
+                    # serve statistics
+                    if action.action == Action.Serve:
+                        playerstats[player.Number]["serve"]["total"] += 1
+                        if action.quality == Quality.Kill:
+                            playerstats[player.Number]["serve"]["kill"] += 1
+                            playerstats[player.Number]["points"] += 1
+                        elif action.quality == Quality.Error:
+                            playerstats[player.Number]["error"] += 1
+
+                    # hitting statistics
+                    elif action.action == Action.Hit:
+                        playerstats[player.Number]["hit"]["total"] += 1
+                        if action.quality == Quality.Kill:
+                            playerstats[player.Number]["hit"]["kill"] += 1
+                            playerstats[player.Number]["points"] += 1
+                        elif action.quality == Quality.Error:
+                            playerstats[player.Number]["error"] += 1
+
+                    # blocking statistics
+                    elif action.action == Action.Block:
+                        if action.quality == Quality.Kill:
+                            playerstats[player.Number]["block"] += 1
+                            playerstats[player.Number]["points"] += 1
+                        elif action.quality == Quality.Error:
+                            playerstats[player.Number]["error"] += 1
+
+                    # rece statistics
+                    elif action.action == Action.Reception:
+                        playerstats[player.Number]["rece"]["total"] += 1
+                        if action.quality == Quality.Perfect or action.quality == Quality.Good:
+                            playerstats[player.Number]["rece"]["win"] += 1
+                        elif action.quality == Quality.Error:
+                            playerstats[player.Number]["error"] += 1
+                    # other actions
+                    else:
+                        if action.quality == Quality.Kill:
+                            playerstats[player.Number]["points"] += 1
+                        elif action.quality == Quality.Error:
+                            playerstats[player.Number]["error"] += 1
+
+    for numbers in [number for number, stats in playerstats.items() if stats["played"] is False]:
+        del playerstats[numbers]
+
+    playerstats["team"] = {}
+    playerstats["team"]["name"] = "Full Team"
+    playerstats["team"]["group"] = 7
+    playerstats["team"]["serve"] = {}
+    playerstats["team"]["serve"]["kill"] = 0
+    playerstats["team"]["serve"]["total"] = 0
+    playerstats["team"]["rece"] = {}
+    playerstats["team"]["rece"]["win"] = 0
+    playerstats["team"]["rece"]["total"] = 0
+    playerstats["team"]["rece"]["perc"] = 0
+    playerstats["team"]["hit"] = {}
+    playerstats["team"]["hit"]["kill"] = 0
+    playerstats["team"]["hit"]["total"] = 0
+    playerstats["team"]["hit"]["perc"] = 0
+    playerstats["team"]["error"] = 0
+    playerstats["team"]["block"] = 0
+    playerstats["team"]["points"] = 0
+    for action in actions:
+        # is is the right player on the right team
+        if action.team == team:
+            # serve statistics
+            if action.action == Action.Serve:
+                playerstats["team"]["serve"]["total"] += 1
+                if action.quality == Quality.Kill:
+                    playerstats["team"]["serve"]["kill"] += 1
+                    playerstats["team"]["points"] += 1
+                elif action.quality == Quality.Error:
+                    playerstats["team"]["error"] += 1
+
+            # hitting statistics
+            elif action.action == Action.Hit:
+                playerstats["team"]["hit"]["total"] += 1
+                if action.quality == Quality.Kill:
+                    playerstats["team"]["hit"]["kill"] += 1
+                    playerstats["team"]["points"] += 1
+                elif action.quality == Quality.Error:
+                    playerstats["team"]["error"] += 1
+
+            # blocking statistics
+            elif action.action == Action.Block:
+                if action.quality == Quality.Kill:
+                    playerstats["team"]["block"] += 1
+                    playerstats["team"]["points"] += 1
+                elif action.quality == Quality.Error:
+                    playerstats["team"]["error"] += 1
+
+            # blocking statistics
+            elif action.action == Action.Reception:
+                playerstats["team"]["rece"]["total"] += 1
+                if action.quality == Quality.Perfect or action.quality == Quality.Good:
+                    playerstats["team"]["rece"]["win"] += 1
+                elif action.quality == Quality.Error:
+                    playerstats["team"]["error"] += 1
+            # other actions
+            else:
+                if action.quality == Quality.Kill:
+                    playerstats["team"]["points"] += 1
+                elif action.quality == Quality.Error:
+                    playerstats["team"]["error"] += 1
+
+    for stats in playerstats.values():
+        stats["rece"]["perc"] = (
+            int(100 * stats["rece"]["win"] / stats["rece"]["total"])
+            if stats["rece"]["total"] > 0
+            else 0
+        )
+        stats["hit"]["perc"] = (
+            int(100 * stats["hit"]["kill"] / stats["hit"]["total"])
+            if stats["hit"]["total"] > 0
+            else 0
+        )
+
+    return playerstats
 
 
 class MainWindow(QtWidgets.QWidget, Ui_Form, Basic_Filter):
@@ -21,10 +177,9 @@ class MainWindow(QtWidgets.QWidget, Ui_Form, Basic_Filter):
         self.qt_setup()
 
     def analyze(self):
-        # TODO: add flter here to only collect stas from filtered data
         results = [
-            self.game_state.collect_stats("*"),
-            self.game_state.collect_stats("/"),
+            collect_stats(self.players, self.actions, "*"),
+            collect_stats(self.players, self.actions, "/"),
         ]
         self.update_player_views(results[self.team])
         self.update_team_view(results[self.team])
