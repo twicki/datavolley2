@@ -80,8 +80,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.update()
 
     def write_analysis(self):
+        if len(self.select_set.text()):
+            set_number = int(self.select_set.text())
+        else:
+            set_number = -1
         sw = StaticWriter(self.game.game_state, self.game.meta_info)
-        sw.analyze()
+        sw.analyze(set_number)
+        self.select_set.clear()
 
     def save_and_reset(self):
         userdata = self.textEdit.toPlainText()
@@ -299,13 +304,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.update_buttons()
 
     def print_play_by_play(self):
-        if len(self.lineEdit.text()):
-            set_number = int(self.lineEdit.text())
+        if len(self.select_set.text()):
+            set_number = int(self.select_set.text())
         else:
             set_number = self.game.game_state.set_score[0] + self.game.game_state.set_score[1]
         analyzer = PlayByPlay(self.game)
         analyzer.analyze(set_number)
-        self.lineEdit.clear()
+        self.select_set.clear()
 
     def qt_setup(self):
         self.pushButton.clicked.connect(self.display_commentator_windows)
