@@ -154,12 +154,12 @@ def split_compound_statements(input, settings: StatementSettings):
 
 class Rally:
     def __init__(self) -> None:
-        self.actions = []
-        self.court = None
-        self.score = None
-        self.set_score = None
-        self.last_serve = None
-        self.setter_call = None
+        self.actions: List[Action] = []
+        self.court: Optional[Court] = None
+        self.score: List[int] = []
+        self.set_score: List[int] = []
+        self.last_serve: Optional[Team] = None
+        self.setter_call: Optional[SetterCall] = None
 
     def correct_setter_call(self):
         if self.setter_call:
@@ -221,7 +221,7 @@ class GameState:
         self.rallies: List[Rally] = []
         self.court: Court = Court()
 
-        self._current_actions = []
+        self._current_actions: List[Action] = []
         self.scoring_team: Optional[Team] = None
         self.set_ended = False
         self._setter_call = None
@@ -234,6 +234,15 @@ class GameState:
         self.settings: StatementSettings = StatementSettings()
 
         self.details = []
+
+    def get_players_from_game_state(self) -> List[List[Player]]:
+        retval = [[], []]
+        for rally in self.rallies:
+            for action in rally.actions:
+                if isinstance(action, SpecialActions.InitializePlayer):
+                    p = Player(action.number, action.position, action.name)
+                    retval[int(action.team)].append(p)
+        return retval
 
     def add_action_substitution_from_string(self, action: str, time_stamp=None) -> None:
         """add a substitiution action from a string formatted [Team]sub![Number]![Position]"""
@@ -294,6 +303,9 @@ class GameState:
                 actions.Team.from_string(team), setter_number, time_stamp
             )
             self.add_logical([action], time_stamp)
+        elif "timeout" in action:
+            action = SpecialActions.Timeout(action, time_stamp)
+            self.add_logical([action], time_stamp)
         elif "K" in action:
             action = SetterCall.from_string(action, time_stamp)
             self.add_logical([action], time_stamp)
@@ -345,6 +357,8 @@ class GameState:
             return [SpecialActions.InitializeTeamName(action, time_stamp)]
         elif "player" in action:
             return [SpecialActions.InitializePlayer(action, time_stamp)]
+        elif "timeout" in action:
+            return [SpecialActions.Timeout(action, time_stamp)]
         elif "setter" in action:
             split_string = action.split("!")
             team = split_string[0][0]
@@ -372,6 +386,8 @@ class GameState:
                 who = action.team_
                 field = self.court.fields[int(who)].players
                 pos = action.position_in - 1
+                if field[pos].Number != 0:
+                    action.player_out = field[pos].Number
                 fpos = field[:pos]
                 fpos.append(Player(action.player_in))
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
@@ -406,6 +422,8 @@ class GameState:
                 who = action.team_
                 field = self.court.fields[int(who)].players
                 pos = action.position_in - 1
+                if field[pos].Number != 0:
+                    action.player_out = field[pos].Number
                 fpos = field[:pos]
                 fpos.append(Player(action.player_in))
                 self.court.fields[int(who)].players = fpos + field[pos + 1 :]
@@ -438,6 +456,8 @@ class GameState:
                 self._setter_call = action
             elif isinstance(action, SpecialActions.SetSetter):
                 self.court.fields[int(action.team_)].setter = action.setter_number
+            elif isinstance(action, SpecialActions.Timeout):
+                pass
             else:
                 who, was_score = is_scoring(action)
                 if was_score:

@@ -2,6 +2,7 @@ from enum import Enum
 
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.utils.errors import TVRSyntaxError
+from typing import List
 
 from .AbstractAction import AbstractAction
 
@@ -137,24 +138,18 @@ class SetterCall(AbstractAction):
 
 
 class Gameaction(AbstractAction):
-    team = None
-    player = None
-    action = None
-    quality = None
-    direction = []
-
     def __init__(self, time_stamp=None):
         super().__init__(time_stamp)
-        self.team = Team.Home
-        self.player = 0
-        self.action = Action.Hit
-        self.quality = Quality.Good
-        self.combination = Combination.Default
-        self.direction = [0, 0]
-        self.action_type = "D"
-        self.action_players_involved = 9
-        self.action_error_type = "D"
-        self.direction_type = "c"
+        self.team: Team = Team.Home
+        self.player: int = 0
+        self.action: Action = Action.Hit
+        self.quality: Quality = Quality.Good
+        self.combination: Combination = Combination.Default
+        self.direction: List[int] = [0, 0]
+        self.action_type: str = "D"
+        self.action_players_involved: int = 9
+        self.action_error_type: str = "D"
+        self.direction_type: str = "c"
 
     def __str__(self):
         return (
@@ -198,7 +193,7 @@ class Gameaction(AbstractAction):
         return new
 
 
-def is_scoring(action):
+def is_scoring(action: Gameaction):
     if action.quality == Quality.Kill:
         return action.team, True
     elif action.quality == Quality.Error:

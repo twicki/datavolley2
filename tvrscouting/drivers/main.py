@@ -23,6 +23,7 @@ from tvrscouting.statistics.Gamestate.game import Game
 from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
+from tvrscouting.analysis.playbyplay import PlayByPlay
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
@@ -297,6 +298,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
             self.remote_server = None
         self.update_buttons()
 
+    def print_play_by_play(self):
+        if len(self.lineEdit.text()):
+            set_number = int(self.lineEdit.text())
+        else:
+            set_number = self.game.game_state.set_score[0] + self.game.game_state.set_score[1]
+        analyzer = PlayByPlay(self.game)
+        analyzer.analyze(set_number)
+        self.lineEdit.clear()
+
     def qt_setup(self):
         self.pushButton.clicked.connect(self.display_commentator_windows)
         self.pushButton_2.clicked.connect(self.save_and_reset)
@@ -309,6 +319,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.remote_on.clicked.connect(self.turn_on_or_off_remote)
         self.matchInfo.clicked.connect(self.get_match_info)
         self.livehost.clicked.connect(self.turn_on_or_off_live_stats)
+        self.playbyplay.clicked.connect(self.print_play_by_play)
         self.Scoreboard.show()
 
     def turn_on_or_off_live_stats(self):

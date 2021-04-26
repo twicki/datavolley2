@@ -2,7 +2,7 @@ import os
 import pickle
 
 from PyQt5.QtWidgets import QFileDialog
-
+from typing import Optional
 from tvrscouting.statistics.Gamestate.game import Game
 
 
@@ -12,7 +12,7 @@ class Serializer:
         self.parent = parent
         self.game = Game() if game is None else game
 
-    def serialize(self, filename: str = None):
+    def serialize(self, filename: Optional[str] = None):
         if filename is None:
             filename = QFileDialog.getSaveFileName(
                 self.parent, "Save File", os.path.expanduser("~")
@@ -22,7 +22,7 @@ class Serializer:
         with open(filename, "wb") as picklefile:
             pickle.dump(self.game, picklefile)
 
-    def deserialize(self, filename: str = None):
+    def deserialize(self, filename: Optional[str] = None) -> Game:
         if filename is None:
             filename = QFileDialog.getOpenFileName(
                 self.parent, "Open File", os.path.expanduser("~")
