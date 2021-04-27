@@ -58,6 +58,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.auto_jump: bool = False
         self.concurent_action: bool = False
         self.timer_start: Optional[float] = None
+        self.hide_non_game_actions: bool = True
 
         self.jump_next_action_timer = QtCore.QTimer(self)
         self.jump_next_action_timer.setInterval(2 * self.leadup_time * 1000)
@@ -284,24 +285,58 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
 
         with self.edit_table():
             self.action_view.setRowCount(self.total_nuber_of_actions)
-            filter_string = self.lineEdit.text()
             i = 0
             self.displayed_actions = []
             for action in self.all_actions:
-                if isinstance(action.action, Gameaction):
-                    current_action = str(action.action)
-                    if (
-                        self.check_all_rally_filters(action.from_rally)
-                        and self.check_all_court_filters(action.from_rally.court)
-                        and self.check_all_subaction_filters(action.from_rally)
-                        and self.check_all_action_filters(current_action)
-                    ):
-                        self.action_view.setItem(0, i, QtWidgets.QTableWidgetItem(current_action))
-                        self.action_view.setColumnWidth(i, 200)
-                        self.displayed_actions.append(action)
-                        i += 1
-                        if action.action_index == old_highlight_index:
-                            new_highlight_column = i
+                if self.hide_non_game_actions:
+                    if isinstance(action.action, Gameaction):
+                        current_action = str(action.action)
+                        if (
+                            self.check_all_rally_filters(action.from_rally)
+                            and self.check_all_court_filters(action.from_rally.court)
+                            and self.check_all_subaction_filters(action.from_rally)
+                            and self.check_all_action_filters(current_action)
+                        ):
+                            self.action_view.setItem(
+                                0, i, QtWidgets.QTableWidgetItem(current_action)
+                            )
+                            self.action_view.setColumnWidth(i, 200)
+                            self.displayed_actions.append(action)
+                            i += 1
+                            if action.action_index == old_highlight_index:
+                                new_highlight_column = i
+                else:
+                    if isinstance(action, Gameaction):
+                        current_action = str(action.action)
+                        if (
+                            self.check_all_rally_filters(action.from_rally)
+                            and self.check_all_court_filters(action.from_rally.court)
+                            and self.check_all_subaction_filters(action.from_rally)
+                            and self.check_all_action_filters(current_action)
+                        ):
+                            self.action_view.setItem(
+                                0, i, QtWidgets.QTableWidgetItem(current_action)
+                            )
+                            self.action_view.setColumnWidth(i, 200)
+                            self.displayed_actions.append(action)
+                            i += 1
+                            if action.action_index == old_highlight_index:
+                                new_highlight_column = i
+                    else:
+                        current_action = str(action.action)
+                        if (
+                            self.check_all_rally_filters(action.from_rally)
+                            and self.check_all_court_filters(action.from_rally.court)
+                            and self.check_all_subaction_filters(action.from_rally)
+                        ):
+                            self.action_view.setItem(
+                                0, i, QtWidgets.QTableWidgetItem(current_action)
+                            )
+                            self.action_view.setColumnWidth(i, 200)
+                            self.displayed_actions.append(action)
+                            i += 1
+                            if action.action_index == old_highlight_index:
+                                new_highlight_column = i
             self.action_view.setRowCount(i)
         # since the table is one-indexed we need to remove 1
         new_highlight_column = (
@@ -603,6 +638,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.pushButton_3.keyPressEvent = self.keyPressEvent
         self.lcdNumber.keyPressEvent = self.keyPressEvent
         self.horizontalSlider_2.keyPressEvent = self.keyPressEvent
+        self.hideactions.keyPressEvent = self.keyPressEvent
 
     def start_stop_timer(self):
         if self.timer_start is None:
@@ -614,6 +650,10 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             self.pushButton_3.setText("Start Timer")
             self.lcdNumber.hide()
         pass
+
+    def toggle_non_game_actions(self):
+        self.hide_non_game_actions = self.hideactions.isChecked()
+        self.apply_all_filters()
 
     def _qt_setup(self):
         self.pushButton.clicked.connect(self.open)
@@ -638,6 +678,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         self.lcdNumber.hide()
 
         self.horizontalSlider_2.sliderMoved.connect(self.set_volume)
+
+        self.hideactions.clicked.connect(self.toggle_non_game_actions)
 
         self.set_keypresses_to_custom_keypresses()
 

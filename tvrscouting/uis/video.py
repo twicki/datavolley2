@@ -41,9 +41,7 @@ class Ui_Dialog(object):
         self.lcdNumber.setProperty("value", 0.0)
         self.lcdNumber.setObjectName("lcdNumber")
         self.gridLayout.addWidget(self.lcdNumber, 1, 2, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
         self.saveFile_button = QtWidgets.QPushButton(Dialog)
         self.saveFile_button.setObjectName("saveFile_button")
@@ -51,9 +49,7 @@ class Ui_Dialog(object):
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setObjectName("pushButton")
         self.gridLayout.addWidget(self.pushButton, 1, 5, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem1, 1, 4, 1, 1)
         self.load_button = QtWidgets.QPushButton(Dialog)
         self.load_button.setObjectName("load_button")
@@ -61,9 +57,7 @@ class Ui_Dialog(object):
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 8, 1, 2)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem2, 1, 7, 1, 3)
         self.gridLayout.setColumnStretch(0, 3)
         self.gridLayout.setColumnStretch(1, 2)
@@ -119,12 +113,16 @@ class Ui_Dialog(object):
         self.gridLayout_3.addWidget(self.horizontalSlider, 8, 0, 1, 1)
         self.gridLayout_5 = QtWidgets.QGridLayout()
         self.gridLayout_5.setObjectName("gridLayout_5")
+        self.insert_action = QtWidgets.QPushButton(Dialog)
+        self.insert_action.setObjectName("insert_action")
+        self.gridLayout_5.addWidget(self.insert_action, 0, 1, 1, 1)
         self.delete_action = QtWidgets.QPushButton(Dialog)
         self.delete_action.setObjectName("delete_action")
         self.gridLayout_5.addWidget(self.delete_action, 1, 1, 1, 1)
-        self.insert_action = QtWidgets.QPushButton(Dialog)
-        self.insert_action.setObjectName("insert_action")
-        self.gridLayout_5.addWidget(self.insert_action, 1, 0, 1, 1)
+        self.hideactions = QtWidgets.QCheckBox(Dialog)
+        self.hideactions.setChecked(True)
+        self.hideactions.setObjectName("hideactions")
+        self.gridLayout_5.addWidget(self.hideactions, 2, 1, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout_5, 9, 1, 1, 1)
         self.action_view = QtWidgets.QTableWidget(Dialog)
         self.action_view.setObjectName("action_view")
@@ -160,8 +158,7 @@ class Ui_Dialog(object):
         self.rally_button.setText(_translate("Dialog", "Rally Filter"))
         self.jump_on_select_box.setText(_translate("Dialog", "jump on select"))
         self.action_reel_box.setText(_translate("Dialog", "view action reel"))
-        self.delete_action.setText(_translate("Dialog", "Delete Action"))
         self.insert_action.setText(_translate("Dialog", "Insert Action"))
-
-
+        self.delete_action.setText(_translate("Dialog", "Delete Action"))
+        self.hideactions.setText(_translate("Dialog", "hide non-game actions"))
 from PyQt5.QtMultimediaWidgets import QVideoWidget

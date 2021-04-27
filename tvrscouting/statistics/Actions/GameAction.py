@@ -154,7 +154,7 @@ class Gameaction(AbstractAction):
     def __str__(self):
         return (
             str(self.team)
-            + str(self.player)
+            + "%02d" % self.player
             + str(self.action)
             + str(self.quality)
             + str(self.combination)

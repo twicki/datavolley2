@@ -140,9 +140,6 @@ class Basic_Filter:
         self.players = self.game_state.get_players_from_game_state()
         for rally in self.game_state.rallies:
             for action in rally.actions:
-                # if isinstance(action, InitializePlayer):
-                #     p = Player(action.number, action.position, action.name)
-                #     self.players[int(action.team)].append(p)
                 if (
                     self.check_all_rally_filters(rally)
                     and self.check_all_court_filters(rally.court)
@@ -163,4 +160,3 @@ class Basic_Filter:
         if game:
             self.game_state = game.game_state
             self.apply_all_filters()
-        # self.fill_action_view()
