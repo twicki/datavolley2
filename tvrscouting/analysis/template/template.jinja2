@@ -91,8 +91,8 @@
     \begin{minipage}{0.95\textwidth}
       \begin{tabularx}{\textwidth}{L{1.5cm} L{2cm} L{2cm} L{2cm}}
         \textbf{Match } & {{global_info.match_number}}     & \textbf{Spectators} & {{global_info.Spectators}}      \\
-        \textbf{Date }  & {{global_info.date}} & \textbf{Receipts}   & \\
-        \textbf{Time}   & {{global_info.time}} & \textbf{Hall} & {{global_info.Hall}} \\
+        \textbf{Date }  & {{global_info.date}} & \textbf{Hall} & {{global_info.Hall}} \\
+        \textbf{Time}   & {{global_info.time}} &  \\
         \textbf{City}   & {{global_info.City}} & \\
       \end{tabularx}
     \end{minipage}
@@ -149,7 +149,7 @@
           \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{9B9B9B} }} &
         {% endif %}
       {% endfor %}
-      {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
+      {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pt} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Ex\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pt}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pt\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pt}     \\
       \midrule
       {% for player in playerstats.home %}
         {{ player.Number }} {{ player.Role}} & {{ player.Name}} &
@@ -195,14 +195,14 @@
       & {{teamstats.home.Total.Attack.Blocked }} & {{teamstats.home.Total.Attack.Points }}
       & {{teamstats.home.Total.Attack.Percentage }}\% & {{ teamstats.home.Total.Blocks }} \\
       \midrule
-       & & \multicolumn{4}{l}{\cellcolor[HTML]{9B9B9B}\textbf{Points won}} & \multicolumn{1}{|l}{\cellcolor[HTML]{9B9B9B}\textbf{Ser}} & \cellcolor[HTML]{9B9B9B}\textbf{Att} & \cellcolor[HTML]{9B9B9B}\textbf{BK} & \cellcolor[HTML]{9B9B9B}\textbf{O.Er} & & & & & & & & & & & & & \\
+       & & \multicolumn{4}{l}{\cellcolor[HTML]{9B9B9B}\textbf{Points won}} & \multicolumn{1}{|l}{\cellcolor[HTML]{9B9B9B}\textbf{Sv}} & \cellcolor[HTML]{9B9B9B}\textbf{Att} & \cellcolor[HTML]{9B9B9B}\textbf{BK} & \cellcolor[HTML]{9B9B9B}\textbf{O.Er} & & & & & & & & & & & & & \\
       \multicolumn{2}{l}{\multirow{2}{*}{\begin{minipage}{0.15\linewidth}\textbf{HC:} {{ global_info.coaches.home.HC }}\newline \textbf{AC:} {{ global_info.coaches.home.AC}}\end{minipage}}}
        {% for set in teamstats.home.Per_set %}
         & & \multicolumn{3}{l}{Set {{set.setnumber}}} & \multicolumn{1}{|l}{ {{set.SABO.serve }} }
         & {{set.SABO.attack }} & {{set.SABO.block }} & {{set.SABO.errors }}
         & {{set.Serve.Total }}& {{set.Serve.Errors }} & {{set.Serve.Points }}
         & {{set.Reception.Total }} & {{set.Reception.Errors }} & {{set.Reception.Percentage }}\%
-        & ({{set.Reception.Perfect }}\%) & {{set.Attack.Total }} &  {{set.Attack.Errors }}
+        & {{set.Reception.Perfect }}\% & {{set.Attack.Total }} &  {{set.Attack.Errors }}
         & {{set.Attack.Blocked }}   & {{set.Attack.Points }}  & {{set.Attack.Percentage }}\%
         & {{set.Blocks }}\\ {{ "&" if not loop.last or teamstats.guest.Per_set|length == 1 else "" }}
        {% endfor %}
@@ -229,7 +229,7 @@
           \multicolumn{1}{c}{ {\tiny \cellcolor[HTML]{9B9B9B} }} &
         {% endif %}
       {% endfor %}
-      {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
+      {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pt} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Ex\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pt}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pt\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pt}     \\
       \midrule
       {% for player in playerstats.guest %}
         {{ player.Number }} {{ player.Role}} & {{ player.Name}} &
@@ -275,14 +275,14 @@
       & {{teamstats.guest.Total.Attack.Blocked }} & {{teamstats.guest.Total.Attack.Points }}
       & {{teamstats.guest.Total.Attack.Percentage }}\% & {{ teamstats.guest.Total.Blocks }} \\
       \midrule
-       & & \multicolumn{4}{l}{\cellcolor[HTML]{9B9B9B}\textbf{Points won}} & \multicolumn{1}{|l}{\cellcolor[HTML]{9B9B9B}\textbf{Ser}} & \cellcolor[HTML]{9B9B9B}\textbf{Att} & \cellcolor[HTML]{9B9B9B}\textbf{BK} & \cellcolor[HTML]{9B9B9B}\textbf{O.Er} & & & & & & & & & & & & & \\
+       & & \multicolumn{4}{l}{\cellcolor[HTML]{9B9B9B}\textbf{Points won}} & \multicolumn{1}{|l}{\cellcolor[HTML]{9B9B9B}\textbf{Sv}} & \cellcolor[HTML]{9B9B9B}\textbf{Att} & \cellcolor[HTML]{9B9B9B}\textbf{BK} & \cellcolor[HTML]{9B9B9B}\textbf{O.Er} & & & & & & & & & & & & & \\
        \multicolumn{2}{l}{\multirow{2}{*}{\begin{minipage}{0.15\linewidth}\textbf{HC:} {{ global_info.coaches.guest.HC }}\newline \textbf{AC:} {{ global_info.coaches.guest.AC}}\end{minipage}}}
        {% for set in teamstats.guest.Per_set %}
         & & \multicolumn{3}{l}{Set {{set.setnumber}}} & \multicolumn{1}{|l}{ {{set.SABO.serve }} }
         & {{set.SABO.attack }} & {{set.SABO.block }} & {{set.SABO.errors }}
         & {{set.Serve.Total }}& {{set.Serve.Errors }} & {{set.Serve.Points }}
         & {{set.Reception.Total }} & {{set.Reception.Errors }} & {{set.Reception.Percentage }}\%
-        & ({{set.Reception.Perfect }}\%) & {{set.Attack.Total }} &  {{set.Attack.Errors }}
+        & {{set.Reception.Perfect }}\% & {{set.Attack.Total }} &  {{set.Attack.Errors }}
         & {{set.Attack.Blocked }}   & {{set.Attack.Points }}  & {{set.Attack.Percentage }}\%
         & {{set.Blocks }}\\ {{ "&" if not loop.last or teamstats.guest.Per_set|length == 1 else "" }}
        {% endfor %}
@@ -337,7 +337,7 @@
     \tcbtab{Attack after reception}{
       1st attack after positive reception (+\#)
       \begin{tabular}{l l l l | r r r r}
-        \textbf{Err} & \textbf{Blo} & \textbf{Pts\%} & \textbf{Tot} & \textbf{Tot} & \textbf{Pts\%} & \textbf{Blo} & \textbf{Err} \\
+        \textbf{Err} & \textbf{Blo} & \textbf{Pt\%} & \textbf{Tot} & \textbf{Tot} & \textbf{Pt\%} & \textbf{Blo} & \textbf{Err} \\
         {{ detailed_infos.home.K1_stats.positive.Errors }} & {{ detailed_infos.home.K1_stats.positive.Blocked }}
         & {{ detailed_infos.home.K1_stats.positive.Percentage }}\% & {{ detailed_infos.home.K1_stats.positive.Total }}
         & {{ detailed_infos.guest.K1_stats.positive.Total }} & {{ detailed_infos.guest.K1_stats.positive.Percentage }}\%
@@ -345,7 +345,7 @@
       \end{tabular}
       1st attack after negative reception (-o)
       \begin{tabular}{l l l l | r r r r}
-        \textbf{Err} & \textbf{Blo} & \textbf{Pts\%} & \textbf{Tot} & \textbf{Tot} & \textbf{Pts\%} & \textbf{Blo} & \textbf{Err} \\
+        \textbf{Err} & \textbf{Blo} & \textbf{Pt\%} & \textbf{Tot} & \textbf{Tot} & \textbf{Pt\%} & \textbf{Blo} & \textbf{Err} \\
         {{ detailed_infos.home.K1_stats.negative.Errors }} & {{ detailed_infos.home.K1_stats.negative.Blocked }}
         & {{ detailed_infos.home.K1_stats.negative.Percentage }}\% & {{ detailed_infos.home.K1_stats.negative.Total }}
          & {{ detailed_infos.guest.K1_stats.negative.Total }} & {{ detailed_infos.guest.K1_stats.negative.Percentage }}\%
@@ -354,7 +354,7 @@
     }
     \tcbtab{Attack after dig}{
       \begin{tabular}{l l l l | r r r r}
-        \textbf{Err} & \textbf{Blo} & \textbf{Pts\%} & \textbf{Tot} & \textbf{Tot} & \textbf{Pts\%} & \textbf{Blo} & \textbf{Err} \\
+        \textbf{Err} & \textbf{Blo} & \textbf{Pt\%} & \textbf{Tot} & \textbf{Tot} & \textbf{Pt\%} & \textbf{Blo} & \textbf{Err} \\
         {{ detailed_infos.home.K2_stats.Errors }} & {{ detailed_infos.home.K2_stats.Blocked }}
         & {{ detailed_infos.home.K2_stats.Percentage }}\% & {{ detailed_infos.home.K2_stats.Total }}
         & {{ detailed_infos.guest.K2_stats.Total }} & {{ detailed_infos.guest.K2_stats.Percentage }}\%
@@ -403,7 +403,7 @@
     \begin{tabular}{l l l l}
       \textbf{BP}    & Break Point            & \tikz[baseline=0ex]\draw[draw=gray] (0,0) rectangle (0.2cm, 0.2cm); & Serving Team   \\
       \textbf{Err}   & Error                  & \textbf{Blo} & Block         \\
-      \textbf{Pos\%} & Positive Actions (+\#) & \textbf{Exc} & Excellent (\#) \\
+      \textbf{Pos\%} & Positive Actions (+\#) & \textbf{Ex} & Excellent (\#) \\
       \textbf{W-L}   & Won - Lost             & \played      & Substitute    \\
     \end{tabular}
   }
