@@ -41,7 +41,7 @@
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \definecolor{light-gray}{gray}{0.6}
 \newcommand\played{%%
-   \tikz[baseline=0.6ex]\draw (0,0) rectangle (0.12cm,1ex);
+   \tikz[baseline=0ex]\draw[draw=light-gray, fill=light-gray] (0,0) rectangle (0.2cm, 0.2cm);
     }
 \setlength\parindent{0pt}
 \setlength\parskip{\medskipamount}
@@ -152,15 +152,59 @@
       {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
       \midrule
       {% for player in playerstats.home %}
-      {{ player.Number }} {{ player.Role}} & {{ player.Name}} & {% for start in player.Starts %} {% if start == 0 %} {% elif start == -1 %} \played {% else %} {% if player.IsSetter %} \cellcolor[HTML]{9B9B9B} {% endif %}{{ start }} {% endif %} & {% endfor %} {{player.Points.Total}} & {{player.Points.BP}} & {{player.Points.Plus_minus}} & {{player.Serve.Total}} & {{player.Serve.Error}} & {{player.Serve.Points}} & {{player.Reception.Total}} & {{player.Reception.Error}} & {% if player.Reception.Positive == "." %} . {% else %} {{ player.Reception.Positive }}\% {% endif %} & {% if player.Reception.Perfect == "." %} . {% else %} {{player.Reception.Perfect}}\% {% endif %} & {{player.Attack.Total}} & {{player.Attack.Error}} & {{player.Attack.Blocked}} & {{player.Attack.Points}} & {% if player.Attack.Percentage == "." %} . {% else %} {{ player.Attack.Percentage }}\% {% endif %} & {{player.Blocks}} \\
+        {{ player.Number }} {{ player.Role}} & {{ player.Name}} & 
+        {% for start in player.Starts %} 
+        {% if start == 0 %} 
+        {% elif start == -1 %}
+          \played 
+        {% else %} 
+          {% if player.IsSetter %} 
+            \cellcolor[HTML]{9B9B9B} 
+            {% endif %}
+          {{ start }} 
+        {% endif %} 
+        & {% endfor %} 
+        {{player.Points.Total}} & {{player.Points.BP}} & {{player.Points.Plus_minus}} & 
+        {{player.Serve.Total}} & {{player.Serve.Errors}} & {{player.Serve.Points}} 
+        & {{player.Reception.Total}} & {{player.Reception.Errors}} & 
+        {% if player.Reception.Percentage == "." %}
+        . 
+        {% else %}
+        {{ player.Reception.Percentage }}\% 
+        {% endif %} 
+        & 
+        {% if player.Reception.Perfect == "." %} 
+        . 
+        {% else %}
+          {{player.Reception.Perfect}}\% 
+        {% endif %} 
+        & {{player.Attack.Total}} & {{player.Attack.Errors}} & {{player.Attack.Blocked}} & {{player.Attack.Points}} &
+        {% if player.Attack.Percentage == "." %} 
+        . {% else %} 
+        {{ player.Attack.Percentage }}\% 
+        {% endif %} 
+        & {{player.Blocks}} \\
       {% endfor %}
       \midrule
-      \multicolumn{7}{l}{Team total} & {{teamstats.home.Total.Points.Total }} & {{teamstats.home.Total.Points.BP }} & {{teamstats.home.Total.Points.Plus_minus }} & {{teamstats.home.Total.Serve.Total }} & {{teamstats.home.Total.Serve.Error }} & {{teamstats.home.Total.Serve.Points }} & {{teamstats.home.Total.Reception.Total }} & {{teamstats.home.Total.Reception.Error }} & {{teamstats.home.Total.Reception.Positive }} \% & {{teamstats.home.Total.Reception.Perfect }}\% & {{teamstats.home.Total.Attack.Total }} & {{teamstats.home.Total.Attack.Error }} & {{teamstats.home.Total.Attack.Blocked }} & {{teamstats.home.Total.Attack.Points }} & {{teamstats.home.Total.Attack.Percentage }}\% & {{ teamstats.home.Total.Blocks }} \\
+      \multicolumn{7}{l}{Team total} & {{teamstats.home.Total.Points.Total }} & {{teamstats.home.Total.Points.BP }} 
+      & {{teamstats.home.Total.Points.Plus_minus }} & {{teamstats.home.Total.Serve.Total }} 
+      & {{teamstats.home.Total.Serve.Errors }} & {{teamstats.home.Total.Serve.Points }} 
+      & {{teamstats.home.Total.Reception.Total }} & {{teamstats.home.Total.Reception.Errors }} 
+      & {{teamstats.home.Total.Reception.Percentage }} \% & {{teamstats.home.Total.Reception.Perfect }}\% 
+      & {{teamstats.home.Total.Attack.Total }} & {{teamstats.home.Total.Attack.Errors }} 
+      & {{teamstats.home.Total.Attack.Blocked }} & {{teamstats.home.Total.Attack.Points }} 
+      & {{teamstats.home.Total.Attack.Percentage }}\% & {{ teamstats.home.Total.Blocks }} \\
       \midrule
        & & \multicolumn{4}{l}{\cellcolor[HTML]{9B9B9B}\textbf{Points won}} & \multicolumn{1}{|l}{\cellcolor[HTML]{9B9B9B}\textbf{Ser}} & \cellcolor[HTML]{9B9B9B}\textbf{Att} & \cellcolor[HTML]{9B9B9B}\textbf{BK} & \cellcolor[HTML]{9B9B9B}\textbf{O.Er} & & & & & & & & & & & & & \\
       \multicolumn{2}{l}{\multirow{2}{*}{\begin{minipage}{0.15\linewidth}\textbf{HC:} {{ global_info.coaches.home.HC }}\newline \textbf{AC:} {{ global_info.coaches.home.AC}}\end{minipage}}}
        {% for set in teamstats.home.Per_set %}
-        & & \multicolumn{3}{l}{Set {{set.setnumber}}} & \multicolumn{1}{|l}{ {{set.SABO.serve }} }  & {{set.SABO.attack }} & {{set.SABO.block }} & {{set.SABO.errors }} & {{set.Serve.Total }}& {{set.Serve.Error }} & {{set.Serve.Points }} & {{set.Reception.Total }} & {{set.Reception.Error }} & {{set.Reception.Positive }}\% & ({{set.Reception.Perfect }}\%) & {{set.Attack.Total }} &  {{set.Attack.Error }}   & {{set.Attack.Blocked }}   & {{set.Attack.Points }}  & {{set.Attack.Percentage }}\% & {{set.Blocks }}\\{{ "&" if not loop.last or teamstats.home.Per_set|length == 1 else "" }}
+        & & \multicolumn{3}{l}{Set {{set.setnumber}}} & \multicolumn{1}{|l}{ {{set.SABO.serve }} }  
+        & {{set.SABO.attack }} & {{set.SABO.block }} & {{set.SABO.errors }} 
+        & {{set.Serve.Total }}& {{set.Serve.Errors }} & {{set.Serve.Points }} 
+        & {{set.Reception.Total }} & {{set.Reception.Errors }} & {{set.Reception.Percentage }}\% 
+        & ({{set.Reception.Perfect }}\%) & {{set.Attack.Total }} &  {{set.Attack.Errors }}   
+        & {{set.Attack.Blocked }}   & {{set.Attack.Points }}  & {{set.Attack.Percentage }}\% 
+        & {{set.Blocks }}\\ {{ "&" if not loop.last or teamstats.guest.Per_set|length == 1 else "" }}
        {% endfor %}
     \end{tabular}
   \end{minipage}
@@ -188,15 +232,59 @@
       {\tiny Tot} & {\tiny BP} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny W-L} & {\tiny Tot} & {\tiny Err} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts} & {\tiny Tot} & {\tiny Err}  & {\tiny Pos\%}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Exc\%} & {\tiny Tot} & {\tiny Err} & {\tiny Blo} & {\tiny Pts}  & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts\%} & \multicolumn{1}{c}{\cellcolor[HTML]{9B9B9B}\tiny Pts}     \\
       \midrule
       {% for player in playerstats.guest %}
-      {{ player.Number }} {{ player.Role}} & {{ player.Name}} & {% for start in player.Starts %} {% if start == 0 %} {% elif start == -1 %} \played {% else %} {% if player.IsSetter %} \cellcolor[HTML]{9B9B9B} {% endif %} {{ start }} {% endif %} & {% endfor %} {{player.Points.Total}} & {{player.Points.BP}} & {{player.Points.Plus_minus}} & {{player.Serve.Total}} & {{player.Serve.Error}} & {{player.Serve.Points}} & {{player.Reception.Total}} & {{player.Reception.Error}} & {% if player.Reception.Positive == "." %} . {% else %} {{ player.Reception.Positive }}\% {% endif %} & {% if player.Reception.Perfect == "." %} . {% else %} {{player.Reception.Perfect}}\% {% endif %} & {{player.Attack.Total}} & {{player.Attack.Error}} & {{player.Attack.Blocked}} & {{player.Attack.Points}} & {% if player.Attack.Percentage == "." %} . {% else %} {{ player.Attack.Percentage }}\% {% endif %} & {{player.Blocks}} \\
+        {{ player.Number }} {{ player.Role}} & {{ player.Name}} & 
+        {% for start in player.Starts %} 
+        {% if start == 0 %} 
+        {% elif start == -1 %}
+          \played 
+        {% else %} 
+          {% if player.IsSetter %} 
+            \cellcolor[HTML]{9B9B9B} 
+            {% endif %}
+          {{ start }} 
+        {% endif %} 
+        & {% endfor %} 
+        {{player.Points.Total}} & {{player.Points.BP}} & {{player.Points.Plus_minus}} & 
+        {{player.Serve.Total}} & {{player.Serve.Errors}} & {{player.Serve.Points}} 
+        & {{player.Reception.Total}} & {{player.Reception.Errors}} & 
+        {% if player.Reception.Percentage == "." %}
+        . 
+        {% else %}
+        {{ player.Reception.Percentage }}\% 
+        {% endif %} 
+        & 
+        {% if player.Reception.Perfect == "." %} 
+        . 
+        {% else %}
+          {{player.Reception.Perfect}}\% 
+        {% endif %} 
+        & {{player.Attack.Total}} & {{player.Attack.Errors}} & {{player.Attack.Blocked}} & {{player.Attack.Points}} &
+        {% if player.Attack.Percentage == "." %} 
+        . {% else %} 
+        {{ player.Attack.Percentage }}\% 
+        {% endif %} 
+        & {{player.Blocks}} \\
       {% endfor %}
       \midrule
-      \multicolumn{7}{l}{Team total} & {{teamstats.guest.Total.Points.Total }} & {{teamstats.guest.Total.Points.BP }} & {{teamstats.guest.Total.Points.Plus_minus }} & {{teamstats.guest.Total.Serve.Total }} & {{teamstats.guest.Total.Serve.Error }} & {{teamstats.guest.Total.Serve.Points }} & {{teamstats.guest.Total.Reception.Total }} & {{teamstats.guest.Total.Reception.Error }} & {{teamstats.guest.Total.Reception.Positive }} \% & {{teamstats.guest.Total.Reception.Perfect }}\% & {{teamstats.guest.Total.Attack.Total }} & {{teamstats.guest.Total.Attack.Error }} & {{teamstats.guest.Total.Attack.Blocked }} & {{teamstats.guest.Total.Attack.Points }} & {{teamstats.guest.Total.Attack.Percentage }}\% & {{ teamstats.guest.Total.Blocks }} \\
+      \multicolumn{7}{l}{Team total} & {{teamstats.guest.Total.Points.Total }} & {{teamstats.guest.Total.Points.BP }} 
+      & {{teamstats.guest.Total.Points.Plus_minus }} & {{teamstats.guest.Total.Serve.Total }} 
+      & {{teamstats.guest.Total.Serve.Errors }} & {{teamstats.guest.Total.Serve.Points }} 
+      & {{teamstats.guest.Total.Reception.Total }} & {{teamstats.guest.Total.Reception.Errors }} 
+      & {{teamstats.guest.Total.Reception.Percentage }} \% & {{teamstats.guest.Total.Reception.Perfect }}\% 
+      & {{teamstats.guest.Total.Attack.Total }} & {{teamstats.guest.Total.Attack.Errors }} 
+      & {{teamstats.guest.Total.Attack.Blocked }} & {{teamstats.guest.Total.Attack.Points }} 
+      & {{teamstats.guest.Total.Attack.Percentage }}\% & {{ teamstats.guest.Total.Blocks }} \\
       \midrule
        & & \multicolumn{4}{l}{\cellcolor[HTML]{9B9B9B}\textbf{Points won}} & \multicolumn{1}{|l}{\cellcolor[HTML]{9B9B9B}\textbf{Ser}} & \cellcolor[HTML]{9B9B9B}\textbf{Att} & \cellcolor[HTML]{9B9B9B}\textbf{BK} & \cellcolor[HTML]{9B9B9B}\textbf{O.Er} & & & & & & & & & & & & & \\
        \multicolumn{2}{l}{\multirow{2}{*}{\begin{minipage}{0.15\linewidth}\textbf{HC:} {{ global_info.coaches.guest.HC }}\newline \textbf{AC:} {{ global_info.coaches.guest.AC}}\end{minipage}}}
        {% for set in teamstats.guest.Per_set %}
-       & & \multicolumn{3}{l}{Set {{set.setnumber}}} & \multicolumn{1}{|l}{ {{set.SABO.serve }} }  & {{set.SABO.attack }} & {{set.SABO.block }} & {{set.SABO.errors }} & {{set.Serve.Total }}& {{set.Serve.Error }} & {{set.Serve.Points }} & {{set.Reception.Total }} & {{set.Reception.Error }} & {{set.Reception.Positive }}\% & ({{set.Reception.Perfect }}\%) & {{set.Attack.Total }} &  {{set.Attack.Error }}   & {{set.Attack.Blocked }}   & {{set.Attack.Points }}  & {{set.Attack.Percentage }}\% & {{set.Blocks }}\\ {{ "&" if not loop.last or teamstats.guest.Per_set|length == 1 else "" }}
+        & & \multicolumn{3}{l}{Set {{set.setnumber}}} & \multicolumn{1}{|l}{ {{set.SABO.serve }} }  
+        & {{set.SABO.attack }} & {{set.SABO.block }} & {{set.SABO.errors }} 
+        & {{set.Serve.Total }}& {{set.Serve.Errors }} & {{set.Serve.Points }} 
+        & {{set.Reception.Total }} & {{set.Reception.Errors }} & {{set.Reception.Percentage }}\% 
+        & ({{set.Reception.Perfect }}\%) & {{set.Attack.Total }} &  {{set.Attack.Errors }}   
+        & {{set.Attack.Blocked }}   & {{set.Attack.Points }}  & {{set.Attack.Percentage }}\% 
+        & {{set.Blocks }}\\ {{ "&" if not loop.last or teamstats.guest.Per_set|length == 1 else "" }}
        {% endfor %}
     \end{tabular}
   \end{minipage}
@@ -212,10 +300,10 @@
   \end{tabular}
   \begin{minipage}{0.09\linewidth}
     % \hspace*{-0.85em}
-    \begin{tabular}{l l}
+    \begin{tabular}{l| l}
       \multicolumn{2}{c}{
         Points }                    \\
-      \multicolumn{2}{c}{S in Diff} \\
+      S in & Diff \\
       \midrule
       {% for rotation in detailed_infos.home.plus_minus_rotations %}
       \textbf{ {{rotation[1]}} } & {{rotation[0]}} \\
@@ -288,10 +376,10 @@
   \end{minipage}
   \begin{minipage}{0.01\textwidth}
     % \hspace*{-0.85em}
-    \begin{tabular}{l l}
+    \begin{tabular}{l | l}
       \multicolumn{2}{c}{
         Points }                    \\
-      \multicolumn{2}{c}{S in Diff} \\
+      S in & Diff \\
       \midrule
       {% for rotation in detailed_infos.guest.plus_minus_rotations %}
       \textbf{ {{rotation[1]}} } & {{rotation[0]}} \\
@@ -304,7 +392,7 @@
   \tiny
   \tcbtab{Legend}{
     \begin{tabular}{l l l l}
-      \textbf{BP}    & Break Point            & \textbf{Pts} & Points        \\
+      \textbf{BP}    & Break Point            & \tikz[baseline=0ex]\draw[draw=gray] (0,0) rectangle (0.2cm, 0.2cm); & Serving Team   \\
       \textbf{Err}   & Error                  & \textbf{Blo} & Block         \\
       \textbf{Pos\%} & Positive Actions (+\#) & \textbf{Exc} & Excellent (\#) \\
       \textbf{W-L}   & Won - Lost             & \played      & Substitute    \\

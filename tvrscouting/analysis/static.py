@@ -9,10 +9,12 @@ from tvrscouting.analysis.filters import (
     rally_filter_from_string,
 )
 from tvrscouting.organization.game_meta_info import GameMetaInfo
-from tvrscouting.statistics.Actions.GameAction import Gameaction
+from tvrscouting.statistics.Actions.GameAction import Gameaction, Quality
 from tvrscouting.statistics.Actions.SpecialAction import Endset
-from tvrscouting.statistics.Gamestate.game_state import GameState
+from tvrscouting.statistics.Gamestate.game_state import GameState, Rally
 from tvrscouting.statistics.Players.players import Player, Team
+from typing import List, Optional
+from tvrscouting.statistics.Actions import Action
 
 
 class StaticWriter:
@@ -33,6 +35,7 @@ class StaticWriter:
         super().__init__()
         self.gamestate = game_state
         self.meta_info: GameMetaInfo = game_meta_info
+        self.collected_stats: Dict = {}
 
     def fill_scores(self) -> None:
         partialscores = []
@@ -196,23 +199,31 @@ class StaticWriter:
         return result
 
     def fill_team_stats(self):
-        self.teamstats = {
-            "home": {
-                "Total": {},
-                "Per_set": [],
-            },
-            "guest": {
-                "Total": {},
-                "Per_set": [],
-            },
+        self.teamstats["home"] = {
+            "Total": self.init_data_dict(),
+            "Per_set": [],
         }
+        self.teamstats["guest"] = {
+            "Total": self.init_data_dict(),
+            "Per_set": [],
+        }
+        # self.teamstats = {
+        #     "home": {
+        #         "Total": {},
+        #         "Per_set": [],
+        #     },
+        #     "guest": {
+        #         "Total": {},
+        #         "Per_set": [],
+        #     },
+        # }
 
-        self.teamstats["home"]["Total"] = self.collect_stats_from_number(
-            Team.from_string("*"), "@@"
-        )
-        self.teamstats["guest"]["Total"] = self.collect_stats_from_number(
-            Team.from_string("/"), "@@"
-        )
+        # self.teamstats["home"]["Total"] = self.collect_stats_from_number(
+        #     Team.from_string("*"), "@@"
+        # )
+        # self.teamstats["guest"]["Total"] = self.collect_stats_from_number(
+        #     Team.from_string("/"), "@@"
+        # )
 
         number_of_sets = self.gamestate.set_score[0] + self.gamestate.set_score[1]
         if self.gamestate.score[0] + self.gamestate.score[1] != 0:
@@ -231,7 +242,7 @@ class StaticWriter:
                 "block": setstat_home["Blocks"],
                 "errors": len(action_filter_from_string("/@@@=@@@@", current_rallies)),
             }
-            self.teamstats["home"]["Per_set"].append(setstat_home)
+            # self.teamstats["home"]["Per_set"].append(setstat_home)
 
             setstat_guest = self.collect_stats_from_number(
                 Team.from_string("/"), "@@", current_rallies
@@ -243,7 +254,180 @@ class StaticWriter:
                 "block": setstat_guest["Blocks"],
                 "errors": len(action_filter_from_string("*@@@=@@@@", current_rallies)),
             }
-            self.teamstats["guest"]["Per_set"].append(setstat_guest)
+            # self.teamstats["guest"]["Per_set"].append(setstat_guest)
+
+    @staticmethod
+    def init_data_dict() -> Dict:
+        fulldata = {
+            "Attack": {"Total": 0, "Points": 0, "Errors": 0, "Blocked": 0, "Percentage": 0},
+            "Blocks": 0,
+            "Reception": {"Total": 0, "Positive": 0, "Errors": 0, "Perfect": 0, "Percentage": 0},
+            "Serve": {"Total": 0, "Errors": 0, "Points": 0},
+            "Points": {"Total": 0, "Errors": 0, "Plus_minus": 0, "BP": 0},
+        }
+        return fulldata
+
+    @staticmethod
+    def player_key_from_action(game_action: Gameaction):
+        return str(game_action.team) + "%02d" % game_action.player
+
+    @staticmethod
+    def team_key_from_action(game_action: Gameaction) -> str:
+        return StaticWriter.team_key_from_team(game_action.team)
+
+    @staticmethod
+    def team_key_from_team(team: Team) -> str:
+        if team == Team.Home:
+            return "home"
+        else:
+            return "guest"
+
+    def add_set_stats_if_needed(self, rally):
+        if len(self.teamstats["home"]["Per_set"]) <= rally.set_score[0] + rally.set_score[1]:
+            for team in ["home", "guest"]:
+                self.teamstats[team]["Per_set"].append(self.init_data_dict())
+                self.teamstats[team]["Per_set"][-1]["setnumber"] = (
+                    rally.set_score[0] + rally.set_score[1] + 1
+                )
+                self.teamstats[team]["Per_set"][-1]["SABO"] = {
+                    "serve": 0,
+                    "attack": 0,
+                    "block": 0,
+                    "errors": 0,
+                }
+
+    @staticmethod
+    def can_be_break_point(action: Gameaction, rally: Rally) -> bool:
+        return action.team == Team.inverse(rally.find_receiveing_team())
+
+    @staticmethod
+    def update_percentages_in_dict(dict):
+        dict["Attack"]["Percentage"] = int(
+            100
+            * (
+                (dict["Attack"]["Points"] / dict["Attack"]["Total"])
+                if dict["Attack"]["Total"] > 0
+                else 0
+            )
+        )
+        dict["Reception"]["Percentage"] = int(
+            100
+            * (
+                (dict["Reception"]["Positive"] / dict["Reception"]["Total"])
+                if dict["Reception"]["Total"] > 0
+                else 0
+            )
+        )
+        dict["Points"]["Plus_minus"] = dict["Points"]["Total"] - dict["Points"]["Errors"]
+
+    @staticmethod
+    def update_percentages(dict):
+        for k, v in dict.items():
+            StaticWriter.update_percentages_in_dict(v)
+
+    def fill_stats_from_rallies(self, rallies: Optional[List[Rally]] = None):
+        rallies = self.gamestate.rallies if rallies is None else rallies
+        can_break = False
+        for rally in rallies:
+            self.add_set_stats_if_needed(rally)
+            for action in rally.actions:
+                try:
+                    if isinstance(action, Gameaction):
+                        can_break = self.can_be_break_point(action, rally)
+                        team_stats = self.teamstats[self.team_key_from_action(action)]["Total"]
+                        player_stats = self.collected_stats[self.player_key_from_action(action)]
+                        set_stats = self.teamstats[self.team_key_from_action(action)]["Per_set"][
+                            rally.set_score[0] + rally.set_score[1]
+                        ]
+                        if action.quality == Quality.Kill:
+                            player_stats["Points"]["Total"] += 1
+                            team_stats["Points"]["Total"] += 1
+                            if can_break:
+                                player_stats["Points"]["BP"] += 1
+                                team_stats["Points"]["BP"] += 1
+                        elif action.quality == Quality.Error:
+                            player_stats["Points"]["Errors"] += 1
+                            team_stats["Points"]["Errors"] += 1
+                            self.teamstats[self.team_key_from_team(Team.inverse(action.team))][
+                                "Per_set"
+                            ][rally.set_score[0] + rally.set_score[1]]["SABO"]["errors"] += 1
+                        elif action.quality == Quality.Over:
+                            player_stats["Points"]["Errors"] += 1
+                            team_stats["Points"]["Errors"] += 1
+
+                        if action.action == Action.Hit:
+                            player_stats["Attack"]["Total"] += 1
+                            team_stats["Attack"]["Total"] += 1
+                            set_stats["Attack"]["Total"] += 1
+
+                            if action.quality == Quality.Kill:
+                                player_stats["Attack"]["Points"] += 1
+                                team_stats["Attack"]["Points"] += 1
+                                set_stats["Attack"]["Points"] += 1
+                                set_stats["SABO"]["attack"] += 1
+
+                            elif action.quality == Quality.Error:
+                                player_stats["Attack"]["Errors"] += 1
+                                team_stats["Attack"]["Errors"] += 1
+                                set_stats["Attack"]["Errors"] += 1
+
+                            elif action.quality == Quality.Over:
+                                player_stats["Attack"]["Blocked"] += 1
+                                team_stats["Attack"]["Blocked"] += 1
+                                set_stats["Attack"]["Blocked"] += 1
+
+                        elif action.action == Action.Block:
+                            if action.quality == Quality.Kill:
+                                player_stats["Blocks"] += 1
+                                team_stats["Blocks"] += 1
+                                set_stats["Blocks"] += 1
+                                set_stats["SABO"]["block"] += 1
+
+                        elif action.action == Action.Reception:
+                            player_stats["Reception"]["Total"] += 1
+                            team_stats["Reception"]["Total"] += 1
+                            set_stats["Reception"]["Total"] += 1
+
+                            if action.quality == Quality.Error or action.quality == Quality.Over:
+                                player_stats["Reception"]["Errors"] += 1
+                                team_stats["Reception"]["Errors"] += 1
+                                set_stats["Reception"]["Errors"] += 1
+
+                            elif action.quality == Quality.Good:
+                                player_stats["Reception"]["Positive"] += 1
+                                team_stats["Reception"]["Positive"] += 1
+                                set_stats["Reception"]["Positive"] += 1
+
+                            elif action.quality == Quality.Perfect:
+                                player_stats["Reception"]["Positive"] += 1
+                                team_stats["Reception"]["Positive"] += 1
+                                set_stats["Reception"]["Positive"] += 1
+                                player_stats["Reception"]["Perfect"] += 1
+                                team_stats["Reception"]["Perfect"] += 1
+                                set_stats["Reception"]["Perfect"] += 1
+
+                        elif action.action == Action.Serve:
+                            player_stats["Serve"]["Total"] += 1
+                            team_stats["Serve"]["Total"] += 1
+                            set_stats["Serve"]["Total"] += 1
+
+                            if action.quality == Quality.Kill:
+                                player_stats["Serve"]["Points"] += 1
+                                team_stats["Serve"]["Points"] += 1
+                                set_stats["Serve"]["Points"] += 1
+                                set_stats["SABO"]["serve"] += 1
+
+                            elif action.quality == Quality.Error:
+                                player_stats["Serve"]["Errors"] += 1
+                                team_stats["Serve"]["Errors"] += 1
+                                set_stats["Serve"]["Errors"] += 1
+                except KeyError:
+                    print("a bad thing was found")
+        self.update_percentages(self.collected_stats)
+        for team in ["home", "guest"]:
+            self.update_percentages_in_dict(self.teamstats[team]["Total"])
+            for current_set in self.teamstats[team]["Per_set"]:
+                self.update_percentages_in_dict(current_set)
 
     def fill_player_stats(self) -> None:
         self.playerstats["home"] = []
@@ -252,24 +436,36 @@ class StaticWriter:
             (Team.from_string("*"), "home"),
             (Team.from_string("/"), "guest"),
         ]:
+            # self.teamstats[name] = self.init_data_dict()
             for player in self.gamestate.players[int(team)]:
+                self.collect_individual_statistics(team, player)
 
-                self.playerstats[name].append(self.collect_individual_statistics(team, player))
-            for playerstat in self.playerstats[name]:
-                if playerstat["Blocks"] == 0:
-                    playerstat["Blocks"] = "."
-                for k, v in playerstat["Attack"].items():
-                    if v == 0:
-                        playerstat["Attack"][k] = "."
-                for k, v in playerstat["Reception"].items():
-                    if v == 0:
-                        playerstat["Reception"][k] = "."
-                for k, v in playerstat["Serve"].items():
-                    if v == 0:
-                        playerstat["Serve"][k] = "."
-                for k, v in playerstat["Points"].items():
-                    if v == 0:
-                        playerstat["Points"][k] = "."
+        self.fill_stats_from_rallies()
+
+        for k, v in self.collected_stats.items():
+            index = "home" if k[0] == "*" else "guest"
+            self.playerstats[index].append(v)
+
+        for team, name in [
+            (Team.from_string("*"), "home"),
+            (Team.from_string("/"), "guest"),
+        ]:
+            for player in self.gamestate.players[int(team)]:
+                for playerstat in self.playerstats[name]:
+                    if playerstat["Blocks"] == 0:
+                        playerstat["Blocks"] = "."
+                    for k, v in playerstat["Attack"].items():
+                        if v == 0:
+                            playerstat["Attack"][k] = "."
+                    for k, v in playerstat["Reception"].items():
+                        if v == 0:
+                            playerstat["Reception"][k] = "."
+                    for k, v in playerstat["Serve"].items():
+                        if v == 0:
+                            playerstat["Serve"][k] = "."
+                    for k, v in playerstat["Points"].items():
+                        if v == 0:
+                            playerstat["Points"][k] = "."
 
     def fill_detailed_info(self):
         self.detailed_infos["home"] = {}
@@ -327,9 +523,6 @@ class StaticWriter:
                 "positive": {},
                 "negative": {},
             }
-            # rece_rallies = rally_filter_from_string(
-            #     "@@@@@@@@@@@" + str(Team.inverse(team)), self.gamestate.rallies
-            # )
             rece_rallies = []
             for rally in self.gamestate.rallies:
                 if len(action_filter_from_string(str(Team.inverse(team)) + "@@s", [rally])) > 0:
@@ -602,12 +795,11 @@ class StaticWriter:
 
         return round(vote / votes, 1) if votes > 0 else "."
 
-    def collect_individual_statistics(self, team: Team, player: Player) -> Dict:
-        player_number = "%02d" % player.Number
-        fulldata = self.collect_stats_from_number(team, player_number)
-        fulldata["Name"] = player.Name
-        fulldata["Number"] = player.Number
-        fulldata["Role"] = ""
+    def collect_individual_statistics(self, team: Team, player: Player) -> None:
+        self.collected_stats[str(team) + "%02d" % player.Number] = self.init_data_dict()
+        self.collected_stats[str(team) + "%02d" % player.Number]["Name"] = player.Name
+        self.collected_stats[str(team) + "%02d" % player.Number]["Number"] = player.Number
+        self.collected_stats[str(team) + "%02d" % player.Number]["Role"] = ""
         if self.meta_info and self.meta_info.teams[int(team)]:
             for player_from_team in self.meta_info.teams[int(team)].players:
                 if (
@@ -615,40 +807,49 @@ class StaticWriter:
                     and player_from_team.Number == player.Number
                     and player_from_team.is_capitain
                 ):
-                    fulldata["Role"] = "C"
-        fulldata["IsSetter"] = player.PlayerPosition.Setter == player.Position
+                    self.collected_stats[str(team) + "%02d" % player.Number]["Role"] = "C"
+        self.collected_stats[str(team) + "%02d" % player.Number]["IsSetter"] = (
+            player.PlayerPosition.Setter == player.Position
+        )
         if player.is_capitain:
-            fulldata["Role"] = "C"
+            self.collected_stats[str(team) + "%02d" % player.Number]["Role"] = "C"
         elif player.Position == Player.PlayerPosition.Libera:
-            fulldata["Role"] = "L"
-        fulldata["Starts"] = [0, 0, 0, 0, 0]
+            self.collected_stats[str(team) + "%02d" % player.Number]["Role"] = "L"
+        self.collected_stats[str(team) + "%02d" % player.Number]["Starts"] = [0, 0, 0, 0, 0]
         for rally in self.gamestate.rallies:
             setnumber = rally.set_score[0] + rally.set_score[1]
             if player.Position == Player.PlayerPosition.Libera:
                 for action in rally.actions:
                     if isinstance(action, Gameaction):
                         if action.player == player.Number and action.team == team:
-                            fulldata["Starts"][setnumber] = -1
+                            self.collected_stats[str(team) + "%02d" % player.Number]["Starts"][
+                                setnumber
+                            ] = -1
                             continue
-            else:
+            elif self.collected_stats[str(team) + "%02d" % player.Number]["Starts"][setnumber] == 0:
                 for i in range(6):
                     if player.Number == rally.court.fields[int(team)].players[i].Number:
                         if rally.score[0] + rally.score[1] == 0:
-                            fulldata["Starts"][setnumber] = i + 1
-                        elif fulldata["Starts"][setnumber] == 0:
-                            fulldata["Starts"][setnumber] = -1
+                            self.collected_stats[str(team) + "%02d" % player.Number]["Starts"][
+                                setnumber
+                            ] = (i + 1)
+                        else:
+                            self.collected_stats[str(team) + "%02d" % player.Number]["Starts"][
+                                setnumber
+                            ] = -1
 
         # currently disables as we don't need it
         if False:
-            fulldata["Vote"] = self.compute_vote(team, player_number, fulldata)
-        return fulldata
+            self.collected_stats[str(team) + "%02d" % player.Number]["Vote"] = self.compute_vote(
+                team,
+                "%02d" % player.Number,
+                self.collected_stats[str(team) + "%02d" % player.Number],
+            )
+        return self.collected_stats[str(team) + "%02d" % player.Number]
 
-    def analyze(self) -> None:
-        print("start")
+    def analyze(self, set_number: int) -> None:
         self.fill_scores()
-        print("scores")
         self.fill_global_info()
-        print("global")
         self.fill_team_stats()
         print("team_stats")
         self.fill_player_stats()
