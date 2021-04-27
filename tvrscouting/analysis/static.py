@@ -31,6 +31,7 @@ class StaticWriter:
         self.gamestate = game_state
         self.meta_info: GameMetaInfo = game_meta_info
         self.collected_stats: Dict = {}
+        self.set_number: int = -1
 
     def fill_scores(self) -> None:
         partialscores = []
@@ -134,6 +135,9 @@ class StaticWriter:
         self.scores["final_score"]["duration"] = total_time if total_time > 0 else ""
 
     def fill_global_info(self):
+        self.global_info["what"] = (
+            "Match Report " if self.set_number == -1 else "Set " + str(self.set_number)
+        )
         self.global_info["teamnames"] = {
             "home": self.gamestate.teamnames[0],
             "guest": self.gamestate.teamnames[1],
@@ -185,7 +189,6 @@ class StaticWriter:
 
     def collect_serving_teams(self):
         result = {}
-        number_of_sets = self.gamestate.set_score[0] + self.gamestate.set_score[1]
         for rally in self.gamestate.rallies:
             setnumber = rally.set_score[0] + rally.set_score[1] + 1
             if setnumber not in result and rally.last_serve:
@@ -276,6 +279,9 @@ class StaticWriter:
         k1_key = ""
         k1_hit = False
         for action in rally.actions:
+            if self.set_number > 0:
+                if rally.set_score[0] + rally.set_score[1] + 1 != self.set_number:
+                    continue
             if isinstance(action, Gameaction):
                 if (
                     action.action == Action.Hit
@@ -321,6 +327,9 @@ class StaticWriter:
                     k1_key = "negative"
 
         for action in rally.actions:
+            if self.set_number > 0:
+                if rally.set_score[0] + rally.set_score[1] + 1 != self.set_number:
+                    continue
             if isinstance(action, Gameaction):
                 if action.quality == Quality.Kill and rally.find_receiveing_team() == action.team:
                     self.detailed_infos[self.team_key_from_action(action)]["SideOut"] += 1
@@ -398,6 +407,9 @@ class StaticWriter:
         }
         rallies = self.gamestate.rallies if rallies is None else rallies
         for rally in rallies:
+            if self.set_number > 0:
+                if rally.set_score[0] + rally.set_score[1] + 1 != self.set_number:
+                    continue
             self.update_k1_stats(rally)
         for team in ["home", "guest"]:
             total_rece = self.teamstats[team]["Total"]["Reception"]["Total"]
@@ -434,6 +446,9 @@ class StaticWriter:
         can_break = False
         for rally in rallies:
             self.add_set_stats_if_needed(rally)
+            if self.set_number > 0:
+                if rally.set_score[0] + rally.set_score[1] + 1 != self.set_number:
+                    continue
             for action in rally.actions:
                 try:
                     if isinstance(action, Gameaction):
@@ -695,6 +710,7 @@ class StaticWriter:
         return self.collected_stats[str(team) + "%02d" % player.Number]
 
     def analyze(self, set_number: int) -> None:
+        self.set_number = set_number
         self.fill_scores()
         self.fill_global_info()
         self.init_team_stats()
