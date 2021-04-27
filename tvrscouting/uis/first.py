@@ -35,7 +35,9 @@ class Ui_TVRScouting(object):
         self.matchInfo = QtWidgets.QPushButton(self.centralwidget)
         self.matchInfo.setObjectName("matchInfo")
         self.gridLayout_7.addWidget(self.matchInfo, 7, 1, 1, 2)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem, 11, 1, 1, 1)
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName("lineEdit")
@@ -57,14 +59,20 @@ class Ui_TVRScouting(object):
         self.remote_on.setText("")
         self.remote_on.setObjectName("remote_on")
         self.gridLayout_7.addWidget(self.remote_on, 0, 2, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem1, 3, 1, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem2, 6, 1, 1, 1)
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName("pushButton_3")
         self.gridLayout_7.addWidget(self.pushButton_3, 4, 1, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_7.addItem(spacerItem3, 8, 1, 1, 1)
         self.loadFile = QtWidgets.QPushButton(self.centralwidget)
         self.loadFile.setObjectName("loadFile")

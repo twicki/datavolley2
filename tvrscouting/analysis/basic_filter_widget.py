@@ -10,7 +10,6 @@ from tvrscouting.analysis.filters import (
 )
 from tvrscouting.serializer.serializer import Serializer
 from tvrscouting.statistics.Actions.GameAction import Gameaction
-from tvrscouting.statistics.Actions.SpecialAction import InitializePlayer
 from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.statistics.Players.players import Player
 

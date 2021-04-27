@@ -1,8 +1,9 @@
 import os
 import pickle
+from typing import Optional
 
 from PyQt5.QtWidgets import QFileDialog
-from typing import Optional
+
 from tvrscouting.statistics.Gamestate.game import Game
 
 

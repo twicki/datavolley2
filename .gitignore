@@ -5,7 +5,15 @@ tvr_ve
 
 *.tvr
 gamestats.*
-playbyplay.*
+*.aux
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.log
+playbyplay.pdf
+playbyplay.tex
+*.fls
+
 tests/test_network_server.py
 tests/test_network_client.py
 

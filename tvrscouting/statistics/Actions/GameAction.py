@@ -1,8 +1,8 @@
 from enum import Enum
+from typing import List
 
 from tvrscouting.statistics.Players.players import Team
 from tvrscouting.utils.errors import TVRSyntaxError
-from typing import List
 
 from .AbstractAction import AbstractAction
 

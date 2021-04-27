@@ -201,7 +201,7 @@ class Rally:
             return team
         return self.last_serve
 
-    def wins_in_k1(self):
+    def wins_in_k1(self) -> bool:
         rece_team = self.find_receiveing_team()
         for action in self.actions:
             if isinstance(action, Gameaction):
@@ -211,6 +211,17 @@ class Rally:
                 elif compare_action_to_string(current_action, "@@@h"):
                     return False
         return False
+
+    def get_k1_hit(self) -> Optional[Gameaction]:
+        rece_team = self.find_receiveing_team()
+        for action in self.actions:
+            if isinstance(action, Gameaction):
+                current_action = str(action)
+                if compare_action_to_string(current_action, str(rece_team) + "@@h"):
+                    return current_action
+                elif compare_action_to_string(current_action, str(Team.inverse(rece_team))):
+                    return None
+        return None
 
 
 class GameState:

@@ -11,6 +11,7 @@ from typing import List, OrderedDict
 from PyQt5 import QtGui, QtWidgets
 
 from tvrscouting.analysis.comments import CommentView
+from tvrscouting.analysis.playbyplay import PlayByPlay
 from tvrscouting.analysis.playerview import TeamViews
 from tvrscouting.analysis.point_graph import PointGraph
 from tvrscouting.analysis.recent_scores_view import RecentScores
@@ -23,7 +24,6 @@ from tvrscouting.statistics.Gamestate.game import Game
 from tvrscouting.statistics.Gamestate.game_state import GameState
 from tvrscouting.uis.first import Ui_TVRScouting
 from tvrscouting.utils.errors import TVRSyntaxError
-from tvrscouting.analysis.playbyplay import PlayByPlay
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):

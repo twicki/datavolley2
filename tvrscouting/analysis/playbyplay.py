@@ -1,13 +1,14 @@
-from tvrscouting.statistics.Actions import GameAction
-from tvrscouting.statistics.Actions.SpecialAction import Substitute, Timeout
-from tvrscouting.statistics.Gamestate.game_state import GameState, Rally
-from tvrscouting.statistics.Gamestate.game import Game
-from tvrscouting.statistics.Actions.GameAction import Gameaction, Quality
-from tvrscouting.statistics.Actions import Action
-from tvrscouting.statistics.Players.players import Player, Team
-from typing import List, Optional
 import os
+from typing import List, Optional
+
 from jinja2 import Environment, FileSystemLoader
+
+from tvrscouting.statistics.Actions import Action, GameAction
+from tvrscouting.statistics.Actions.GameAction import Gameaction, Quality
+from tvrscouting.statistics.Actions.SpecialAction import Substitute, Timeout
+from tvrscouting.statistics.Gamestate.game import Game
+from tvrscouting.statistics.Gamestate.game_state import GameState, Rally
+from tvrscouting.statistics.Players.players import Player, Team
 
 
 class PlayByPlay:
@@ -259,8 +260,9 @@ class PlayByPlay:
 
 
 if __name__ == "__main__":
-    from tvrscouting.serializer.serializer import Serializer
     import sys
+
+    from tvrscouting.serializer.serializer import Serializer
 
     file = sys.argv[1]
     ser = Serializer(None)

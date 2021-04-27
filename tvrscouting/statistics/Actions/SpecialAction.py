@@ -1,11 +1,11 @@
 from typing import Optional
+
 from tvrscouting.statistics.Players.players import Player, Team
 
 from .AbstractAction import AbstractAction
 
 
 class Substitute(AbstractAction):
-
     def __init__(
         self,
         team: Team,
@@ -16,9 +16,9 @@ class Substitute(AbstractAction):
     ):
         super().__init__(time_stamp)
         self.team_: Team = team
-        self.player_in:int = player_in
-        self.position_in:int = position_in
-        self.player_out: Optional[int] = None,
+        self.player_in: int = player_in
+        self.position_in: int = position_in
+        self.player_out: Optional[int] = None
 
     def __str__(self):
         return str(self.team_) + "sub!" + str(self.player_in) + "!" + str(self.position_in)
