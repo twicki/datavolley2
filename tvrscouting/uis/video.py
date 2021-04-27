@@ -41,7 +41,9 @@ class Ui_Dialog(object):
         self.lcdNumber.setProperty("value", 0.0)
         self.lcdNumber.setObjectName("lcdNumber")
         self.gridLayout.addWidget(self.lcdNumber, 1, 2, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
         self.saveFile_button = QtWidgets.QPushButton(Dialog)
         self.saveFile_button.setObjectName("saveFile_button")
@@ -49,7 +51,9 @@ class Ui_Dialog(object):
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setObjectName("pushButton")
         self.gridLayout.addWidget(self.pushButton, 1, 5, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem1, 1, 4, 1, 1)
         self.load_button = QtWidgets.QPushButton(Dialog)
         self.load_button.setObjectName("load_button")
@@ -57,7 +61,9 @@ class Ui_Dialog(object):
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 8, 1, 2)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout.addItem(spacerItem2, 1, 7, 1, 3)
         self.gridLayout.setColumnStretch(0, 3)
         self.gridLayout.setColumnStretch(1, 2)
@@ -161,4 +167,6 @@ class Ui_Dialog(object):
         self.insert_action.setText(_translate("Dialog", "Insert Action"))
         self.delete_action.setText(_translate("Dialog", "Delete Action"))
         self.hideactions.setText(_translate("Dialog", "hide non-game actions"))
+
+
 from PyQt5.QtMultimediaWidgets import QVideoWidget
