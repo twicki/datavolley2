@@ -75,11 +75,15 @@ class EditGame(QtWidgets.QWidget, Widget):
     def return_info_to_parent(self):
         if self.parent:
             self.parent.game.meta_info = self.save_metadata()
-            if len(self.parent.textEdit.toPlainText()) == 0:
-                full_string = ""
-                for index, team in enumerate(self.teams):
-                    full_string += self.team_to_string(team, index) + "\n"
-                self.parent.textEdit.setText(full_string)
+            plain_text = self.parent.textEdit.toPlainText()
+            for index, team in enumerate(self.teams):
+                teamstring = self.team_to_string(team, index)
+                if not teamstring[:5] in plain_text:
+                    plain_text += "\n"
+                    plain_text += teamstring
+            plain_text += "\n"
+            self.parent.textEdit.setText(plain_text)
+            self.parent.save_and_reset()
         self.close()
 
     def set_up_team(self, team_index=0, filename: str = None):

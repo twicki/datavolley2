@@ -620,7 +620,7 @@ class GameState:
             for teams_player in self.players[int(team)]:
                 if teams_player.Number == player.Number:
                     playerstats[player.Number]["name"] = (
-                        str(player.Number) + " " + teams_player.Name
+                        str(player.Number) + " " + teams_player.Name_with_initial
                     )
             playerstats[player.Number]["serve"] = {}
             playerstats[player.Number]["serve"]["kill"] = 0

@@ -46,17 +46,18 @@ class EditTeam(QtWidgets.QWidget, Widget):
         team.assistant_coach = self.AC.text()
         for row in range(self.table.rowCount()):
             if self.table.item(row, 0) and len(self.table.item(row, 0).text()):
-                lastName = ""
+                player_name = ""
                 position = Player.PlayerPosition.Universal
                 isCapitain = False
-                isLAS = False
                 if self.table.item(row, 3):
-                    lastName = str(self.table.item(row, 3).text())
+                    player_name = str(self.table.item(row, 3).text())
                 if self.table.item(row, 1):
                     position = Player.PlayerPosition.from_string(self.table.item(row, 1).text())
                 if self.table.item(row, 2):
                     isCapitain = True if str(self.table.item(row, 2).text()) == "C" else False
-                player = Player(int(self.table.item(row, 0).text()), position, lastName, isCapitain)
+                player = Player(
+                    int(self.table.item(row, 0).text()), position, player_name, isCapitain
+                )
                 player.is_las = False
                 if self.table.item(row, 4) and str(self.table.item(row, 4).text()) == "LAS":
                     player.is_las = True
@@ -93,7 +94,7 @@ class EditTeam(QtWidgets.QWidget, Widget):
             self.table.setItem(
                 index, 2, QtWidgets.QTableWidgetItem("C" if player.is_capitain else "")
             )
-            self.table.setItem(index, 3, QtWidgets.QTableWidgetItem(str(player.Name)))
+            self.table.setItem(index, 3, QtWidgets.QTableWidgetItem(str(player.name)))
             self.table.setItem(
                 index, 4, QtWidgets.QTableWidgetItem("LAS" if player.is_las else "foreign")
             )

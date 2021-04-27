@@ -22,7 +22,7 @@ class TeamInfo:
                 + "!"
                 + str(player.Number)
                 + "!"
-                + player.Name.split()[-1]
+                + player.name
                 + "!"
                 + str(player.Position)
             )

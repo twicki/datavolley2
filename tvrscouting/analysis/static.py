@@ -659,7 +659,7 @@ class StaticWriter:
 
     def collect_individual_statistics(self, team: Team, player: Player) -> None:
         self.collected_stats[str(team) + "%02d" % player.Number] = self.init_data_dict()
-        self.collected_stats[str(team) + "%02d" % player.Number]["Name"] = player.Name
+        self.collected_stats[str(team) + "%02d" % player.Number]["Name"] = player.Name_with_initial
         self.collected_stats[str(team) + "%02d" % player.Number]["Number"] = player.Number
         self.collected_stats[str(team) + "%02d" % player.Number]["Role"] = ""
         if self.meta_info and self.meta_info.teams[int(team)]:

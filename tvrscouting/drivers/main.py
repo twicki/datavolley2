@@ -101,9 +101,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_TVRScouting):
         self.time_stamps.clear()
 
         rallies = userdata.split("\n")
-        for rally in rallies:
-            actions = rally.split()
-            self.add_stings_to_game_state(actions)
+        for rally_string in rallies:
+            if "team" in rally_string or "player" in rally_string:
+                self.add_stings_to_game_state([rally_string])
+            else:
+                actions = rally_string.split()
+                self.add_stings_to_game_state(actions)
 
         if oldstate:
             self.game.game_state.fix_time_stamps(oldstate)

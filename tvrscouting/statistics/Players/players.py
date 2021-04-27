@@ -55,11 +55,6 @@ class Player:
                 if position.value[1] == s.lower():
                     return position
 
-    Position = PlayerPosition.Universal
-    Number = 0
-    Name = ""
-    is_capitain = False
-
     def __init__(
         self,
         number: int,
@@ -70,5 +65,18 @@ class Player:
 
         self.Number = number
         self.Position = position
-        self.Name = name
+        self.name = name
         self.is_capitain = is_capitain
+
+    @property
+    def Name(self):
+        return self.name.split()[-1]
+
+    @property
+    def Name_with_initial(self):
+        names = self.name.split()
+        if len(names) > 1:
+            initial = names[0][0] + ". "
+            return initial + names[-1]
+        else:
+            return self.Name
