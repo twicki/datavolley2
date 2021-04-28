@@ -420,6 +420,8 @@ class GameState:
                 self.players[int(action.team)].append(p)
             elif isinstance(action, SpecialActions.InitializeTeamName):
                 self.teamnames[int(action.team)] = action.name
+            elif isinstance(action, SetterCall):
+                self._setter_call = action
             elif isinstance(action, SpecialActions.SetSetter):
                 self.court.fields[int(action.team_)].setter = action.setter_number
             elif isinstance(action, Gameaction):

@@ -101,9 +101,9 @@ class InitializePlayer(AbstractAction):
         super().__init__(time_stamp)
         split_string = initialization_string.split("!")
         self.team = Team.from_string(split_string[0][0])
-        self.number = int(split_string[1])
+        self.number = int(split_string[1].strip())
         self.name = split_string[2]
-        self.position = Player.PlayerPosition.from_string(split_string[3])
+        self.position = Player.PlayerPosition.from_string(split_string[3].strip())
         self.is_capitan = False
         if len(split_string) > 4:
             if split_string[4].upper() == "C":

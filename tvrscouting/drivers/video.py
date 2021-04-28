@@ -485,10 +485,8 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
             if current_action.absolute_timestamp - self.leadup_time > 0
             else 0
         )
-        current_time = self.get_current_second_of_player()
-        if abs(current_time - start_with_leadup) > jump_threshold:
-            percentage = start_with_leadup / self.total_time
-            self.mediaplayer.set_position(percentage)
+        percentage = start_with_leadup / self.total_time
+        self.mediaplayer.set_position(percentage)
         self.updateUI()
 
     def get_current_action_from_highlight(self):
@@ -589,6 +587,7 @@ class Main(QtWidgets.QWidget, Ui_Dialog, Basic_Filter):
         number = self.lineEdit.text()
         if number.isnumeric():
             self.leadup_time = float(number)
+            self.jump_next_action_timer.setInterval(2 * self.leadup_time * 1000)
         self.lineEdit.clear()
 
     def update_view_action_reel(self):
